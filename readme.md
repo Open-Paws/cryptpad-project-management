@@ -20,9 +20,9 @@ We've extended CryptPad's Kanban with three integrated views, task management, a
 
 ### Three Views
 
-**Pipeline** — Enhanced kanban board with drag-and-drop columns, color-coded cards, priority scores displayed on each card, and a compact mode toggle.
+**Pipeline** — Enhanced kanban board with drag-and-drop columns, priority scores displayed on each card, and a compact mode toggle.
 
-**My Tasks** — Personal dashboard showing all your tasks across every project. Check off tasks, edit inline, filter by status or due date. Includes "Add Quick Task" for standalone to-dos.
+**My Tasks** — Personal dashboard showing all your tasks across every project. Check off tasks, edit inline, filter by status or due date.
 
 **Timeline** — Gantt chart view. Drag projects to reschedule, resize bars to change duration. Tasks appear nested under their parent projects.
 
@@ -91,8 +91,6 @@ CryptPad requires proper infrastructure—it won't work on PaaS platforms like R
 - NGINX reverse proxy
 - Let's Encrypt SSL
 - Two DNS A records (main domain + sandbox subdomain)
-
-**Deployment guide**: See our [deployment repository](https://github.com/stuckvgn/cryptpad-openpaws-deploy-public) for pre-configured Docker Compose, NGINX configs, and setup scripts.
 
 **Development setup**: Follow CryptPad's [developer guide](https://docs.cryptpad.org/en/dev_guide/setup.html).
 
