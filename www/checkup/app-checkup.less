@@ -1,0 +1,128 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) "../../customize/src/less2/include/colortheme-all.less";
+@import (reference) "../../customize/src/less2/include/font.less";
+@import (reference) "../../customize/src/less2/include/alertify.less";
+
+@corner: 5px;
+
+html, body {
+    .font_main();
+    .alertify_main();
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: @cp_static-bg !important;
+    color: @cryptpad_text_col;
+    font-family: "IBM Plex Mono";
+
+    .report {
+        font-size: 30px;
+        max-width: 30em;
+        margin: auto;
+        padding-top: 15px;
+    }
+
+    .cp-test-status, .summary {
+        margin-bottom: 1em;
+        border-radius: @corner;
+        padding: 15px;
+        &.success {
+            border: 1px solid green;
+        }
+        &.failure {
+            border: 1px solid red;
+        }
+        &.error {
+            border: 1px solid red;
+        }
+        &.warning {
+            border: 1px solid yellow;
+        }
+    }
+    //.summary, .failure, .error, .success { }
+
+    .pending {
+        border: 1px solid @cryptpad_text_col;
+        .fa {
+            margin-right: 20px;
+        }
+    }
+    .hidden {
+        display: none;
+    }
+
+    .failures div.error, .summary {
+        padding: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        width: 100%;
+        table {
+            td {
+                padding: 5px;
+                border: 1px solid @cryptpad_text_col;
+                font-size: 60%;
+            }
+            td:nth-child(2) {
+                word-break: break-word;
+            }
+        }
+    }
+
+    .advisory-text {
+        display: inline-block;
+        word-break: break-word;
+        padding: 5px;
+        //font-size: 16px;
+        border-radius: @corner;
+
+        max-width: 100%;
+        box-sizing: border-box;
+
+        &.cp-danger {
+            border: 1px solid @cp_alerts-danger-bg;
+            background-color: @cp_alerts-danger-bg;
+            color: @cp_alerts-danger-text;
+        }
+        &.cp-warning {
+            border: 1px solid @cp_alerts-warning-bg;
+            background-color: @cp_alerts-warning-bg;
+            color: @cp_alerts-warning-text;
+        }
+        pre.cp-raw-text {
+            overflow: auto;
+            background-color: #2222;
+        }
+
+        code {
+            word-break: keep-all;
+            font-style: italic;
+        }
+    }
+
+    a {
+        color: @cryptpad_color_link;
+    }
+
+    .cp-notice-browser, .cp-notice-details, .cp-notice-other, .cp-notice-customizations {
+        font-size: 70%;
+    }
+    .cp-notice-customizations {
+        border: 1px solid #777;
+        padding: 5px;
+    }
+    .underline { text-decoration: underline; }
+    .cp-app-checkup-version, .cp-app-checkup-browser {
+        .underline;
+    }
+    iframe {
+        display: none;
+    }
+}
+

@@ -1,0 +1,133 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/framework.less';
+
+&.cp-app-todo {
+
+    @colortheme_todo-bg: @colortheme_static_apps[default];
+    .framework_min_main();
+
+    display: flex;
+    flex-flow: column;
+
+    @button-border: 2px;
+
+    #cp-toolbar {
+        display: flex; // We need this to remove a 3px border at the bottom of the toolbar
+    }
+
+    .cp-cryptpad-toolbar {
+        padding: 0px;
+        display: inline-block;
+    }
+
+    #cp-app-todo-container {
+        display: flex;
+        flex: 1;
+        flex-flow: column;
+        padding: 20px;
+        align-items: center;
+        background-color: lighten(@colortheme_todo-bg, 15%);
+        min-height: 0;
+    }
+
+    @spacing: 15px;
+
+    #cp-app-todo-taskslist {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        min-width: 40%;
+        max-width: 90%;
+    }
+
+    .cp-app-todo-create-form {
+        margin: @spacing;
+        min-width: 40%;
+        display: flex;
+
+        #cp-app-todo-newtodo {
+            flex: 1;
+            margin-right: 15px;
+            border-radius: 0;
+            border: 0;
+            background-color: darken(@colortheme_todo-bg, 10%);
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: bold;
+        }
+
+        button {
+            cursor: pointer;
+            border-radius: 0;
+            background-color: darken(@colortheme_todo-bg, 20%);
+            border:0;
+            &:hover {
+                background-color: darken(@colortheme_todo-bg, 25%);
+            }
+        }
+    }
+
+    .cp-app-todo-task {
+        padding: 0px @spacing;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        background-color: white;
+
+        &.cp-app-todo-task-complete {
+            background-color: #f0f0f0;
+            color: #777;
+        }
+
+        .cp-app-todo-task-input {
+            margin: @spacing;
+            flex: 1;
+            min-width: 0;
+            font-weight: bold;
+            display: none;
+        }
+        .cp-app-todo-task-text {
+            margin: @spacing;
+            flex: 1;
+            word-wrap: break-word;
+            min-width: 0;
+            font-weight: bold;
+        }
+        .cp-app-todo-task-date {
+            margin: @spacing;
+        }
+        .cp-app-todo-task-remove {
+            margin: @spacing;
+            cursor: pointer;
+        }
+        .cp-app-todo-task-checkbox {
+            font-size: 45px;
+            width: 45px;
+            cursor: pointer;
+            &:hover {
+                color: #999;
+            }
+        }
+        .cp-app-todo-task-checkbox-checked {
+
+        }
+        .cp-app-todo-task-checkbox-unchecked {
+
+        }
+
+        button {
+            border-radius: 0;
+            border:0;
+        }
+    }
+
+    display: flex;
+    flex-flow: column;
+
+}
+

@@ -1,0 +1,142 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/sidebar-layout.less';
+@import (reference) "../../customize/src/less2/include/limit-bar.less";
+@import (reference) "../../customize/src/less2/include/creation.less";
+@import (reference) '../../customize/src/less2/include/framework.less';
+@import (reference) '../../customize/src/less2/include/export.less';
+@import (reference) '../../customize/src/less2/include/admin.less';
+
+&.cp-app-admin {
+    .framework_min_main();
+    .sidebar-layout_main();
+    .limit-bar_main();
+    .creation_main();
+    .admin_main();
+
+    display: flex;
+    flex-flow: column;
+    font: @colortheme_app-font;
+
+    input, textarea, .cp-appblock {
+        &:focus-visible {
+            outline: @variables_focus_style;
+        }
+    }
+    .cp-admin-customize-logo {
+        padding: 1em;
+        img {
+            max-height: 250px;
+        }
+    }
+    #cp-sidebarlayout-container {
+        #cp-sidebarlayout-rightside {
+            .cp-sidebarlayout-element[data-item] {
+                div#cp-admin-table-container {
+                    overflow-x: auto;
+                    .cp-sidebar-table#cp-admin-table {
+                        tr {
+                            display: flex;
+                        }
+                        th, td {
+                            flex: 1;
+                            word-wrap: break-word;
+                            white-space: normal;
+                            min-width: 13rem;
+                            margin-right: 0px;
+                        }
+                        @media (max-width: @browser_media-not-small) {
+                            width: 100%;
+                            tr {
+                                width: 100%;
+                            }
+                            th, td {
+                                margin-right: 0;
+                                min-width: 7rem;
+                            }
+                        }
+                    }
+                }
+                &[data-item="add-admins"] {
+                    .cp-sidebar-form:not(:last-child) {
+                        margin-bottom: 1em;
+                    }
+                }
+            }
+        }
+}
+    .cp-admin-color-current {
+        width: 20px;
+        height: 20px;
+        border-radius: 5px;
+        background-color: @cryptpad_color_brand;
+    }
+    input.cp-admin-color-picker {
+        vertical-align: middle;
+    }
+    .cp-palette-container {
+        display: inline-flex;
+        width: ~"calc(100% - 5rem)";
+        padding-left: 0.5rem;
+        vertical-align: middle;
+    }
+
+    .cp-admin-color-preview {
+        & > div {
+            margin-top: @sidebar_base-margin;
+            padding: 2*@sidebar_base-margin;
+        }
+        .cp-admin-color-preview-dark {
+            @import (reference) '../../customize/src/less2/include/colortheme-dark.less?force';
+            background-color: @cp_sidebar-right-bg;
+            border: 1px solid @cryptpad_text_col;
+            a {
+                color: @cryptpad_color_link !important;
+            }
+        }
+        .cp-admin-color-preview-light {
+            @import (reference) '../../customize/src/less2/include/colortheme.less?force';
+            @import '../../customize/src/less2/include/forms.less?force';
+            background-color: @cp_sidebar-right-bg;
+            border: 1px solid @cryptpad_text_col;
+            a {
+                color: @cryptpad_color_link !important;
+            }
+        }
+    }
+
+    .cp-admin-broadcast-form {
+        & > *:not(:last-child) {
+            margin-bottom: @sidebar_base-margin;
+            margin-top: 0;
+        }
+        .cp-broadcast-container {
+            display: flex;
+            flex-flow: column;
+        }
+        .cp-broadcast-lang {
+            margin-left: 30px;
+            display: flex;
+            flex-flow: column;
+            align-items: baseline;
+            &:not(:last-child) {
+                margin-bottom: @sidebar_base-margin;
+            }
+        }
+    }
+    .cp-limit-key {
+        padding: @sidebar_base-margin 0;
+        cursor: pointer;
+    }
+
+    .cp-admin-support-state {
+        i {
+            margin-right: @sidebar_base-margin;
+        }
+    }
+}
+

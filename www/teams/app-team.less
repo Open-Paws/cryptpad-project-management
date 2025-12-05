@@ -1,0 +1,387 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/framework.less';
+@import (reference) '../../customize/src/less2/include/drive.less';
+@import (reference) '../../customize/src/less2/include/messenger.less';
+@import (reference) '../../customize/src/less2/include/sidebar-layout.less';
+@import (reference) "../../customize/src/less2/include/tools.less";
+@import (reference) "../../customize/src/less2/include/colortheme-all.less";
+@import (reference) '../../customize/src/less2/include/export.less';
+
+.fa-spinner,.fa-check{
+    margin-left:0.5rem;
+}
+
+&.cp-app-team {
+    .framework_min_main(
+        @bg-color: @colortheme_static_apps[teams],
+    );
+
+    .drive_main();
+    .messenger_main(
+        @bg-color: @cp_messenger-bg
+    );
+    .sidebar-layout_main();
+
+    @roster-bg-color: @cp_teams-card-bg;
+    @roster-bg-color-hover: contrast(@roster-bg-color, darken(@roster-bg-color, 5%), lighten(@roster-bg-color, 5%));
+    @roster-bg-color-hover2: contrast(@roster-bg-color, darken(@roster-bg-color, 10%), lighten(@roster-bg-color, 10%));
+
+    .export_main();
+
+    &:not(.cp-app-team-offline) {
+        .cp-offline {
+            display: none !important;
+        }
+    }
+    &.cp-app-team-offline {
+        .cp-online {
+            display: none !important;
+        }
+        .cp-online-alt {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    }
+
+    #cp-sidebarlayout-container {
+        @media screen and (max-width: 900px) {
+            .cp-app-drive-toolbar-leftside {
+                .cp-dropdown-button-title span:last-child {
+                    display: none;
+                }
+                .cp-toolbar-share-button span:last-child {
+                    display: none;
+                }
+            }
+        }
+        div#cp-sidebarlayout-leftside {
+            background-color: @cp_teams-leftside-bg;
+        }
+        #cp-sidebarlayout-rightside{
+            input, button, textarea {
+                &:focus-visible {
+                    outline: @variables_focus_style;
+                }
+            }
+
+        }
+        div#cp-sidebarlayout-rightside.cp-rightside-drive {
+            padding: 0;
+            & > .cp-team-chat {
+                display: flex;
+                height: 100%;
+                margin: 0;
+                .cp-app-contacts-container {
+                    height: 100%;
+                }
+                .cp-app-contacts-input {
+                    textarea {
+                        border: 0;
+                        margin-right: 2px;
+                    }
+                    .fa-paper-plane{
+                        border-radius: @variables_radius;
+                    }
+                }
+            }
+            & > .cp-team-drive {
+                display: flex;
+                height: 100%;
+                margin: 0;
+                .cp-app-drive-container {
+                    height: 100%;
+                }
+            }
+            .cp-limit-buttons {
+                display: none;
+            }
+        }
+
+        .cp-leftside-narrow {
+            .cp-avatar {
+                overflow: visible;
+            }
+        }
+        .cp-team-cat-header {
+            justify-content: left;
+            background-color: transparent !important;
+            box-shadow: none !important;
+            .avatar_main(30px);
+            .cp-avatar {
+                justify-content: center;
+                font-size: 20px;
+            }
+            media-tag, .cp-avatar-default {
+                margin-right: 3px;
+                flex-shrink: 0;
+            }
+            media-tag {
+                order: -1;
+            }
+            cursor: default !important;
+            font-size: 18px;
+            span.cp-sidebarlayout-category-name {
+                max-width: 12rem;
+                padding-left: 5px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                min-width: 0;
+            }
+        }
+        .cp-team-cat-chat {
+            span.cp-team-chat-notification {
+                color: red;
+            }
+        }
+
+        .cp-team-list {
+            .cp-team-list-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                flex-wrap: wrap;
+            }
+            .cp-team-list-team {
+                .tools_unselectable();
+                background-color: @roster-bg-color;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-flow: column;
+                width: 300px;
+                border-radius: @variables_radius_L;
+                max-width: 90%;
+                height: 384px;
+                padding: 50px;
+                margin: 5px;
+                .cp-team-spinner-container {
+                    height: 200px;
+                    .cp-team-spinner {
+                        display: inline-block;
+                        box-sizing: border-box;
+                        width: 180px;
+                        height: 180px;
+                        border: 11px solid @cp_loading-spinner;
+                        border-radius: 50%;
+                        border-top-color: transparent;
+                        animation: spin infinite 3s; // defined in loading.less
+                        animation-timing-function: cubic-bezier(.6,0.15,0.4,0.85);
+                    }
+                }
+                &:focus-visible {
+                    outline: @variables_focus_style;
+                }
+                &.create, &:not(.empty) {
+                    cursor: pointer;
+                    &:hover {
+                        background-color: @roster-bg-color-hover;
+                    }
+                }
+                .cp-team-list-avatar {
+                    .avatar_main(200px);
+                }
+                .cp-team-list-name {
+                    word-wrap: break-word;
+                    min-width: 0;
+                    white-space: pre-wrap;
+                    text-overflow: ellipsis;
+                    max-width: 250px;
+                    font-size: 25px;
+                    text-align: center;
+                    &.empty {
+                        white-space: initial;
+                        text-align: center;
+                    }
+                }
+                &.empty {
+                    justify-content: unset;
+                    .cp-team-list-name {
+                        flex: unset;
+                        font-size: 20px;
+                        height: 150px;
+                    }
+                }
+                .cp-team-list-team-create {
+                    font-size: 25px;
+                    display: flex;
+                    align-items: center;
+                    flex-flow: column;
+                    i {
+                        font-size: 40px;
+                    }
+                }
+                .cp-team-list-open {
+                    width: 100%;
+                }
+            }
+        }
+        .cp-team-avatar {
+            .avatar_main(300px);
+            .cp-avatar img {
+                max-width: 100%;
+                max-height: 100%;
+                border-radius: @variables_radius_L;
+            }
+            .cp-avatar-default {
+                border-radius: @variables_radius_L;
+            }
+        }
+        .cp-team-roster {
+            .avatar_main(40px);
+            .cp-hidden {
+                display: none;
+            }
+            .cp-app-team-roster-header {
+                margin-bottom: 20px;
+                button:not(:last-child) {
+                    margin-right: 5px;
+                }
+            }
+            .cp-team-roster-member {
+                display: flex;
+                align-items: center;
+                margin: 5px 0px;
+                padding: 5px 5px 5px 10px;
+                max-width: 500px;
+                background-color: @roster-bg-color;
+                border-radius: @variables_radius;
+                &:hover {
+                    background-color: @roster-bg-color-hover;
+                }
+                .cp-avatar {
+                    margin-right: 10px;
+                }
+                .cp-team-member-status {
+                    margin-left: 5px;
+                    width: 5px;
+                    height: 50px;
+                    display: inline-block;
+                    border-radius: @variables_radius;
+                    background-color: @cryptpad_color_red;
+                    &.online {
+                        background-color: @cryptpad_color_green;
+                    }
+                }
+                .cp-team-member-name {
+                    flex: 1;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    .tools_unselectable();
+                }
+                .cp-team-member-actions {
+                    .fa {
+                        height: 25px;
+                        width: 25px;
+                        display: inline-flex;
+                        justify-content: center;
+                        align-items: center;
+                        cursor: pointer;
+                        &:hover {
+                            background-color: @roster-bg-color-hover2;
+                        }
+                    }
+                }
+            }
+        }
+        .cp-team-link {
+            max-width: 550px;
+            .cp-teams-invite-from {
+                display: flex;
+                margin-bottom: 20px;
+                .cp-teams-invite-from-author {
+                    display: flex;
+                    margin-left: 10px;
+                    .cp-teams-invite-from-avatar {
+                        .avatar_main(25px);
+                        margin: 0px 5px;
+                    }
+                }
+            }
+            .cp-teams-invite-message {
+                background-color: @cp_teams-invite-bg;
+                color: @cp_teams-invite-fg;
+                resize: none;
+                width: 100%;
+                padding: 12px;
+                margin-bottom: 20px;
+                border-radius: @variables_radius;
+                overflow-wrap: break-word;
+            }
+            .cp-teams-invite-password {
+                margin-bottom: 20px;
+            }
+            i.fa.fa-spin.fa-spinner {
+                margin-right: 10px;
+            }
+        }
+        div#cp-sidebarlayout-rightside .cp-team-offline {
+            // Compensate #cp-sidebarlayout-rightside padding
+            margin-top: -5px;
+            margin-right: -20px;
+            margin-left: -20px;
+        }
+        div#cp-sidebarlayout-rightside.cp-rightside-drive .cp-team-offline {
+            margin: 0;
+        }
+    }
+    .cp-team-trim {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .fa {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+    }
+
+    .cp-teams-invite-uses {
+        input {
+            margin-bottom: 0px !important;
+            margin-right: 10px;
+            width: 75px !important;
+        }
+
+    }
+    .cp-teams-invite-role {
+        margin-bottom: 15px;
+        span:first-child {
+            margin-right: 10px;
+        }
+    }
+
+
+    #cp-teams-roster-dialog {
+        table {
+            width: 100%;
+            table-layout: fixed;
+            &.cp-teams-generic {
+                margin-bottom: 30px;
+                margin-top: 30px;
+            }
+            tr:nth-child(even) {
+                background-color: @cp_teams-roster-odd;
+            }
+        }
+        p {
+            text-align: left;
+        }
+        h5 {
+            text-align: left;
+        }
+        ul {
+            text-align: left;
+            padding-left: 30px;
+        }
+        li {
+            font-weight: bold;
+        }
+    }
+}
+

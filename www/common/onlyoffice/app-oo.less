@@ -1,0 +1,85 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) "../../customize/src/less2/include/framework.less";
+
+// body
+body.cp-app-sheet, body.cp-app-doc, body.cp-app-presentation {
+    display: flex;
+    flex-flow: column;
+
+    &.cp-app-sheet {
+        .framework_main(
+            @bg-color: @colortheme_apps[sheet],
+        );
+    }
+    &.cp-app-doc {
+        .framework_main(
+            @bg-color: @colortheme_apps[doc],
+        );
+    }
+    &.cp-app-presentation {
+        .framework_main(
+            @bg-color: @colortheme_apps[presentation],
+        );
+    }
+
+    .cp-oo-x2tXls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .fa {
+            font-size: 30px;
+            margin-right: 10px;
+        }
+    }
+
+    #cp-fileupload {
+        display: none !important;
+    }
+
+    #cp-toolbar {
+        display: flex; // We need this to remove a 3px border at the bottom of the toolbar
+    }
+
+    .cp-cryptpad-toolbar {
+        padding: 0px;
+        display: inline-block;
+    }
+    #cp-app-oo-container {
+        flex: 1;
+        height: 100%;
+        background-color: @cp_app-bg;
+        display: flex;
+        min-height: 0;
+    }
+    #cp-app-oo-editor {
+        flex: 1;
+        height: 100%;
+        background-color: @cp_app-bg;
+        display: flex;
+        flex-flow: column;
+        position: relative;
+        iframe {
+            flex: 1;
+        }
+    }
+    #cp-app-oo-offline {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background-color: @cp_oo-offline-overlay;
+    }
+    #ooframe {
+        flex: 1;
+        border:none;
+        margin:0;
+        padding:0;
+    }
+}
+

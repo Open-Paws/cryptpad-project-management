@@ -1,0 +1,35 @@
+<!--
+SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+<!DOCTYPE html>
+<html class="cp-app-noscroll">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+    <script src="/customize/pre-loading.js?ver=1.1"></script>
+    <link href="/customize/src/pre-loading.css?ver=1.0" rel="stylesheet" type="text/css">
+    <script async data-bootload="/file/inner.js" data-main="/common/sframe-boot.js?ver=1.11" src="/components/requirejs/require.js?ver=2.3.7"></script>
+    <style>
+        .loading-hidden { display: none; }
+        #editor1 { display: none; }
+    </style>
+</head>
+<body class="cp-app-file">
+    <div id="cp-toolbar" class="cp-toolbar-container"></div>
+    <div id="cp-app-file-content">
+        <div id="cp-app-file-upload-form" style="display: none;">
+            <input type="file" name="file" id="cp-app-file-upfile" class="cp-app-file-input" />
+            <button for="cp-app-file-upfile" class="btn btn-primary cp-app-file-block unselectable" data-localization-title="upload_choose"
+                data-localization="upload_choose"></label>
+        </div>
+        <div id="cp-app-file-download-view" style="display: none;">
+            <media-tag id="cp-app-file-view"></media-tag>
+        </div>
+        <div id="cp-app-file-feedback" class="cp-app-file-block cp-app-file-hidden">
+        </div>
+    </div>
+</body>
+</html>
+

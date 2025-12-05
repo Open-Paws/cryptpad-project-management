@@ -1,0 +1,148 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) "../include/infopages.less";
+@import (reference) "../include/colortheme-all.less";
+@import (reference) "../include/alertify.less";
+@import (reference) "../include/checkmark.less";
+@import (reference) "../include/forms.less";
+@import (reference) "../include/login.less";
+
+&.cp-page-register {
+    .infopages_main();
+    .forms_main();
+
+    .alertify_main();
+    .checkmark_main(20px);
+
+    &:not(.cp-register-closed) {
+        .cp-restricted-registration {
+            display: none;
+        }
+        .cp-closed-filler {
+            display: none;
+        }
+    }
+    &.cp-register-closed {
+        div.cp-register-det {
+            display: none;
+        }
+    }
+
+    .cp-container {
+        .form-group {
+            .cp-register-instance {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            #register {
+                &.btn {
+                    padding: .5rem .5rem;
+                }
+                margin-top: 16px;
+                font-size: 1.25em;
+                min-width: 30%;
+            }
+        }
+        .input-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            input {
+                margin-top: 5px;
+            }
+        }
+        .cp-register-label { display: none; }
+        padding-bottom: 3em;
+        min-height: 5vh;
+    }
+    .alertify {
+        // workaround for alertify making empty p
+        p:empty {
+            display: none;
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+            .btn-confirm {
+                white-space: normal;
+            }
+        }
+
+    }
+    .cp-restricted-registration {
+        text-align: center !important;
+    }
+
+    .cp-register-det {
+        #data {
+
+            p {
+                li {
+                    margin-bottom: 1em;
+                }
+                .fa {
+                    padding-right: 10px;
+                }
+            }
+            h3 {
+                font-weight: 700;
+                margin-bottom: 1em;
+            }
+        }
+        .cp-reg-form {
+            img {
+                margin-top: 0px;
+                position: relative;
+                z-index: 0;
+            }
+        }
+        .cp-hidden {
+            display: none !important;
+        }
+        .login_main();
+        #userForm, #ssoForm {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+            padding: 15px;
+            .checkbox-container {
+                margin-top: 0.5rem;
+            }
+            button#register {
+                margin-top: 10px;
+            }
+        }
+        #ssoForm {
+            margin-top: 15px;
+        }
+
+        .cp-register-notes {
+            ul.cp-notes-list {
+                list-style: none;
+                margin-left: 0;
+                padding-left: 30px;
+                position: relative;
+                li {
+                    margin-bottom: 10px;
+                    &::before {
+                        position: absolute;
+                        left: 0;
+                        font-family: "FontAwesome";
+                        content: "\f071";
+                    }
+                    .red {
+                        background-color: @cp_static-danger;
+                    }
+                }
+            }
+        }
+    }
+}
+

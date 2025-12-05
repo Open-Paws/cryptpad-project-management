@@ -1,0 +1,66 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) "./colortheme-all.less";
+@import (reference) "./variables.less";
+
+.help_main () {
+    --LessLoader_require: LessLoader_currentFile();
+};
+& {
+    .cp-help-container {
+
+        position: relative;
+        background-color: @cp_help-bg;
+        max-height: 50%;
+        &.cp-help-hidden {
+            display: none;
+        }
+
+        .cp-help-close {
+            background: none;
+            border: none;
+            position: absolute;
+            color: @cryptpad_text_col;
+            top: 5px;
+            right: 5px;
+            &:focus-visible {
+                outline: @variables_focus_style;
+                border-radius: @variables_radius;
+            }
+        }
+        .cp-help-text {
+            color: @cp_help-fg;
+            margin: 0;
+            padding: 5px 15px;
+            a {
+                color: @cp_help-link;
+                text-decoration: underline;
+                &:focus-visible {
+                    outline: @variables_focus_style;
+                    border-radius: @variables_radius;
+                }
+            }
+            h1 {
+                font-size: 20px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            h3 {
+                font-size: 16px;
+            }
+            ul, ol, p, h1, h2, h3 { margin: 0; }
+            &.cp-help-small {
+                ul {
+                    display: none;
+                }
+                cursor: pointer;
+            }
+        }
+    }
+}
+

@@ -1,0 +1,193 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/tools.less';
+@import (reference) "../../customize/src/less2/include/framework.less";
+
+&.cp-app-whiteboard {
+
+    .framework_main(
+        @bg-color: @colortheme_apps[whiteboard],
+    );
+
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
+    .middle () {
+        position: relative;
+        vertical-align: middle;
+    }
+    .hidden {
+        display: none;
+    }
+
+    .cp-toolbar-file {
+        .cp-toolbar-savetodrive { order: 31; }
+        .cp-toolbar-icon-embedImage { order: 21; }
+    }
+
+    #cp-app-whiteboard-media-hidden {
+        display: none;
+    }
+
+    #cp-app-whiteboard-container {
+        flex: 1;
+        display: flex;
+        overflow: auto;
+        flex-flow: column;
+        background: @cp_whiteboard-board-bg;
+    }
+
+    // created in the html
+    #cp-app-whiteboard-canvas-area {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+    }
+    // created by fabricjs. styled so defaults don't break anything
+    .cp-app-whiteboard-canvas-container {
+        width: 100%;
+        margin: auto;
+        flex: 1;
+        min-height: 0;
+        & > canvas {
+            width: 100%;
+            border: 1px solid @cp_whiteboard-board-border;
+        }
+    }
+
+    .cp-app-whiteboard-unselectable {
+        .tools_unselectable();
+    }
+
+    // contains user tools
+    #cp-app-whiteboard-controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
+        border-top: 1px solid @cp_whiteboard-board-border;
+        background: @cp_whiteboard-bg;
+        color: @cp_whiteboard-fg;
+
+        padding: 10px;
+
+        & > * + * {
+            margin: 0;
+            margin-left: 1em;
+        }
+
+        #cp-app-whiteboard-width, #cp-app-whiteboard-opacity {
+            .middle;
+        }
+
+        #cp-app-whiteboard-clear {
+            display: inline;
+            vertical-align: middle;
+        }
+        #cp-app-whiteboard-delete {
+            min-width: 40px;
+        }
+        .cp-whiteboard-type, .cp-whiteboard-history {
+            button {
+                min-width: 40px;
+                text-align: center;
+                &:not(:first-child) {
+                    margin-left: -1px;
+                }
+                &.btn-primary:hover {
+                    cursor: default;
+                }
+            }
+        }
+
+        .cp-app-whiteboard-selected {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9001;
+
+            width: 100px;
+            height: 100px;
+        }
+
+        .cp-whiteboard-brush {
+            display: flex;
+            flex-direction: column;
+            margin-left: 2em;
+            margin-right: 1em;
+            .cp-app-whiteboard-range-group {
+                display: flex;
+                align-items: center;
+                position: relative;
+
+                label {
+                    margin-bottom: 0;
+                    margin-right: 5px;
+                    flex: 1;
+                }
+
+                input[type="range"] {
+                    background-color: inherit;
+                    margin-right: 5px;
+                    width: 150px;
+                    padding: 0;
+                }
+
+                & > span {
+                    width: 50px;
+                    cursor: default;
+                }
+            }
+        }
+    }
+
+    /* Colors */
+    #cp-app-whiteboard-colors {
+        .middle;
+        z-index: 100;
+        background: @cp_whiteboard-bg;
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 320px;
+
+        span.cp-app-whiteboard-palette-color {
+            height: 30px;
+            width: 30px;
+            display: block;
+            margin: 5px;
+            border: 1px solid @cp_whiteboard-board-border;
+            vertical-align: top;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    // used in the toolbar if supported
+    #cp-app-whiteboard-color-picker {
+        display: block;
+    }
+
+    // input[type=color] must exist in the dom to work correctly
+    // styled so that they don't break layouts
+
+    #cp-app-whiteboard-pickers {
+        visibility: hidden;
+        position: absolute;
+        width: 0;
+        height: 0;
+        z-index: -5;
+    }
+}
+

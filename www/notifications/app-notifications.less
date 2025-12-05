@@ -1,0 +1,173 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/framework.less';
+@import (reference) '../../customize/src/less2/include/sidebar-layout.less';
+@import (reference) '../../customize/src/less2/include/avatar.less';
+
+&.cp-app-notifications {
+
+    .framework_min_main();
+    .sidebar-layout_main();
+
+    display: flex;
+    flex-flow: column;
+
+    .cp-clickable {
+        cursor: pointer;
+        &:hover {
+            background-color: @cp_notif-hover;
+        }
+        &:focus-visible {
+            outline: @variables_focus_style;
+            border-radius: @variables_radius;
+        }
+    }
+
+    .cp-app-notifications-panel {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        width: 100%;
+
+        .cp-app-notifications-panel-titlebar {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: @cp_notif-header-bg;
+            color: @cp_notif-header-fg;
+
+            .cp-app-notifications-panel-title {
+                flex-grow: 1;
+                margin: 1rem 1rem;
+            }
+
+            .cp-app-notifications-panel-titlebar-buttons {
+                align-self: stretch;
+                flex-shrink: 0;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-end;
+                align-items: stretch;
+
+                .cp-app-notifications-dismissall {
+                    align-self: stretch;
+                    flex-shrink: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 3rem;
+                    border-radius: @variables_radius;
+                    margin: 0.2rem;
+                }
+            }
+        }
+
+        .cp-app-notifications-panel-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            border: 1px solid @cp_notif-table-border;
+            border-top: none;
+            overflow: hidden;
+
+            .cp-notification {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                background-color: @cp_notif-bg;
+                border-top: 1px solid @cp_notif-table-border;
+                &.no-notifications {
+                    display: none;
+                    padding: 1rem 1rem;
+                    font-style: italic;
+                    color: @cp_notif-fg;
+                    &:only-child {
+                        display: block;
+                    }
+                }
+                .cp-avatar {
+                    .avatar_main(48px);
+                    padding: 5px;
+                    margin: 0.2rem;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: @cp_notif-hover;
+                    }
+                    &:focus-visible {
+                        outline: @variables_focus_style;
+                        border-radius: @variables_radius;
+                    }
+                }
+                .cp-avatar-calendar {
+                    font-size: 45px;
+                    padding: 12px;
+                }
+                &.cp-app-notification-archived {
+                    background-color: @cp_notif-bg;
+                }
+                &.dismissed {
+                    display: none;
+                }
+
+                .cp-notification-content {
+                    flex-grow: 1;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin: 0.1rem;
+                    &:focus-visible {
+                        outline: @variables_focus_style;
+                        border-radius: @variables_radius;
+                    }
+                    p {
+                        display: inline-block;
+                        margin: 1rem 1rem;
+                        flex: 1;
+                    }
+                    .notification-time {
+                        margin: 1rem 1rem 1rem auto;
+                    }
+                }
+
+                .cp-notification-dismiss {
+                    align-self: stretch;
+                    flex-shrink: 0;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    border-left: 1px solid @cp_notif-table-border;
+                    width: 3rem;
+                    margin: 0.2rem;
+                    &:focus-visible{
+                        border-radius: @variables_radius;
+                    }
+                }
+            }
+        }
+    }
+
+    .cp-app-notification-loadmore {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 0.5rem;
+        background-color: @cp_notif-bg;
+        border: 1px solid @cp_notif-table-border;
+        color: @cp_notif-fg;
+    }
+
+}
+

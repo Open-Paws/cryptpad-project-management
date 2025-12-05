@@ -1,0 +1,40 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/framework.less';
+@import (reference) '../../customize/src/less2/include/messenger.less';
+@import (reference) '../../customize/src/less2/include/avatar.less';
+
+// body
+&.cp-app-contacts {
+    .framework_min_main(
+        @bg-color: @colortheme_static_apps[contacts]
+    );
+
+    display: flex;
+    flex-flow: column;
+
+
+    #cp-toolbar {
+        display: flex; // We need this to remove a 3px border at the bottom of the toolbar
+    }
+
+    .cp-contacts-muted-table {
+        .avatar_main(50px);
+        .cp-contacts-muted-user {
+            display: flex;
+            align-items: center;
+            span:nth-child(2) {
+                flex: 1;
+            }
+        }
+    }
+
+    .messenger_main(
+        @bg-color: @cp_messenger-bg;
+    );
+}
+

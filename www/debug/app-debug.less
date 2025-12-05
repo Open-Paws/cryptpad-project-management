@@ -1,0 +1,95 @@
+/*
+ * SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+@import (reference) '../../customize/src/less2/include/tokenfield.less';
+@import (reference) '../../customize/src/less2/include/framework.less';
+
+// body
+&.cp-app-debug {
+    .tokenfield_main();
+    .framework_main();
+
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+
+    #cp-app-debug {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+    }
+    #cp-app-debug-content, #cp-app-debug-history {
+        flex: 1;
+        overflow: auto;
+        white-space: pre-wrap;
+        display: none;
+        color: @cp_preview-fg;
+        background-color: @cp_preview-bg;
+    }
+    #cp-app-debug-content {
+        margin: 10px 50px;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        .cp-app-debug-content {
+            flex: 1;
+            min-height: 0;
+            justify-content: center;
+        }
+        .cp-app-debug-progress, .cp-app-debug-init {
+            text-align: center;
+            input {
+                width: auto !important;
+            }
+        }
+        #cp-app-debug-loading {
+            text-align: center;
+        }
+        .cp-app-debug-content-hrefs {
+            td, th {
+                max-width: 300px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 0 20px;
+            }
+            td:nth-child(3) {
+                max-width: 500px;
+            }
+            .cp-debug-ok {
+                background-color: @cryptpad_color_light_green;
+            }
+            .cp-debug-nok {
+                background-color: @cryptpad_color_light_red;
+            }
+            tr:not(:first-child):hover {
+                background-color: @cp_debug-hover;
+            }
+        }
+        .fa-chevron-left, .fa-chevron-right {
+            margin: 5px 20px;
+            cursor: pointer;
+            &:hover {
+                color: @cp_debug-icon-hover;
+            }
+        }
+        .cp-app-debug-progress {
+            display: flex;
+            flex: 1;
+            min-height: 0;
+            flex-flow: column;
+        }
+        pre.cp-debug-replay {
+            text-align: left;
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow: auto;
+            flex: 1;
+            min-height: 0;
+        }
+    }
+}
+
