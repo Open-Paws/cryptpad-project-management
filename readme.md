@@ -14,10 +14,45 @@ This is a customized version of CryptPad that adds powerful project management f
 
 **What we've added to CryptPad's Kanban:**
 
+### **Three Powerful Views**
+
+#### 📋 Pipeline View (Kanban Board)
+The classic kanban board enhanced with project management features:
+- Drag-and-drop cards between columns
+- Visual priority indicators based on project scores
+- Compact/expanded mode toggle to show or hide card details
+- Color-coded cards for visual organization
+
+#### 📅 My Tasks View
+A personal task dashboard that aggregates all tasks across all projects:
+- See every task assigned to you in one place
+- Tasks show their parent project for context
+- Quick checkbox to mark tasks complete
+- Inline editing of task titles
+- Add Quick Tasks for personal to-dos
+- Filter and sort tasks by due date, project, or status
+
+#### 📊 Timeline View (Gantt Chart)
+A visual timeline for project planning and scheduling:
+- Gantt-style visualization of all projects
+- Drag to move projects along the timeline
+- Resize project bars to adjust start/end dates
+- Tasks within projects displayed as nested bars
+- Automatic date calculations and positioning
+- Week/month navigation controls
+
+### **Tasks Inside Projects**
+Each project card can contain multiple sub-tasks:
+- Checkbox tasks with completion tracking
+- Individual due dates per task
+- Assignee per task
+- Progress shown on card (e.g., "3/5 tasks complete")
+- Tasks inherit project due date as fallback
+
 ### **Strategic Project Scoring System**
 - **10-dimension scoring framework** designed for advocacy impact assessment:
   - Scale - Potential reach and scope
-  - Impact Magnitude - Depth of change potential  
+  - Impact Magnitude - Depth of change potential
   - Longevity - Long-term sustainability
   - Multiplication - Ability to inspire similar efforts
   - Foundation - Building movement infrastructure
@@ -30,10 +65,12 @@ This is a customized version of CryptPad that adds powerful project management f
 - **Fully encrypted** - all scoring data uses CryptPad's native storage
 
 ### **Advanced Project Management Features**
-- **Assignee management** - assign multiple team members per project
-- **Due date tracking** - visual indicators and deadline management
-- **Advanced filtering and sorting** - filter by assignee, score ranges, and due dates
-- **Real-time collaboration** - multiple users can score and assign projects simultaneously
+- **Assignee management** - assign team members to projects and individual tasks
+- **Start & due date tracking** - set date ranges for projects with visual urgency indicators
+- **Advanced filtering** - filter by assignee, score ranges, due dates, and completion status
+- **Multiple sort options** - sort by score, due date, title, or creation date
+- **Compact mode** - toggle card detail visibility for cleaner board views
+- **Real-time collaboration** - multiple users can edit simultaneously with live updates
 
 ### **Recent Stability Improvements (December 2024)**
 We've fixed 11 bugs to significantly improve the collaborative editing experience:
@@ -140,11 +177,28 @@ For complete production deployment instructions with Docker Compose, NGINX, and 
 
 After installation, create a new Kanban board to access the Open Paws enhancements:
 
+### Pipeline View (Kanban Board)
 1. **Create Projects**: Add cards to represent your advocacy projects
 2. **Score Projects**: Click edit on any card to access the 10-dimension scoring system
-3. **Assign Team Members**: Add comma-separated assignees (e.g., "Sam, Gary, Maddie")
-4. **Set Due Dates**: Use the date picker for project deadlines
-5. **Filter & Sort**: Use the toolbar to filter by assignee, score range, or due date
+3. **Assign Team Members**: Select assignees from the checkbox list in the edit modal
+4. **Set Dates**: Use the start date and due date pickers for project scheduling
+5. **Add Tasks**: Create sub-tasks within each project with their own assignees and due dates
+6. **Filter & Sort**: Use the toolbar to filter by assignee, score range, status, or due date
+
+### My Tasks View
+1. **Switch Views**: Click the "My Tasks" button in the toolbar
+2. **See All Tasks**: View every task from all projects in one list
+3. **Quick Complete**: Check off tasks directly from the list
+4. **Edit Inline**: Click a task title to edit it
+5. **Add Quick Tasks**: Use "Add Quick Task" for personal to-dos not tied to a project
+
+### Timeline View (Gantt Chart)
+1. **Switch Views**: Click the "Timeline" button in the toolbar
+2. **Visualize Schedule**: See all projects laid out on a timeline
+3. **Drag to Reschedule**: Move project bars left/right to change dates
+4. **Resize Duration**: Drag the edges of project bars to adjust length
+5. **Navigate Time**: Use the week/month controls to scroll through time
+6. **View Tasks**: Expand projects to see their sub-tasks on the timeline
 
 ## Project Scoring Methodology
 
