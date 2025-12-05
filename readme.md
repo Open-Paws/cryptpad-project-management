@@ -10,8 +10,6 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 This is a customized version of [CryptPad](https://cryptpad.org) that transforms the Kanban board into a full-featured project management tool. Built for [Open Paws](https://openpaws.ai) to coordinate animal advocacy work, but useful for any organization that needs secure, collaborative project planning.
 
-**Live instance**: [cryptpad.openpaws.ai](https://cryptpad.openpaws.ai)
-
 ---
 
 ## What We Built
@@ -72,10 +70,6 @@ This is CryptPad's standard zero-knowledge model. Our enhancements add no server
 ---
 
 ## Deployment
-
-### Use Our Hosted Instance
-
-The easiest option: [cryptpad.openpaws.ai](https://cryptpad.openpaws.ai)
 
 ### Self-Host with Docker
 
