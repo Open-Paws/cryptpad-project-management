@@ -61,6 +61,25 @@ define([
 
     var verbose = function (x) { console.log(x); };
     verbose = function () {}; // comment out to enable verbose logging
+
+    // Debug flag for kanban diagnostic logging. Set to true to enable console output
+    // for data synchronization and other diagnostic messages.
+    var DEBUG_KANBAN = true;
+
+    // Scoring dimensions - defined at module level so all functions can access
+    var scoringDimensions = [
+        { key: 'scale_score', label: 'Scale - Number of animals/advocates affected' },
+        { key: 'impact_magnitude_score', label: 'Impact Magnitude - Depth of positive change' },
+        { key: 'longevity_score', label: 'Longevity - Lasting value over time' },
+        { key: 'multiplication_score', label: 'Multiplication - Enables additional impact' },
+        { key: 'foundation_score', label: 'Foundation - Creates platform for future work' },
+        { key: 'agi_readiness_score', label: 'Future-Readiness - Adapts to changing landscape' },
+        { key: 'accessibility_score', label: 'Accessibility - Easy for advocates to adopt' },
+        { key: 'coalition_building_score', label: 'Coalition Building - Strengthens movement unity' },
+        { key: 'pillar_coverage_score', label: 'Coverage - Impact across advocacy approaches' },
+        { key: 'build_feasibility_score', label: 'Build Feasibility - Speed and ease of implementation' }
+    ];
+
     var onRedraw = Util.mkEvent();
     var onCursorUpdate = Util.mkEvent();
     var remoteCursors = {};
@@ -73,7 +92,7 @@ define([
         var $input = $(input);
         var focus = _cursor || $input.is(':focus');
         var oldVal = $input.val();
-        var ops = ChainPad.Diff.diff(_cursor ? _cursor.value : oldVal, val);
+        var ops = ChainPad.Diff.diff(_cursor ? _cursor.value : oldVal, val);
 
         var cursor = _cursor || input;
 
@@ -157,13 +176,41 @@ define([
     var now = function () { return +new Date(); };
     var _lastUpdate = 0;
     var _updateBoards = function (framework, kanban, boards) {
+        // Debug logging for board updates
+        if (DEBUG_KANBAN) {
+            var boardsDataKeys = boards && boards.data ? Object.keys(boards.data).length : 0;
+            var boardsItemsCount = boards && boards.items ? Object.keys(boards.items).length : 0;
+            console.log('updateBoards before: boards.data keys:', boardsDataKeys, 'items count:', boardsItemsCount);
+        }
+
         _lastUpdate = now();
         var cursor = getCursor();
         kanban.setBoards(Util.clone(boards));
+
+        // Debug logging after setBoards
+        if (DEBUG_KANBAN) {
+            var postBoardsDataKeys = kanban.options.boards && kanban.options.boards.data ? Object.keys(kanban.options.boards.data).length : 0;
+            console.log('updateBoards after setBoards: kanban.options.boards.data keys:', postBoardsDataKeys);
+        }
+
         kanban.inEditMode = false;
         addEditItemButton(framework, kanban);
         addMoveElementButton(framework, kanban);
         restoreCursor(cursor);
+
+        if (DEBUG_KANBAN) {
+            var boards = kanban.options.boards || {};
+            var activeIds = {};
+            Object.keys(boards.data || {}).forEach(function(boardId) {
+                var board = boards.data[boardId];
+                if (board && Array.isArray(board.item)) {
+                    board.item.forEach(function(itemId) { activeIds[itemId] = true; });
+                }
+            });
+            console.log('[_updateBoards] Post-update activeItemIds:', Object.keys(activeIds),
+                        'Total items:', Object.keys(boards.items || {}).length);
+        }
+
         onRemoteChange.fire();
     };
     var _updateBoardsThrottle = Util.throttle(_updateBoards, 1000);
@@ -173,6 +220,7 @@ define([
             return;
         }
         _updateBoardsThrottle(framework, kanban, boards);
+        onRemoteChange.fire();
     };
     var editModal;
     var PROPERTIES = ['title', 'body', 'tags', 'color', 'assignee', 'start_date', 'due_date', 'scoring', 'tasks', 'createdBy', 'dependencies', 'completed'];
@@ -192,7 +240,7 @@ define([
         };
     };
     var createEditModal = function (framework, kanban) {
-        if (framework.isReadOnly()) { return; }
+        if (framework.isReadOnly()) { return; }
         if (editModal) { return editModal; }
 
         var dataObject = {};
@@ -217,7 +265,7 @@ define([
 
         var commit = function () {
             framework.localChange();
-            update();
+            _updateBoards(framework, kanban, kanban.options.boards);
             flashSaveIndicator();
         };
 
@@ -230,21 +278,7 @@ define([
 
         var conflicts, conflictContainer, titleInput, tagsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle;
         var scoringSliders = {};
-        
-        // Create scoring dimension sliders
-        var scoringDimensions = [
-            { key: 'scale_score', label: 'Scale - Number of animals/advocates affected' },
-            { key: 'impact_magnitude_score', label: 'Impact Magnitude - Depth of positive change' },
-            { key: 'longevity_score', label: 'Longevity - Lasting value over time' },
-            { key: 'multiplication_score', label: 'Multiplication - Enables additional impact' },
-            { key: 'foundation_score', label: 'Foundation - Creates platform for future work' },
-            { key: 'agi_readiness_score', label: 'Future-Readiness - Adapts to changing landscape' },
-            { key: 'accessibility_score', label: 'Accessibility - Easy for advocates to adopt' },
-            { key: 'coalition_building_score', label: 'Coalition Building - Strengthens movement unity' },
-            { key: 'pillar_coverage_score', label: 'Coverage - Impact across advocacy approaches' },
-            { key: 'build_feasibility_score', label: 'Build Feasibility - Speed and ease of implementation' }
-        ];
-        
+
         // Composite score display with progress bar (always visible)
         var scoreProgressBar = h('div.cp-kanban-score-progress-bar');
         var scoreProgressContainer = h('div.cp-kanban-score-progress-container', [scoreProgressBar]);
@@ -1115,21 +1149,21 @@ define([
             onClick: function (/*button*/) {
                 var boards = kanban.options.boards || {};
                 if (isBoard) {
-                    var list = boards.list || [];
+                    var list = boards.list || [];
                     var idx = list.indexOf(id);
                     if (idx !== -1) { list.splice(idx, 1); }
-                    delete (boards.data || {})[id];
+                    delete (boards.data || {})[id];
                     kanban.removeBoard(id);
                     return void commit();
                 }
-                Object.keys(boards.data || {}).forEach(function (boardId) {
+                Object.keys(boards.data || {}).forEach(function (boardId) {
                     var board = boards.data[boardId];
                     if (!board) { return; }
                     var items = board.item || [];
                     var idx = items.indexOf(id);
                     if (idx !== -1) { items.splice(idx, 1); }
                 });
-                delete (boards.items || {})[id];
+                delete (boards.items || {})[id];
                 commit();
             },
             keys: []
@@ -1230,7 +1264,7 @@ define([
         if (!editModal) { editModal = createEditModal(framework, kanban); }
         editModal.setId(false, eid);
         var boards = kanban.options.boards || {};
-        var item = (boards.items || {})[eid];
+        var item = (boards.items || {})[eid];
         if (!item) { return void UI.warn(Messages.error); }
         editModal.conflict.setValue();
         PROPERTIES.forEach(function (type) {
@@ -1249,7 +1283,7 @@ define([
 
         editModal.setId(true, id);
         var boards = kanban.options.boards || {};
-        var board = (boards.data || {})[id];
+        var board = (boards.data || {})[id];
         if (!board) { return void UI.warn(Messages.error); }
         editModal.conflict.setValue();
         BOARD_PROPERTIES.forEach(function (type) {
@@ -1401,7 +1435,7 @@ define([
 
     addEditItemButton = function (framework, kanban) {
         if (!kanban) { return; }
-        if (framework.isReadOnly() || framework.isLocked()) { return; }
+        if (framework.isReadOnly() || framework.isLocked()) { return; }
         var $container = $(kanban.element);
         $container.find('.kanban-edit-item').remove();
         $container.find('.kanban-item').each(function (i, el) {
@@ -1436,7 +1470,7 @@ define([
     var getDefaultBoards = function () {
         var items = {};
         for (var i=1; i<=6; i++) {
-            items[i] = {
+            items[i] = {
                 id: i,
                 title: Messages._getKey('kanban_item', [i])
             };
@@ -1464,9 +1498,13 @@ define([
         };
         return defaultBoards;
     };
-    var migrate = function (framework, boards) {
+    // migrate: Converts old array-based board format to the new object-based format.
+    // NOTE: This function directly manipulates board.item arrays during one-time migration.
+    // This is a special case for data format conversion; normal item operations should go
+    // through jKanban's addElement() and moveItem() APIs.
+    var migrate = function (framework, boards) {
         if (!Array.isArray(boards)) { return; }
-        console.log("Migration to new format");
+        if (DEBUG_KANBAN) { console.log("Migration to new format"); }
         var b = {
             list: [],
             data: {},
@@ -1547,7 +1585,7 @@ define([
                 }
             },
             click: function (el) {
-                if (framework.isReadOnly() || framework.isLocked()) { return; }
+                if (framework.isReadOnly() || framework.isLocked()) { return; }
                 if (kanban.inEditMode) {
                     $(el).focus();
                     verbose("An edit is already active");
@@ -1612,7 +1650,7 @@ define([
             },
             boardTitleClick: function (el, e) {
                 e.stopPropagation();
-                if (framework.isReadOnly() || framework.isLocked()) { return; }
+                if (framework.isReadOnly() || framework.isLocked()) { return; }
                 if (kanban.inEditMode) {
                     $(el).focus();
                     verbose("An edit is already active");
@@ -1673,7 +1711,7 @@ define([
                 });
             },
             addItemClick: function (el) {
-                if (framework.isReadOnly() || framework.isLocked()) { return; }
+                if (framework.isReadOnly() || framework.isLocked()) { return; }
                 var $el = $(el);
                 if (kanban.inEditMode) {
                     $el.focus();
@@ -2010,6 +2048,161 @@ define([
                 status: ''
             };
 
+            // Shared helper: normalizes an assignee field and checks if it matches a filter value.
+            // Handles comma-separated lists, trims whitespace, and performs case-insensitive comparison.
+            // Used by applyFilters, renderMyTasksView, getAllTasks, and renderTimelineView.
+            var assigneeMatchesFilter = function (assigneeField, filterValue) {
+                if (!filterValue) { return true; } // No filter = pass all
+                if (!assigneeField) { return false; } // No assignee but filter set = fail
+                var filterLower = filterValue.toLowerCase().trim();
+                var assignees = assigneeField.split(',').map(function(a) {
+                    return a.trim().toLowerCase();
+                }).filter(function(a) { return a; });
+                return assignees.indexOf(filterLower) !== -1;
+            };
+
+            // Shared helper: computes the effective due date for a project.
+            // If the project has its own due_date, use that.
+            // Otherwise, use the earliest task due date (if any tasks have due dates).
+            // Returns the date string or null if no due date is available.
+            var getEffectiveDueDate = function (item) {
+                if (item.due_date) { return item.due_date; }
+                if (!Array.isArray(item.tasks) || item.tasks.length === 0) { return null; }
+                var earliestDate = null;
+                item.tasks.forEach(function (task) {
+                    if (task.due_date) {
+                        if (!earliestDate || task.due_date < earliestDate) {
+                            earliestDate = task.due_date;
+                        }
+                    }
+                });
+                return earliestDate;
+            };
+
+            // Shared helper: checks if a date string passes the duePreset filter.
+            // Returns true if the item should be included, false if it should be filtered out.
+            // This centralizes the due-date preset logic used by applyFilters, renderMyTasksView,
+            // and renderTimelineView to ensure consistent behavior across all views.
+            var passesDatePresetFilter = function (dateStr, preset) {
+                if (!preset) { return true; } // No filter = pass all
+
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                if (preset === 'none') {
+                    // Show only items with no due date
+                    return !dateStr;
+                }
+
+                // All other presets require a due date
+                if (!dateStr) { return false; }
+
+                var itemDate = new Date(dateStr);
+                itemDate.setHours(0, 0, 0, 0);
+
+                switch (preset) {
+                    case 'overdue':
+                        return itemDate < today;
+                    case 'today':
+                        return itemDate.getTime() === today.getTime();
+                    case 'week':
+                        // Due between today and end of current week (Sunday)
+                        var endOfWeek = new Date(today);
+                        endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
+                        return itemDate >= today && itemDate <= endOfWeek;
+                    case 'month':
+                        // Due between today and end of current month
+                        var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                        return itemDate >= today && itemDate <= endOfMonth;
+                    case 'quarter':
+                        // Due between today and end of current quarter
+                        var currentQuarter = Math.floor(today.getMonth() / 3);
+                        var endOfQuarter = new Date(today.getFullYear(), (currentQuarter + 1) * 3, 0);
+                        return itemDate >= today && itemDate <= endOfQuarter;
+                }
+                return true; // Unknown preset = pass
+            };
+
+            // Shared helper: unified filter function for projects.
+            // Checks assignee, status (completion), score, duePreset, and visibility filters.
+            // Used by applyFilters (Pipeline), renderMyTasksView, and renderTimelineView.
+            // For tasks, use itemPassesFilters with task-specific logic in renderMyTasksView.
+            var projectPassesFilters = function (item, filters, scoringDims) {
+                // Assignee filter
+                if (!assigneeMatchesFilter(item.assignee, filters.assignee)) {
+                    return false;
+                }
+
+                // Status filter (project completion)
+                if (filters.status === 'incomplete' && item.completed) { return false; }
+                if (filters.status === 'complete' && !item.completed) { return false; }
+
+                // Visibility filter
+                if (filters.visibility === 'active' && item.completed) { return false; }
+                if (filters.visibility === 'completed' && !item.completed) { return false; }
+
+                // Score filter
+                if (filters.minScore > 0) {
+                    var itemScore = 0;
+                    if (item.scoring && scoringDims) {
+                        var total = 0;
+                        scoringDims.forEach(function(dim) {
+                            if (item.scoring[dim] !== undefined) total += item.scoring[dim];
+                        });
+                        itemScore = total / scoringDims.length;
+                    }
+                    if (itemScore < filters.minScore) { return false; }
+                }
+
+                // Due date preset filter (uses effective due date - project date or earliest task date)
+                var effectiveDue = getEffectiveDueDate(item);
+                if (!passesDatePresetFilter(effectiveDue, filters.duePreset)) {
+                    return false;
+                }
+
+                return true;
+            };
+
+            // Shared helper: filter function for tasks in My Tasks view.
+            // Checks task-level assignee (with fallback to project), status (done), due date, and project completion.
+            // taskDescriptor should include: task, projectAssignee, effectiveDueDate, projectCompleted
+            var taskPassesFilters = function (taskDescriptor, filters) {
+                var task = taskDescriptor.task;
+
+                // Assignee filter - check task assignee first, fall back to project assignee
+                var effectiveAssignee = task.assignee || taskDescriptor.projectAssignee || '';
+                if (!assigneeMatchesFilter(effectiveAssignee, filters.assignee)) {
+                    return false;
+                }
+
+                // Status filter (task done state)
+                if (filters.status === 'incomplete' && task.done) { return false; }
+                if (filters.status === 'complete' && !task.done) { return false; }
+
+                // Visibility filter - also check parent project completion
+                if (filters.visibility === 'active') {
+                    // Hide completed tasks and tasks from completed projects
+                    if (task.done || taskDescriptor.projectCompleted) { return false; }
+                }
+                if (filters.visibility === 'completed') {
+                    // Show only completed tasks or tasks from completed projects
+                    if (!task.done && !taskDescriptor.projectCompleted) { return false; }
+                }
+
+                // Project-level completion check: if project is completed, honor status filter
+                // This ensures tasks from completed projects don't show when filtering for incomplete
+                if (filters.status === 'incomplete' && taskDescriptor.projectCompleted) {
+                    return false;
+                }
+
+                // Due date preset filter (uses task's effective due date)
+                if (!passesDatePresetFilter(taskDescriptor.effectiveDueDate, filters.duePreset)) {
+                    return false;
+                }
+
+                return true;
+            };
+
             // Get filter elements
             var assigneeSelect = advancedFilters.querySelector('.cp-kanban-filter-assignee-select');
             var statusSelect = advancedFilters.querySelector('.cp-kanban-filter-status-select');
@@ -2061,78 +2254,12 @@ define([
                 currentFilters.minScore = parseFloat(scoreMin.value);
                 currentFilters.duePreset = duePresetSelect.value;
 
-                // Apply custom filter
+                // Get scoring dimension keys for filter helper
+                var scoringDimKeys = scoringDimensions.map(function(d) { return d.key; });
+
+                // Apply custom filter using shared helper
                 kanban.options.customFilter = function(item) {
-                    // Assignee filter (case-insensitive)
-                    if (currentFilters.assignee) {
-                        if (!item.assignee) return false;
-                        var filterAssigneeLower = currentFilters.assignee.toLowerCase();
-                        var itemAssignees = item.assignee.split(',').map(function(a) { return a.trim().toLowerCase(); });
-                        if (itemAssignees.indexOf(filterAssigneeLower) === -1) return false;
-                    }
-
-                    // Status filter (project completion)
-                    if (currentFilters.status === 'incomplete' && item.completed) return false;
-                    if (currentFilters.status === 'complete' && !item.completed) return false;
-
-                    // Score filter
-                    if (currentFilters.minScore > 0) {
-                        var itemScore = 0;
-                        if (item.scoring) {
-                            var total = 0;
-                            var dimensions = scoringDimensions.map(function(d) { return d.key; });
-                            dimensions.forEach(function(dim) {
-                                if (item.scoring[dim] !== undefined) total += item.scoring[dim];
-                            });
-                            itemScore = total / dimensions.length;
-                        }
-                        if (itemScore < currentFilters.minScore) return false;
-                    }
-
-                    // Due date preset filter
-                    if (currentFilters.duePreset) {
-                        var today = new Date();
-                        today.setHours(0, 0, 0, 0);
-
-                        if (currentFilters.duePreset === 'none') {
-                            // Show only items with no due date
-                            if (item.due_date) return false;
-                        } else {
-                            // All other presets require a due date
-                            if (!item.due_date) return false;
-
-                            var itemDate = new Date(item.due_date);
-                            itemDate.setHours(0, 0, 0, 0);
-
-                            switch (currentFilters.duePreset) {
-                                case 'overdue':
-                                    if (itemDate >= today) return false;
-                                    break;
-                                case 'today':
-                                    if (itemDate.getTime() !== today.getTime()) return false;
-                                    break;
-                                case 'week':
-                                    // Due between today and end of current week (Sunday)
-                                    var endOfWeek = new Date(today);
-                                    endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
-                                    if (itemDate < today || itemDate > endOfWeek) return false;
-                                    break;
-                                case 'month':
-                                    // Due between today and end of current month
-                                    var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                                    if (itemDate < today || itemDate > endOfMonth) return false;
-                                    break;
-                                case 'quarter':
-                                    // Due between today and end of current quarter
-                                    var currentQuarter = Math.floor(today.getMonth() / 3);
-                                    var endOfQuarter = new Date(today.getFullYear(), (currentQuarter + 1) * 3, 0);
-                                    if (itemDate < today || itemDate > endOfQuarter) return false;
-                                    break;
-                            }
-                        }
-                    }
-
-                    return true;
+                    return projectPassesFilters(item, currentFilters, scoringDimKeys);
                 };
 
                 // Apply sorting (Pipeline/Board view sorts PROJECTS)
@@ -2172,6 +2299,12 @@ define([
                     kanban.options.customSort = null;
                 }
 
+                // Debug logging for filter application
+                if (DEBUG_KANBAN) {
+                    console.log('[Kanban Debug] applyFilters - currentFilters:', JSON.stringify(currentFilters));
+                    console.log('[Kanban Debug] applyFilters - currentViewMode:', currentViewMode);
+                }
+
                 // Re-render based on current view mode
                 if (currentViewMode === 'mytasks') {
                     renderMyTasksView();
@@ -2179,6 +2312,10 @@ define([
                     renderTimelineView();
                 } else {
                     // Pipeline/board view
+                    if (DEBUG_KANBAN) {
+                        var boardsItemCount = kanban.options.boards && kanban.options.boards.items ? Object.keys(kanban.options.boards.items).length : 0;
+                        console.log('[Kanban Debug] applyFilters (Pipeline) - total items before filter:', boardsItemCount);
+                    }
                     kanban.setBoards(kanban.options.boards);
                     addEditItemButton(framework, kanban);
                     addMoveElementButton(framework, kanban);
@@ -2195,6 +2332,42 @@ define([
                 applyFilters();
             });
             $(duePresetSelect).change(applyFilters);
+
+            // Add "Clear All Filters" button
+            var clearFiltersBtn = h('button.btn.btn-secondary.cp-kanban-clear-filters', {
+                title: 'Reset all filters to defaults'
+            }, [
+                h('i.fa.fa-times-circle'),
+                h('span', ' Clear All Filters')
+            ]);
+
+            $(clearFiltersBtn).on('click', function() {
+                // Reset all filters to defaults
+                currentFilters.assignee = '';
+                currentFilters.status = '';
+                currentFilters.sort = '';
+                currentFilters.minScore = 0;
+                currentFilters.duePreset = '';
+                currentFilters.visibility = 'all';
+
+                // Update UI elements
+                assigneeSelect.value = '';
+                statusSelect.value = '';
+                sortSelect.value = '';
+                scoreMin.value = 0;
+                scoreValue.textContent = '0';
+                duePresetSelect.value = '';
+
+                // Re-apply filters (will render with defaults)
+                applyFilters();
+
+                if (DEBUG_KANBAN) {
+                    console.log('[clearFiltersBtn] Filters reset to defaults:', JSON.stringify(currentFilters));
+                }
+            });
+
+            // Insert button into advanced filters panel (after existing controls)
+            $(advancedFilters).append(clearFiltersBtn);
 
             // Function to update filter/sort visibility based on current view
             var updateFilterVisibilityForView = function(viewMode) {
@@ -2441,9 +2614,15 @@ define([
             timelineViewStart.setDate(timelineViewStart.getDate() - 7); // Start 1 week before today
 
             // Get current user's display name
+            // Safely accesses nested framework metadata; returns empty string if any part is missing.
             var getCurrentUserName = function () {
+                // Guard against missing nested properties to prevent runtime errors in edge contexts
+                if (!framework._) { return ''; }
+                if (!framework._.cpNfInner) { return ''; }
+                if (!framework._.cpNfInner.metadataMgr) { return ''; }
                 // Use getUserData().name which is the presence data (same as what toolbar shows)
                 var userData = framework._.cpNfInner.metadataMgr.getUserData();
+                if (!userData) { return ''; }
                 return userData.name || '';
             };
 
@@ -2467,6 +2646,12 @@ define([
                     }
                 });
 
+                if (DEBUG_KANBAN) {
+                    console.log('[getAllTasks] Total items:', Object.keys(items).length,
+                                'Active items:', Object.keys(activeItemIds).length,
+                                'Orphaned items:', Object.keys(items).filter(function(id) { return !activeItemIds[id]; }));
+                }
+
                 Object.keys(items).forEach(function (itemId) {
                     // Skip orphaned items (not attached to any board)
                     if (!activeItemIds[itemId]) {
@@ -2489,16 +2674,14 @@ define([
 
                     item.tasks.forEach(function (task, taskIndex) {
                         var taskAssigneeRaw = task.assignee || '';
+                        var projectAssignee = item.assignee || '';
+
+                        // Effective assignee: task's own assignee, or fall back to project
+                        var effectiveAssignee = taskAssigneeRaw || projectAssignee;
 
                         // Check if assigned to me - handle both single assignee and comma-separated list
-                        var isAssignedToMe = false;
-                        if (myName && taskAssigneeRaw) {
-                            // Split by comma and check each assignee
-                            var assigneeList = taskAssigneeRaw.split(',').map(function(a) {
-                                return a.toLowerCase().trim();
-                            }).filter(function(a) { return a; });
-                            isAssignedToMe = assigneeList.indexOf(myName) !== -1;
-                        }
+                        // Use shared helper for consistent normalization
+                        var isAssignedToMe = myName && assigneeMatchesFilter(effectiveAssignee, myName);
 
                         allTasks.push({
                             task: task,
@@ -2510,7 +2693,10 @@ define([
                             // Effective due date: task's own due date, or fall back to project
                             effectiveDueDate: task.due_date || item.due_date || null,
                             projectScore: projectScore,
-                            isAssignedToMe: isAssignedToMe
+                            isAssignedToMe: isAssignedToMe,
+                            // Include project-level data for filter consistency
+                            projectCompleted: !!item.completed,
+                            projectAssignee: projectAssignee
                         });
                     });
                 });
@@ -2527,6 +2713,10 @@ define([
                     return dateA - dateB;
                 });
 
+                if (DEBUG_KANBAN) {
+                    console.log('[getAllTasks] Total tasks collected:', allTasks.length);
+                }
+
                 return allTasks;
             };
 
@@ -2535,65 +2725,26 @@ define([
                 $myTasksContainer.empty();
                 var allDocTasks = getAllTasks();
 
-                // Apply filters from shared currentFilters
-                var displayTasks = allDocTasks;
-                displayTasks = displayTasks.filter(function (td) {
-                    var task = td.task;
+                // Debug logging for filter diagnosis
+                if (DEBUG_KANBAN) {
+                    var boardsItemsKeys = kanban.options.boards && kanban.options.boards.items ? Object.keys(kanban.options.boards.items) : [];
+                    console.log('=== RENDER MYTASKS === allDocTasks.length:', allDocTasks ? allDocTasks.length : 0,
+                                'kanban.options.boards.items keys:', boardsItemsKeys,
+                                'currentFilters:', currentFilters);
+                }
 
-                    // Assignee filter (case-insensitive)
-                    if (currentFilters.assignee) {
-                        var filterAssigneeLower = currentFilters.assignee.toLowerCase();
-                        var taskAssignees = (task.assignee || '').split(',').map(function(a) { return a.trim().toLowerCase(); });
-                        if (taskAssignees.indexOf(filterAssigneeLower) === -1) { return false; }
-                    }
-
-                    // Status filter (Tasks view only)
-                    if (currentFilters.status === 'incomplete' && task.done) { return false; }
-                    if (currentFilters.status === 'complete' && !task.done) { return false; }
-
-                    // Due date preset filter (uses task's due date, or falls back to project's due date)
-                    if (currentFilters.duePreset) {
-                        var today = new Date();
-                        today.setHours(0, 0, 0, 0);
-                        var dueDate = td.effectiveDueDate; // Task date or project date
-
-                        if (currentFilters.duePreset === 'none') {
-                            if (dueDate) { return false; }
-                        } else {
-                            if (!dueDate) { return false; }
-                            var taskDate = new Date(dueDate);
-                            taskDate.setHours(0, 0, 0, 0);
-
-                            switch (currentFilters.duePreset) {
-                                case 'overdue':
-                                    if (taskDate >= today) { return false; }
-                                    break;
-                                case 'today':
-                                    if (taskDate.getTime() !== today.getTime()) { return false; }
-                                    break;
-                                case 'week':
-                                    // Due between today and end of current week
-                                    var endOfWeek = new Date(today);
-                                    endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
-                                    if (taskDate < today || taskDate > endOfWeek) { return false; }
-                                    break;
-                                case 'month':
-                                    // Due between today and end of current month
-                                    var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                                    if (taskDate < today || taskDate > endOfMonth) { return false; }
-                                    break;
-                                case 'quarter':
-                                    // Due between today and end of current quarter
-                                    var currentQuarter = Math.floor(today.getMonth() / 3);
-                                    var endOfQuarter = new Date(today.getFullYear(), (currentQuarter + 1) * 3, 0);
-                                    if (taskDate < today || taskDate > endOfQuarter) { return false; }
-                                    break;
-                            }
-                        }
-                    }
-
-                    return true;
+                // Apply filters from shared currentFilters using shared helper
+                var displayTasks = allDocTasks.filter(function (td) {
+                    return taskPassesFilters(td, currentFilters);
                 });
+
+                // Debug logging for filtered result
+                if (DEBUG_KANBAN) {
+                    var filteredOutCount = allDocTasks.length - displayTasks.length;
+                    console.log('[renderMyTasksView] Filtered out:', filteredOutCount, 'tasks',
+                                'Remaining:', displayTasks.length,
+                                'Filters:', JSON.stringify(currentFilters));
+                }
 
                 // Apply sorting (Tasks view sorts TASKS)
                 if (currentFilters.sort && currentFilters.sort.startsWith('task-')) {
@@ -2926,69 +3077,35 @@ define([
                     return total / dimensions.length;
                 };
 
-                // Helper to check due date filter
-                var passesDateFilter = function(dateStr, preset) {
-                    if (!preset) return true;
-                    var today = new Date();
-                    today.setHours(0, 0, 0, 0);
+                // Get scoring dimension keys for filter helper
+                var scoringDimKeys = scoringDimensions.map(function(d) { return d.key; });
 
-                    if (preset === 'none') {
-                        return !dateStr;
+                // Track orphaned items for diagnostics
+                var orphanedIds = [];
+                Object.keys(items).forEach(function(id) {
+                    if (!activeItemIds[id]) {
+                        orphanedIds.push(id);
                     }
-                    if (!dateStr) return false;
+                });
 
-                    var itemDate = new Date(dateStr);
-                    itemDate.setHours(0, 0, 0, 0);
+                if (DEBUG_KANBAN) {
+                    console.log('=== RENDER TIMELINE === projects.length:', Object.keys(items).filter(function(id) { return activeItemIds[id]; }).length,
+                                'activeItemIds:', Object.keys(activeItemIds || {}),
+                                'orphaned:', orphanedIds,
+                                'currentFilters:', currentFilters);
+                }
 
-                    switch (preset) {
-                        case 'overdue':
-                            return itemDate < today;
-                        case 'today':
-                            return itemDate.getTime() === today.getTime();
-                        case 'week':
-                            // Due between today and end of current week
-                            var endOfWeek = new Date(today);
-                            endOfWeek.setDate(today.getDate() + (7 - today.getDay()));
-                            return itemDate >= today && itemDate <= endOfWeek;
-                        case 'month':
-                            // Due between today and end of current month
-                            var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                            return itemDate >= today && itemDate <= endOfMonth;
-                        case 'quarter':
-                            // Due between today and end of current quarter
-                            var currentQuarter = Math.floor(today.getMonth() / 3);
-                            var endOfQuarter = new Date(today.getFullYear(), (currentQuarter + 1) * 3, 0);
-                            return itemDate >= today && itemDate <= endOfQuarter;
-                    }
-                    return true;
-                };
-
-                // Apply all filters consistently with other views
+                // Apply all filters consistently with other views using shared helper
                 Object.keys(items).forEach(function (itemId) {
                     // Skip orphaned items
                     if (!activeItemIds[itemId]) { return; }
 
                     var item = items[itemId];
 
-                    // Apply assignee filter (case-insensitive)
-                    if (currentFilters.assignee) {
-                        if (!item.assignee) return;
-                        var filterAssigneeLower = currentFilters.assignee.toLowerCase();
-                        var itemAssignees = item.assignee.split(',').map(function(a) { return a.trim().toLowerCase(); });
-                        if (itemAssignees.indexOf(filterAssigneeLower) === -1) return;
+                    // Use shared filter helper for consistent behavior across views
+                    if (!projectPassesFilters(item, currentFilters, scoringDimKeys)) {
+                        return;
                     }
-
-                    // Apply status filter (project completion)
-                    if (currentFilters.status === 'incomplete' && item.completed) return;
-                    if (currentFilters.status === 'complete' && !item.completed) return;
-
-                    // Apply score filter
-                    if (currentFilters.minScore > 0) {
-                        if (getProjectScore(item) < currentFilters.minScore) return;
-                    }
-
-                    // Apply due date filter
-                    if (!passesDateFilter(item.due_date, currentFilters.duePreset)) return;
 
                     projects.push({
                         id: itemId,
@@ -3003,6 +3120,16 @@ define([
                         color: item.color || ''
                     });
                 });
+
+                // Debug logging for filtered result
+                if (DEBUG_KANBAN) {
+                    var totalActiveItems = Object.keys(items).filter(function(id) { return activeItemIds[id]; }).length;
+                    var filteredOutCount = totalActiveItems - projects.length;
+                    console.log('[renderTimelineView] Total active items:', totalActiveItems,
+                                'Filtered out:', filteredOutCount,
+                                'Remaining projects:', projects.length,
+                                'Filters:', JSON.stringify(currentFilters));
+                }
 
                 // Apply sorting (Timeline view sorts PROJECTS)
                 if (currentFilters.sort && currentFilters.sort.startsWith('project-')) {
@@ -3472,6 +3599,10 @@ define([
                 // Update filter panel visibility based on view
                 updateFilterVisibilityForView(currentViewMode);
 
+                if (DEBUG_KANBAN) {
+                    console.log('=== RENDER CURRENT VIEW === switching to:', currentViewMode);
+                }
+
                 if (currentViewMode === 'board') {
                     // Cleanup timeline event handlers when switching away
                     $(document).off('.timeline-resize');
@@ -3490,11 +3621,17 @@ define([
                     $kanbanContent.hide();
                     $myTasksContainer.show();
                     $timelineContainer.hide();
+                    if (DEBUG_KANBAN) {
+                        console.log('=== SWITCH TO MYTASKS === calling renderMyTasksView()');
+                    }
                     renderMyTasksView();
                 } else if (currentViewMode === 'timeline') {
                     $kanbanContent.hide();
                     $myTasksContainer.hide();
                     $timelineContainer.show();
+                    if (DEBUG_KANBAN) {
+                        console.log('=== SWITCH TO TIMELINE === calling renderTimelineView()');
+                    }
                     renderTimelineView();
                 }
             };
@@ -3573,7 +3710,6 @@ define([
 
             // Collapsible filter panel (tags filter removed)
             var filterPanelContent = h('div.cp-kanban-filter-panel-content', [
-                visibilityFilterToggle,
                 advancedFilters
             ]);
             var $filterPanelContent = $(filterPanelContent);
@@ -3697,6 +3833,11 @@ define([
             $container.addClass('cp-app-readonly');
         }
 
+        // cleanData: Mutates the given boards object to remove duplicates and orphaned items,
+        // then triggers localChange() to persist changes.
+        // NOTE: This function directly manipulates board.item arrays for cleanup purposes.
+        // This is a special case; normal item operations should go through jKanban's
+        // addElement() and moveItem() APIs to maintain the activeItemIds invariant.
         var cleanData = function (boards) {
             if (typeof(boards) !== "object") { return; }
             var items = boards.items || {};
@@ -3716,7 +3857,7 @@ define([
             });
             Object.keys(items).forEach(function (eid) {
                 var exists = Object.keys(data).some(function (id) {
-                    return (data[id].item || []).indexOf(Number(eid)) !== -1;
+                    return (data[id].item || []).indexOf(Number(eid)) !== -1;
                 });
                 if (!exists) { delete items[eid]; }
             });
@@ -3738,13 +3879,13 @@ define([
         framework.setFileExporter('.json', function () {
             var content = kanban.getBoardsJSON();
             cleanData(content);
-            return new Blob([JSON.stringify(kanban.getBoardsJSON(), 0, 2)], {
+            return new Blob([JSON.stringify(content, 0, 2)], {
                 type: 'application/json',
             });
         });
 
         framework.onEditableChange(function (unlocked) {
-            if (framework.isReadOnly()) { return; }
+            if (framework.isReadOnly()) { return; }
             if (!kanban) { return; }
             if (unlocked) {
                 addEditItemButton(framework, kanban);

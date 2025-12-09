@@ -49,6 +49,11 @@
     color: @cp_kanban-fg;
     background-color: @cp_app-bg;
 
+    // Hide filtered items in Pipeline view
+    .kanban-item-hidden {
+        display: none !important;
+    }
+
     @board-bg: @kanban-surface;
 
     @palette0: @cp_kanban-color0; // Default bg color for header

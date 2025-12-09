@@ -37,6 +37,11 @@ define([
                 items: {},
                 list: []
             }, // The realtime kanban
+            // _boards is a cloned, view-only copy of boards used ONLY for preserving scroll
+            // positions and tracking which boards were previously displayed during redraws.
+            // It stores only 'data' (board metadata) and 'list' (board ordering).
+            // IMPORTANT: _boards must NEVER be used for reading or writing 'items' (tasks/cards).
+            // All item operations must go through options.boards.items.
             _boards: {}, // The displayed kanban. We need to remember the old columns when we redraw
             getAvatar: function () {},
             openLink: function () {},
@@ -469,10 +474,21 @@ define([
             });
             return exists;
         };
+        // moveItem() is one of the ONLY supported paths for attaching/detaching items to/from
+        // boards. It maintains sync between boards.items and each board.item array.
+        // Along with addElement(), these functions ensure the activeItemIds invariant remains
+        // correct: an item is "active" only if it appears in at least one board.item array.
+        // WARNING: Any direct mutation of boards.data[*].item outside addElement() or moveItem()
+        // is unsupported and may cause tasks or projects to be filtered out of My Tasks and
+        // Timeline views. Contributors should always use these APIs for item attachment.
         this.moveItem = function (source, eid, board, pos) {
             var boards = self.options.boards;
             var same = -1;
             if (source && boards.data[source]) {
+                // Defensive normalization: ensure source board.item exists and is an array
+                if (!Array.isArray(boards.data[source].item)) {
+                    boards.data[source].item = [];
+                }
                 // Remove from this board only
                 var l = boards.data[source].item;
                 var idx = l.indexOf(Number(eid));
@@ -482,6 +498,11 @@ define([
                 // Remove the item from all its board
                 var from = findItem(eid);
                 from.forEach(function (obj) {
+                    // Defensive normalization
+                    if (!Array.isArray(obj.board.item)) {
+                        obj.board.item = [];
+                        return;
+                    }
                     obj.board.item.splice(obj.pos, 1);
                     if (obj.board === board) { same = obj.pos; }
                 });
@@ -495,6 +516,10 @@ define([
                     self.options.refresh();
                 }
                 return;
+            }
+            // Defensive normalization: ensure target board.item exists and is an array
+            if (!Array.isArray(board.item)) {
+                board.item = [];
             }
             // If the item already exists in the target board, abort (duplicate)
             if (board.item.indexOf(eid) !== -1) {
@@ -958,10 +983,43 @@ define([
             return nodeItem;
         };
 
+        // addElement() is one of the ONLY supported paths for attaching items to boards.
+        // It maintains sync between boards.items and each board.item array.
+        // Along with moveItem(), these functions ensure the activeItemIds invariant remains
+        // correct: an item is "active" only if it appears in at least one board.item array.
+        // WARNING: Any direct mutation of boards.data[*].item outside addElement() or moveItem()
+        // is unsupported and may cause tasks or projects to be filtered out of My Tasks and
+        // Timeline views. Contributors should always use these APIs for item attachment.
         this.addElement = function (boardID, element, before) {
 
             // add Element to JSON
             var boardJSON = __findBoardJSON(boardID);
+
+            // Guard: if board not found, log warning and return early to prevent errors
+            if (!boardJSON) {
+                console.warn('[kanban addElement] Board ID ' + boardID + ' not found. Cannot add element.');
+                return self;
+            }
+
+            // Defensive normalization: ensure board.item exists and is an array
+            if (!Array.isArray(boardJSON.item)) {
+                boardJSON.item = [];
+            }
+
+            // Check for duplicate: avoid adding the same item id multiple times
+            if (boardJSON.item.indexOf(element.id) !== -1) {
+                // This path intentionally updates only self.options.boards.items[element.id]
+                // and does NOT re-render the DOM. For full re-render/re-sync, use setBoards().
+                self.options.boards.items = self.options.boards.items || {};
+                var existingItem = self.options.boards.items[element.id];
+                // Warn if the new element differs from stored item (discourages using addElement for refresh)
+                if (existingItem && JSON.stringify(existingItem) !== JSON.stringify(element)) {
+                    console.warn('[kanban addElement] Element ' + element.id + ' already exists with different data. ' +
+                        'addElement() updates data but does not re-render. Use setBoards() for full redraw.');
+                }
+                self.options.boards.items[element.id] = element;
+                return self;
+            }
 
             if (before) {
                 boardJSON.item.unshift(element.id);
@@ -1139,9 +1197,11 @@ define([
 
         this.addBoard = function (board) {
             if (!board || !board.id) { return; }
-            // We need to store all the columns in _boards too because it's used to
-            // remember what columns were already displayed when we redraw (in order to
-            // preserve their scroll value)
+            // Board objects are written BY REFERENCE into both options.boards.data and
+            // options._boards.data. This makes incremental local changes immediately visible
+            // in both structures without needing a full clone. Any full content refresh
+            // (e.g., from remote updates) will later replace _boards entirely via setBoards().
+            // Note: We only sync 'data' and 'list' to _boards; items are never stored there.
             var boards = self.options.boards;
             boards.data = boards.data || {};
             boards.list = boards.list || [];
@@ -1149,6 +1209,7 @@ define([
             _boards.data = _boards.data || {};
             _boards.list = _boards.list || [];
             // If it already there, abort
+            // Write by reference to both structures for immediate local visibility
             boards.data[board.id] = board;
             _boards.data[board.id] = board;
             if (boards.list.indexOf(board.id) !== -1) { return; }
@@ -1161,6 +1222,11 @@ define([
         };
 
         this.addBoards = function() {
+            // Sanity check: this function should only use _boards.data and _boards.list
+            // for determining which boards to render. It must NOT read _boards.items.
+            // Item data is always fetched from self.options.boards.items via getBoardNode().
+            // If you need item data, use self.options.boards.items instead.
+
             //for on all the boards
             var boards = self.options._boards;
             boards.list = boards.list || [];
@@ -1191,6 +1257,10 @@ define([
         };
 
         var onVisibleHandler = false;
+        // setBoards() is the CANONICAL path for re-synchronizing _boards with the
+        // authoritative boards structure. It performs a full clone and redraw.
+        // All remote updates and full refreshes should flow through this function.
+        // For incremental local changes, addBoard() writes by reference to both structures.
         this.setBoards = function (boards) {
             var scroll = {};
             // Fix the tags
@@ -1202,7 +1272,19 @@ define([
             // Get existing boards list
             var list = Util.clone(this.options._boards.list);
 
+            // Diagnostic check: verify each boardkey in the old list exists in the new boards.data
+            // This helps detect list/data divergence due to remote or migration bugs.
+            list.forEach(function (boardkey) {
+                if (!boards.data || !boards.data[boardkey]) {
+                    console.warn('[kanban setBoards] Board ID ' + boardkey + ' in _boards.list has no corresponding entry in boards.data');
+                }
+            });
+
             // Update memory
+            this.options.boards = boards;
+            // Clone boards into _boards for scroll preservation and redraw tracking.
+            // _boards is a view-only copy: only 'data' and 'list' should be read from it.
+            // Items must always be read from options.boards.items, never from _boards.
             this.options._boards = Util.clone(boards);
 
             // If the tab is not focused but a handler already exists: abort
@@ -1222,7 +1304,12 @@ define([
                 // Preserve scroll
                 self.options._boards.list.forEach(function (id) {
                     if (!scroll[id]) { return; }
-                    $('.kanban-board[data-id="'+id+'"] .kanban-drag').scrollTop(scroll[id]);
+                    var $boardDrag = $('.kanban-board[data-id="'+id+'"] .kanban-drag');
+                    if (!$boardDrag.length) {
+                        console.warn('[kanban setBoards] Scroll restoration: no DOM element found for board ID ' + id);
+                        return;
+                    }
+                    $boardDrag.scrollTop(scroll[id]);
                 });
                 $el.scrollLeft(scrollLeft);
                 reorder();
