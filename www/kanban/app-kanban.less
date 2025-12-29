@@ -1312,6 +1312,104 @@
                 }
             }
         }
+
+        // Dark mode for PR #3 feature components
+
+        // Task row action buttons (Recurrence, Dependencies, Move)
+        .cp-kanban-task-row {
+            .cp-kanban-task-recurrence,
+            .cp-kanban-task-deps,
+            .cp-kanban-task-move {
+                background: #2D2D2D !important;
+                border-color: #3D3D3D !important;
+                color: #9CA3AF !important;
+
+                &:hover {
+                    background: #3D3D3D !important;
+                    border-color: #4D4D4D !important;
+                    color: #E5E5E5 !important;
+                }
+
+                &.active {
+                    background: #3B82F6 !important;
+                    border-color: #3B82F6 !important;
+                    color: #FFFFFF !important;
+                }
+
+                &.has-deps {
+                    background: rgba(59, 130, 246, 0.15) !important;
+                    border-color: #3B82F6 !important;
+                    color: #60A5FA !important;
+                }
+            }
+
+            &.cp-kanban-task-instance {
+                background: rgba(234, 179, 8, 0.15) !important;
+                border-left-color: #EAB308 !important;
+            }
+        }
+
+        // Recurrence Modal
+        .cp-recurrence-modal {
+            .cp-recurrence-row {
+                label {
+                    color: #E5E5E5 !important;
+                }
+
+                select,
+                input {
+                    background: #1A1A1A !important;
+                    color: #F9FAFB !important;
+                    border-color: #2D2D2D !important;
+                }
+            }
+        }
+
+        // Dependencies Modal
+        .cp-dependencies-modal {
+            p {
+                color: #E5E5E5 !important;
+            }
+
+            .cp-dep-task-option {
+                border-color: #2D2D2D !important;
+                color: #E5E5E5 !important;
+
+                input[type="checkbox"] {
+                    accent-color: #3B82F6;
+                }
+            }
+        }
+
+        // Dashboard Analytics View
+        #cp-kanban-dashboard-container {
+            background: #0D0D0D !important;
+        }
+
+        .cp-dashboard-stat {
+            background: #1A1A1A !important;
+            border-color: #2D2D2D !important;
+
+            &.warning {
+                background: rgba(245, 158, 11, 0.15) !important;
+                border-color: #F59E0B !important;
+
+                .cp-stat-value {
+                    color: #FBBF24 !important;
+                }
+            }
+        }
+
+        .cp-dashboard-section {
+            background: #1A1A1A !important;
+            border-color: #2D2D2D !important;
+        }
+
+        .cp-dashboard-column-row {
+            .cp-col-bar {
+                background: #2D2D2D !important;
+            }
+        }
     }
 
     // Responsive - Stack columns on smaller screens
@@ -4477,6 +4575,225 @@
             .cp-timeline-bar-title {
                 display: none;
             }
+        }
+    }
+
+    // ============================================
+    // Task Row Action Buttons (Recurrence, Dependencies, Move)
+    // ============================================
+    .cp-kanban-task-row {
+        .cp-kanban-task-recurrence,
+        .cp-kanban-task-deps,
+        .cp-kanban-task-move {
+            padding: 4px 8px;
+            margin-left: 4px;
+            font-size: 12px;
+            background: var(--kanban-surface);
+            border: 1px solid var(--kanban-border);
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--kanban-text-secondary);
+            transition: all 0.15s ease;
+
+            &:hover {
+                background: var(--kanban-surface-hover);
+                border-color: var(--kanban-border-hover);
+                color: var(--kanban-text-primary);
+            }
+
+            &.active {
+                background: #3b82f6;
+                border-color: #3b82f6;
+                color: white;
+            }
+
+            &.has-deps {
+                background: #f0f9ff;
+                border-color: #3b82f6;
+                color: #3b82f6;
+            }
+        }
+
+        &.cp-kanban-task-instance {
+            background: #fefce8;
+            border-left: 3px solid #eab308;
+        }
+    }
+
+    // Recurrence Modal
+    .cp-recurrence-modal {
+        .cp-recurrence-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+
+            label {
+                min-width: 60px;
+                font-weight: 500;
+            }
+
+            select,
+            input {
+                padding: 6px 10px;
+                border: 1px solid var(--kanban-border);
+                border-radius: 4px;
+            }
+        }
+    }
+
+    // Dependencies Modal
+    .cp-dependencies-modal {
+        .cp-dep-task-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .cp-dep-task-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-bottom: 1px solid var(--kanban-border);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+
+    // ============================================
+    // Dashboard Analytics View
+    // ============================================
+    #cp-kanban-dashboard-container {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--kanban-board-bg);
+    }
+
+    .cp-dashboard {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .cp-dashboard-header {
+        margin-bottom: 24px;
+
+        h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--kanban-text-primary);
+        }
+
+        .cp-dashboard-subtitle {
+            margin: 0;
+            color: var(--kanban-text-secondary);
+            font-size: 14px;
+        }
+    }
+
+    .cp-dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+    }
+
+    .cp-dashboard-stat {
+        background: var(--kanban-surface);
+        border: 1px solid var(--kanban-border);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.2s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--kanban-shadow);
+        }
+
+        &.warning {
+            background: #fef3c7;
+            border-color: #f59e0b;
+
+            .cp-stat-value {
+                color: #d97706;
+            }
+        }
+
+        .cp-stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--kanban-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .cp-stat-label {
+            font-size: 13px;
+            color: var(--kanban-text-secondary);
+            font-weight: 500;
+        }
+    }
+
+    .cp-dashboard-section {
+        background: var(--kanban-surface);
+        border: 1px solid var(--kanban-border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+
+        h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--kanban-text-primary);
+        }
+    }
+
+    .cp-dashboard-columns {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cp-dashboard-column-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .cp-col-name {
+            min-width: 120px;
+            font-weight: 500;
+            color: var(--kanban-text-primary);
+        }
+
+        .cp-col-bar {
+            flex: 1;
+            height: 24px;
+            background: var(--kanban-border);
+            border-radius: 4px;
+            overflow: hidden;
+
+            .cp-col-bar-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #10b981, #34d399);
+                transition: width 0.3s ease;
+            }
+        }
+
+        .cp-col-count {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--kanban-text-secondary);
         }
     }
 }
