@@ -56,10 +56,11 @@ define([
     CodeMirror,
     jKanban,
     Export,
-    TypingTest) {
+    TypingTest)
+{
 
     var verbose = function (x) { console.log(x); };
-    verbose = function () { }; // comment out to enable verbose logging
+    verbose = function () {}; // comment out to enable verbose logging
 
     // Debug flag for kanban diagnostic logging. Set to true to enable console output
     // for data synchronization and other diagnostic messages.
@@ -83,8 +84,8 @@ define([
     var onCursorUpdate = Util.mkEvent();
     var remoteCursors = {};
 
-    let getCursor = () => { };
-    let restoreCursor = () => { };
+    let getCursor = () => {};
+    let restoreCursor = () => {};
 
     var setValueAndCursor = function (input, val, _cursor) {
         if (!input) { return; }
@@ -109,10 +110,10 @@ define([
         if (!/^[0-9a-f]{6}$/i.test(hex)) {
             return '#000000';
         }
-        var r = parseInt(hex.slice(0, 2), 16);
-        var g = parseInt(hex.slice(2, 4), 16);
-        var b = parseInt(hex.slice(4, 6), 16);
-        if ((r * 0.213 + g * 0.715 + b * 0.072) > 255 / 2) {
+        var r = parseInt(hex.slice(0,2), 16);
+        var g = parseInt(hex.slice(2,4), 16);
+        var b = parseInt(hex.slice(4,6), 16);
+        if ((r*0.213 + g*0.715 + b*0.072) > 255/2) {
             return '#000000';
         }
         return '#FFFFFF';
@@ -126,7 +127,7 @@ define([
 
         var l; // label?
         var animal = '';
-        if (cursor.name === Messages.anonymous && typeof (cursor.uid) === 'string') {
+        if (cursor.name === Messages.anonymous && typeof(cursor.uid) === 'string') {
             l = MT.getPseudorandomAnimal(cursor.uid);
             if (l) {
                 animal = '.animal';
@@ -138,7 +139,7 @@ define([
 
         var text = '';
         if (cursor.color) {
-            text = 'background-color:' + cursor.color + '; color:' + getTextColor(cursor.color) + ';';
+            text = 'background-color:' + cursor.color + '; color:'+getTextColor(cursor.color)+';';
         }
         var avatar = h('span.cp-cursor.cp-tippy-html' + animal, {
             style: text,
@@ -168,8 +169,8 @@ define([
         return tags;
     };
 
-    var addEditItemButton = function () { };
-    var addMoveElementButton = function () { };
+    var addEditItemButton = function () {};
+    var addMoveElementButton = function () {};
 
     var onRemoteChange = Util.mkEvent();
     var now = function () { return +new Date(); };
@@ -200,14 +201,14 @@ define([
         if (DEBUG_KANBAN) {
             var boards = kanban.options.boards || {};
             var activeIds = {};
-            Object.keys(boards.data || {}).forEach(function (boardId) {
+            Object.keys(boards.data || {}).forEach(function(boardId) {
                 var board = boards.data[boardId];
                 if (board && Array.isArray(board.item)) {
-                    board.item.forEach(function (itemId) { activeIds[itemId] = true; });
+                    board.item.forEach(function(itemId) { activeIds[itemId] = true; });
                 }
             });
             console.log('[_updateBoards] Post-update activeItemIds:', Object.keys(activeIds),
-                'Total items:', Object.keys(boards.items || {}).length);
+                        'Total items:', Object.keys(boards.items || {}).length);
         }
 
         onRemoteChange.fire();
@@ -400,7 +401,7 @@ define([
 
         // Detailed scoring sliders (collapsible)
         var scoringDetails = [];
-        scoringDimensions.forEach(function (dim) {
+        scoringDimensions.forEach(function(dim) {
             var slider = h('input', {
                 type: 'range',
                 min: '0',
@@ -427,7 +428,7 @@ define([
         $scoringDetailsContainer.hide(); // Collapsed by default
 
         var scoringExpanded = false;
-        $(scoringExpandBtn).on('click', function () {
+        $(scoringExpandBtn).on('click', function() {
             scoringExpanded = !scoringExpanded;
             $scoringDetailsContainer.slideToggle(150);
             $(scoringExpandIcon).toggleClass('fa-chevron-down', !scoringExpanded);
@@ -436,7 +437,7 @@ define([
         });
 
         var scoringElements = [scoringHeader, scoringDetailsContainer];
-
+        
         // Modern two-column layout matching Image 2
         var content = h('div.cp-kanban-modal-content-wrapper', [
             // Conflicts warning (if any)
@@ -444,19 +445,19 @@ define([
                 h('div', Messages.kanban_conflicts),
                 conflicts = h('div.cp-kanban-cursors')
             ]),
-
+            
             // Main two-column layout
             h('div.cp-kanban-modal-two-column', [
                 // LEFT COLUMN - Main Content
                 h('div.cp-kanban-modal-left-column', [
                     // Title (Large, prominent)
                     h('div.cp-kanban-title-section', [
-                        titleInput = h('input#cp-kanban-edit-title', {
+                        titleInput = h('input#cp-kanban-edit-title', { 
                             placeholder: 'Task title...',
                             class: 'cp-kanban-title-input'
                         })
                     ]),
-
+                    
                     // Description with rich editor
                     h('div.cp-kanban-description-section', [
                         h('div.cp-kanban-description-header', [
@@ -469,7 +470,7 @@ define([
                             text = h('textarea', { placeholder: 'Add a more detailed description...' })
                         ])
                     ]),
-
+                    
                     // Tasks/Subtasks Section
                     h('div.cp-kanban-tasks-section', [
                         h('div.cp-kanban-section-header', [
@@ -479,7 +480,7 @@ define([
                         tasksContainer = h('div#cp-kanban-edit-tasks')
                     ])
                 ]),
-
+                
                 // RIGHT COLUMN - Details/Metadata Sidebar
                 h('div.cp-kanban-modal-right-column', [
                     // Status indicator (shows board name)
@@ -496,7 +497,7 @@ define([
                         h('span.cp-kanban-detail-label', 'Assignee'),
                         assigneeInput = h('div#cp-kanban-edit-assignee.cp-kanban-assignee-compact')
                     ]),
-
+                    
                     // Dates Row (Start & Due side by side)
                     h('div.cp-kanban-detail-row.cp-kanban-dates-row', [
                         h('div.cp-kanban-date-field', [
@@ -514,7 +515,7 @@ define([
                             })
                         ])
                     ]),
-
+                    
                     // Tags Section
                     h('div.cp-kanban-detail-row.cp-kanban-tags-row', [
                         h('span.cp-kanban-detail-label', 'Tags'),
@@ -547,7 +548,7 @@ define([
                     ])
                 ])
             ]),
-
+            
             // Auto-save indicator
             h('div.cp-kanban-autosave-indicator', [
                 h('i.fa.fa-check'),
@@ -650,7 +651,7 @@ define([
                 editor.refresh();
             }
         };
-        cm.configureTheme(common, function () { });
+        cm.configureTheme(common, function () {});
         SFCodeMirror.mkIndentSettings(editor, framework._.cpNfInner.metadataMgr);
         editor.on('change', function () {
             var val = editor.getValue();
@@ -681,11 +682,11 @@ define([
         // Tags
         var $tags = $(tagsDiv); // Define jQuery reference to tags container
         var _field, initialTags;
-
+        
         // Plus button click handler - will be attached after modal is created
-        var attachAddTagHandler = function () {
+        var attachAddTagHandler = function() {
             var $addTagBtn = $(tagsDiv).closest('.cp-kanban-edit-modal').find('.cp-kanban-add-tag-btn-small');
-            $addTagBtn.off('click').on('click', function (e) {
+            $addTagBtn.off('click').on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (isBoard) { return; }
@@ -700,7 +701,7 @@ define([
                 }
             });
         };
-
+        
         var tags = {
             getValue: function () {
                 if (!_field) { return; }
@@ -746,7 +747,7 @@ define([
                 _field.tokenfield.on('tokenfield:createdtoken', commitTags);
                 _field.tokenfield.on('tokenfield:editedtoken', commitTags);
                 _field.tokenfield.on('tokenfield:removedtoken', commitTags);
-
+                
                 // Attach the plus button handler after input is created
                 attachAddTagHandler();
             }
@@ -793,14 +794,14 @@ define([
 
             // Parse comma-separated string to array
             if (typeof selectedAssignees === 'string') {
-                selectedAssignees = selectedAssignees.split(',').map(function (a) { return a.trim(); }).filter(function (a) { return a; });
+                selectedAssignees = selectedAssignees.split(',').map(function(a) { return a.trim(); }).filter(function(a) { return a; });
             }
 
             // Get available assignees using the same function as tasks
             var availableAssignees = getAvailableAssignees();
 
             // Also include any currently selected assignees that might not be in the list
-            selectedAssignees.forEach(function (name) {
+            selectedAssignees.forEach(function(name) {
                 if (name && availableAssignees.indexOf(name) === -1) {
                     availableAssignees.push(name);
                 }
@@ -812,8 +813,8 @@ define([
                 return;
             }
 
-            availableAssignees.forEach(function (name) {
-                var isChecked = selectedAssignees.some(function (s) {
+            availableAssignees.forEach(function(name) {
+                var isChecked = selectedAssignees.some(function(s) {
                     return s.toLowerCase() === name.toLowerCase();
                 });
 
@@ -828,10 +829,10 @@ define([
                     h('span', name)
                 ]);
 
-                $(checkbox).off('change').on('change', function () {
+                $(checkbox).off('change').on('change', function() {
                     // Get all checked assignees
                     var checkedAssignees = [];
-                    $assigneeContainer.find('.cp-kanban-assignee-checkbox:checked').each(function () {
+                    $assigneeContainer.find('.cp-kanban-assignee-checkbox:checked').each(function() {
                         checkedAssignees.push($(this).val());
                     });
                     dataObject.assignee = checkedAssignees.join(', ');
@@ -845,7 +846,7 @@ define([
         var assignee = {
             getValue: function () {
                 var checkedAssignees = [];
-                $assigneeContainer.find('.cp-kanban-assignee-checkbox:checked').each(function () {
+                $assigneeContainer.find('.cp-kanban-assignee-checkbox:checked').each(function() {
                     checkedAssignees.push($(this).val());
                 });
                 return checkedAssignees.join(', ');
@@ -934,7 +935,7 @@ define([
         var scoringData = {};
 
         // Update composite score display with progress bar
-        var updateCompositeScore = function () {
+        var updateCompositeScore = function() {
             var total = 0;
             // Always divide by all dimensions (10) - a 0 score is still a score
             Object.keys(scoringSliders).forEach(function (key) {
@@ -962,12 +963,12 @@ define([
             $(scoreProgressBar).css('background-color', barColor);
         };
 
-        Object.keys(scoringSliders).forEach(function (key) {
+        Object.keys(scoringSliders).forEach(function(key) {
             var sliderObj = scoringSliders[key];
             var $slider = $(sliderObj.slider);
             var $display = $(sliderObj.display);
 
-            $slider.on('input change', function () {
+            $slider.on('input change', function() {
                 var value = parseInt($slider.val());
                 // Validate input range (0-10)
                 if (isNaN(value) || value < 0 || value > 10) {
@@ -986,13 +987,13 @@ define([
                 commit(); // This saves to CryptPad like assignee and due_date
             });
         });
-
+        
         // Scoring field handler
         var scoring = {
-            getValue: function () {
+            getValue: function() {
                 return dataObject.scoring || {};
             },
-            setValue: function (scoringObj, preserveCursor) {
+            setValue: function(scoringObj, preserveCursor) {
                 if (isBoard) { return; }
                 scoringObj = scoringObj || {};
 
@@ -1007,7 +1008,7 @@ define([
                 dataObject.scoring = scoringObj;
 
                 // Update all sliders with saved values
-                Object.keys(scoringSliders).forEach(function (key) {
+                Object.keys(scoringSliders).forEach(function(key) {
                     var value = scoringObj[key] || 0;
                     // Validate loaded values (defense in depth)
                     if (isNaN(value) || value < 0 || value > 10) {
@@ -1046,7 +1047,7 @@ define([
 
             // 1. Add all friends/contacts (these are users who could have access)
             var friends = priv.friends || {};
-            Object.keys(friends).forEach(function (curve) {
+            Object.keys(friends).forEach(function(curve) {
                 if (curve === 'me') { return; } // Skip self entry
                 var friend = friends[curve] || {};
                 var name = friend.displayName || '';
@@ -1059,7 +1060,7 @@ define([
             // 2. Add online users from metadata (in case they're not in friends list)
             var userData = metadataMgr.getMetadata().users || {};
             var uids = [];
-            Object.keys(userData).forEach(function (netfluxId) {
+            Object.keys(userData).forEach(function(netfluxId) {
                 var data = userData[netfluxId] || {};
                 var userId = data.uid;
                 if (!userId) { return; }
@@ -1077,10 +1078,10 @@ define([
             // 3. Add any existing assignees from tasks (historical names)
             var boards = kanban.options.boards || {};
             var items = boards.items || {};
-            Object.keys(items).forEach(function (itemId) {
+            Object.keys(items).forEach(function(itemId) {
                 var item = items[itemId];
                 if (Array.isArray(item.tasks)) {
-                    item.tasks.forEach(function (task) {
+                    item.tasks.forEach(function(task) {
                         var assignee = (task.assignee || '').trim();
                         if (assignee && !seenNames[assignee.toLowerCase()]) {
                             seenNames[assignee.toLowerCase()] = true;
@@ -1128,7 +1129,7 @@ define([
                 var assigneeOptions = [h('option', { value: '', selected: isUnassigned }, '-- Unassigned --')];
                 var foundCurrentAssignee = false;
 
-                availableAssignees.forEach(function (name) {
+                availableAssignees.forEach(function(name) {
                     var isSelected = !isUnassigned && name.toLowerCase() === taskAssignee.toLowerCase();
                     if (isSelected) foundCurrentAssignee = true;
                     assigneeOptions.push(h('option', {
@@ -1154,28 +1155,6 @@ define([
                     title: 'Task due date'
                 });
 
-                // Recurrence button
-                var hasRecurrence = task.recurrence && task.recurrence.type;
-                var recurrenceBtnClass = 'cp-kanban-task-recurrence btn btn-secondary' + (hasRecurrence ? ' active' : '');
-                var recurrenceBtn = h('button.' + recurrenceBtnClass.replace(/\s+/g, '.'), {
-                    title: hasRecurrence ? ('Recurs ' + task.recurrence.type) : 'Set recurrence'
-                }, [h('i.fa.fa-repeat')]);
-
-                // Dependencies button
-                var depCount = (task.dependencies || []).length;
-                var depBtnClass = 'cp-kanban-task-deps btn btn-secondary' + (depCount > 0 ? ' has-deps' : '');
-                var depsBtn = h('button.' + depBtnClass.replace(/\s+/g, '.'), {
-                    title: depCount > 0 ? (depCount + ' dependencies') : 'Set dependencies'
-                }, [
-                    h('i.fa.fa-link'),
-                    depCount > 0 ? h('span.dep-count', String(depCount)) : null
-                ].filter(Boolean));
-
-                // Move to project button
-                var moveBtn = h('button.cp-kanban-task-move.btn.btn-secondary', {
-                    title: 'Move to another project'
-                }, [h('i.fa.fa-external-link')]);
-
                 var deleteBtn = h('button.cp-kanban-task-delete.btn.btn-danger', {
                     title: 'Delete this task'
                 }, [
@@ -1188,9 +1167,6 @@ define([
                     titleInput,
                     assigneeSelect,
                     dueDateInput,
-                    recurrenceBtn,
-                    depsBtn,
-                    moveBtn,
                     deleteBtn
                 ]);
 
@@ -1218,7 +1194,7 @@ define([
                         commit();
 
                         // Reset flag after a short delay to allow remote changes
-                        setTimeout(function () {
+                        setTimeout(function() {
                             isLocalTaskChange = false;
                         }, 100);
 
@@ -1725,7 +1701,7 @@ define([
             editModal.status.setValue(boardName);
         }
 
-        UI.openCustomModal(editModal.modal, { wide: true });
+        UI.openCustomModal(editModal.modal, {wide: true});
         editModal.body.refresh();
 
         // Attach add tag button handler after modal is opened
@@ -1748,7 +1724,7 @@ define([
             if (!editModal[type]) { return; }
             editModal[type].setValue(board[type]);
         });
-        UI.openCustomModal(editModal.modal, { wide: true });
+        UI.openCustomModal(editModal.modal, {wide: true});
     };
 
     addMoveElementButton = function (framework, kanban) {
@@ -1793,14 +1769,14 @@ define([
                 let nextBoardItems;
 
                 if (direction === 'up' && index > 0) {
-                    move(boardItems, index, index - 1);
-                } else if (direction === 'down' && index < boardItems.length - 1) {
-                    move(boardItems, index, index + 1);
+                    move(boardItems, index, index-1);
+                } else if (direction === 'down' && index < boardItems.length-1) {
+                    move(boardItems, index, index+1);
                 } else if (direction === 'left' && boardIndex > 0) {
-                    nextBoardItems = boards.data[boards.list[boardIndex - 1]].item;
+                    nextBoardItems = boards.data[boards.list[boardIndex-1]].item;
                     moveBetweenBoards(nextBoardItems, elId, boardItems, index, boards, boardId);
-                } else if (direction === 'right' && boardIndex < kanban.options.boards.list.length - 1) {
-                    nextBoardItems = boards.data[boards.list[boardIndex + 1]].item;
+                } else if (direction === 'right' && boardIndex < kanban.options.boards.list.length-1){
+                    nextBoardItems = boards.data[boards.list[boardIndex+1]].item;
                     moveBetweenBoards(nextBoardItems, elId, boardItems, index, boards, boardId);
                 }
             };
@@ -1809,9 +1785,9 @@ define([
                 var elId = $(el).attr("data-id");
                 var index = kanban.options.boards.list.indexOf(parseInt(elId));
                 if (direction === 'left' && index > 0) {
-                    move(kanban.options.boards.list, index, index - 1);
-                } else if (direction === 'right' && index < kanban.options.boards.list.length - 1) {
-                    move(kanban.options.boards.list, index, index + 1);
+                    move(kanban.options.boards.list, index, index-1);
+                } else if (direction === 'right' && index < kanban.options.boards.list.length-1) {
+                    move(kanban.options.boards.list, index, index+1);
                 }
                 var element = $(`.kanban-board[data-id="${elId}"]`)[0];
                 if (element) {
@@ -1827,8 +1803,8 @@ define([
                     'title': Messages.kanban_moveBoardLeft,
                     'aria-label': Messages.kanban_moveBoardLeft
                 }, [
-                    h('i.fa.fa-arrow-left', { 'aria-hidden': true })
-                ])).click(function () {
+                    h('i.fa.fa-arrow-left', {'aria-hidden': true})
+                ])).click(function () { 
                     shiftBoards('left', el);
                 }).appendTo(arrowContainer);
                 $(h('button', {
@@ -1836,7 +1812,7 @@ define([
                     'title': Messages.kanban_moveBoardRight,
                     'aria-label': Messages.kanban_moveBoardRight
                 }, [
-                    h('i.fa.fa-arrow-right', { 'aria-hidden': true })
+                    h('i.fa.fa-arrow-right', {'aria-hidden': true})
                 ])).click(function () {
                     shiftBoards('right', el);
                 }).appendTo(arrowContainer);
@@ -1846,49 +1822,49 @@ define([
                 var arrowContainerItem = h('div.item-arrow-container');
                 $(arrowContainerItem).appendTo((el));
                 $(h('button', {
-                    'data-notippy': 1,
+                    'data-notippy':1,
                     'class': 'cp-kanban-arrow item-arrow',
                     'title': Messages.moveItemLeft,
                     'aria-label': Messages.moveItemLeft
                 }, [
-                    h('i.fa.fa-arrow-left', { 'aria-hidden': true })
+                    h('i.fa.fa-arrow-left', {'aria-hidden': true})
                 ])).click(function () {
                     shiftItem('left', el);
                 }).appendTo(arrowContainerItem);
                 var centralArrowContainerItem = h('div.item-central-arrow-container');
                 $(centralArrowContainerItem).appendTo(arrowContainerItem);
                 $(h('button', {
-                    'data-notippy': 1,
+                    'data-notippy':1,
                     'class': 'cp-kanban-arrow item-arrow',
                     'title': Messages.moveItemDown,
                     'aria-label': Messages.moveItemDown
                 }, [
-                    h('i.fa.fa-arrow-down', { 'aria-hidden': true })
+                    h('i.fa.fa-arrow-down', {'aria-hidden': true})
                 ])).click(function () {
                     shiftItem('down', el);
                 }).appendTo(centralArrowContainerItem);
                 $(h('button', {
-                    'data-notippy': 1,
+                    'data-notippy':1,
                     'class': 'cp-kanban-arrow item-arrow',
                     'title': Messages.moveItemUp,
                     'aria-label': Messages.moveItemUp
                 }, [
-                    h('i.fa.fa-arrow-up', { 'aria-hidden': true })
+                    h('i.fa.fa-arrow-up', {'aria-hidden': true})
                 ])).click(function () {
                     shiftItem('up', el);
                 }).appendTo(centralArrowContainerItem);
                 $(h('button', {
-                    'data-notippy': 1,
+                    'data-notippy':1,
                     'class': 'cp-kanban-arrow item-arrow',
                     'title': Messages.moveItemRight,
                     'aria-label': Messages.moveItemRight
                 }, [
-                    h('i.fa.fa-arrow-right', { 'aria-hidden': true })
+                    h('i.fa.fa-arrow-right', {'aria-hidden': true})
                 ])).click(function () {
                     shiftItem('right', el);
                 }).appendTo(arrowContainerItem);
             });
-        }
+        } 
     };
 
     addEditItemButton = function (framework, kanban) {
@@ -1903,14 +1879,14 @@ define([
                 'title': Messages.kanban_editCard,
                 'aria-label': Messages.kanban_editCard
             }, [
-                h('i.fa.fa-pencil', { 'aria-hidden': true })
+                h('i.fa.fa-pencil', {'aria-hidden': true})
             ])).click(function (e) {
                 getItemEditModal(framework, kanban, itemId);
                 e.stopPropagation();
             }).insertAfter($(el).find('.kanban-item-text'));
         });
         // Function to update count badges
-        var updateCountBadges = function () {
+        var updateCountBadges = function() {
             $container.find('.kanban-board').each(function (i, el) {
                 var $header = $(el).find('.kanban-board-header');
                 var $countBadge = $header.find('.kanban-header-count');
@@ -1925,11 +1901,11 @@ define([
             var itemId = $(el).attr('data-id');
             var $header = $(el).find('.kanban-board-header');
             var $actions = $header.find('.kanban-header-actions');
-
+            
             // Connect plus button to add item functionality
             var $plusBtn = $header.find('.kanban-header-plus');
             if ($plusBtn.length) {
-                $plusBtn.off('click').on('click', function (e) {
+                $plusBtn.off('click').on('click', function(e) {
                     e.stopPropagation();
                     if (framework.isReadOnly() || framework.isLocked()) { return; }
                     var $addBtn = $(el).find('.kanban-add-project-btn');
@@ -1943,16 +1919,16 @@ define([
             var $title = $header.find('.kanban-title-board');
             if ($title.length) {
                 $title.css('cursor', 'pointer');
-                $title.off('click').on('click', function (e) {
+                $title.off('click').on('click', function(e) {
                     e.stopPropagation();
                     if (!framework.isReadOnly() && !framework.isLocked()) {
                         getBoardEditModal(framework, kanban, itemId);
                     }
                 });
             }
-
+            
             // Dot is now non-clickable visual indicator (removed click handler)
-
+            
             // Add edit button to actions if it doesn't exist (hidden, using ellipsis instead)
             if ($actions.length && !$actions.find('.kanban-edit-item').length) {
                 var $editBtn = $(h('button', {
@@ -1961,7 +1937,7 @@ define([
                     'aria-label': Messages.kanban_editBoard,
                     'style': 'display: none;' // Hidden, ellipsis handles edit
                 }, [
-                    h('i.fa.fa-pencil', { 'aria-hidden': true })
+                    h('i.fa.fa-pencil', {'aria-hidden': true})
                 ]));
                 $editBtn.click(function (e) {
                     getBoardEditModal(framework, kanban, itemId);
@@ -1974,17 +1950,17 @@ define([
                     'title': Messages.kanban_editBoard,
                     'aria-label': Messages.kanban_editBoard
                 }, [
-                    h('i.fa.fa-pencil', { 'aria-hidden': true })
+                    h('i.fa.fa-pencil', {'aria-hidden': true})
                 ])).click(function (e) {
                     getBoardEditModal(framework, kanban, itemId);
                     e.stopPropagation();
                 }).appendTo($header);
             }
         });
-
+        
         // Update count badges initially and register for updates
         updateCountBadges();
-        onRedraw.reg(function () {
+        onRedraw.reg(function() {
             updateCountBadges();
         });
     };
@@ -1992,7 +1968,7 @@ define([
     // Kanban code
     var getDefaultBoards = function () {
         var items = {};
-        for (var i = 1; i <= 6; i++) {
+        for (var i=1; i<=6; i++) {
             items[i] = {
                 id: i,
                 title: Messages._getKey('kanban_item', [i])
@@ -2245,8 +2221,8 @@ define([
                 // create a form to enter element
                 var isTop = $el.attr('data-top');
                 var boardId = $el.closest('.kanban-board').attr("data-id");
-                var $item = $('<div>', { 'class': 'kanban-item new-item' });
-                var $text = $('<div>', { 'class': 'kanban-item-text' }).appendTo($item);
+                var $item = $('<div>', {'class': 'kanban-item new-item'});
+                var $text = $('<div>', {'class': 'kanban-item-text'}).appendTo($item);
                 if (isTop) {
                     $item.addClass('item-top');
                 }
@@ -2313,7 +2289,7 @@ define([
                 });
             },
             applyHtml: function (html, node) {
-                DiffMd.apply(html, $(node), framework._.sfCommon);
+                DiffMd.apply(html, $(node),framework._.sfCommon);
             },
             renderMd: function (md) {
                 return DiffMd.render(md);
@@ -2373,7 +2349,7 @@ define([
             var small = h('button.cp-kanban-view-small.fa.fa-compress', { title: 'Compact view - hide card details' });
             var big = h('button.cp-kanban-view.fa.fa-expand', { title: 'Full view - show card details' });
 
-            var updateCardDetailVisibility = function () {
+            var updateCardDetailVisibility = function() {
                 if (isCompactMode) {
                     $cContainer.addClass('cp-kanban-quick');
                     $('.kanban-card-tasks').hide();
@@ -2408,7 +2384,7 @@ define([
                 h('span', Messages.kanban_clearFilter)
             ]);
             // Create advanced filter controls first
-            var getAllAssignees = function () {
+            var getAllAssignees = function() {
                 var assignees = [];
                 var seenNames = {};
 
@@ -2425,7 +2401,7 @@ define([
 
                 // 1. Add all friends/contacts
                 var friends = priv.friends || {};
-                Object.keys(friends).forEach(function (curve) {
+                Object.keys(friends).forEach(function(curve) {
                     if (curve === 'me') { return; }
                     var friend = friends[curve] || {};
                     var name = friend.displayName || '';
@@ -2438,7 +2414,7 @@ define([
                 // 2. Add online users
                 var userData = metadataMgr.getMetadata().users || {};
                 var uids = [];
-                Object.keys(userData).forEach(function (netfluxId) {
+                Object.keys(userData).forEach(function(netfluxId) {
                     var data = userData[netfluxId] || {};
                     var userId = data.uid;
                     if (!userId) { return; }
@@ -2454,12 +2430,12 @@ define([
                 });
 
                 // 3. Add existing card assignees (historical)
-                Object.keys(kanban.options.boards.items || {}).forEach(function (id) {
+                Object.keys(kanban.options.boards.items || {}).forEach(function(id) {
                     var item = kanban.options.boards.items[id];
                     // Project/card assignees
                     if (item.assignee) {
-                        var itemAssignees = item.assignee.split(',').map(function (a) { return a.trim(); }).filter(function (a) { return a; });
-                        itemAssignees.forEach(function (a) {
+                        var itemAssignees = item.assignee.split(',').map(function(a) { return a.trim(); }).filter(function(a) { return a; });
+                        itemAssignees.forEach(function(a) {
                             if (a && !seenNames[a.toLowerCase()]) {
                                 seenNames[a.toLowerCase()] = true;
                                 assignees.push(a);
@@ -2468,10 +2444,10 @@ define([
                     }
                     // Task assignees
                     if (Array.isArray(item.tasks)) {
-                        item.tasks.forEach(function (task) {
+                        item.tasks.forEach(function(task) {
                             if (task.assignee) {
-                                var taskAssignees = task.assignee.split(',').map(function (a) { return a.trim(); }).filter(function (a) { return a; });
-                                taskAssignees.forEach(function (a) {
+                                var taskAssignees = task.assignee.split(',').map(function(a) { return a.trim(); }).filter(function(a) { return a; });
+                                taskAssignees.forEach(function(a) {
                                     if (a && !seenNames[a.toLowerCase()]) {
                                         seenNames[a.toLowerCase()] = true;
                                         assignees.push(a);
@@ -2578,9 +2554,9 @@ define([
                 if (!filterValue) { return true; } // No filter = pass all
                 if (!assigneeField) { return false; } // No assignee but filter set = fail
                 var filterLower = filterValue.toLowerCase().trim();
-                var assignees = assigneeField.split(',').map(function (a) {
+                var assignees = assigneeField.split(',').map(function(a) {
                     return a.trim().toLowerCase();
-                }).filter(function (a) { return a; });
+                }).filter(function(a) { return a; });
                 return assignees.indexOf(filterLower) !== -1;
             };
 
@@ -2669,7 +2645,7 @@ define([
                     var itemScore = 0;
                     if (item.scoring && scoringDims) {
                         var total = 0;
-                        scoringDims.forEach(function (dim) {
+                        scoringDims.forEach(function(dim) {
                             if (item.scoring[dim] !== undefined) total += item.scoring[dim];
                         });
                         itemScore = total / scoringDims.length;
@@ -2744,7 +2720,7 @@ define([
             var $taskSortOptions = $sortSelect.find('.cp-sort-task-options');
 
             // Update assignee dropdown
-            var updateAssigneeDropdown = function () {
+            var updateAssigneeDropdown = function() {
                 var allAssignees = getAllAssignees();
                 var currentValue = assigneeSelect.value;
 
@@ -2754,14 +2730,14 @@ define([
                 }
 
                 // Add assignee options
-                allAssignees.forEach(function (assignee) {
+                allAssignees.forEach(function(assignee) {
                     var option = h('option', { value: assignee }, assignee);
                     assigneeSelect.appendChild(option);
                 });
 
                 // Restore selection if still valid (case-insensitive comparison)
                 var currentValueLower = (currentValue || '').toLowerCase();
-                var matchingAssignee = allAssignees.find(function (a) {
+                var matchingAssignee = allAssignees.find(function(a) {
                     return (a || '').toLowerCase() === currentValueLower;
                 });
                 if (matchingAssignee) {
@@ -2770,7 +2746,7 @@ define([
             };
 
             // Apply all filters and sorting
-            var applyFilters = function () {
+            var applyFilters = function() {
                 currentFilters.assignee = assigneeSelect.value;
                 currentFilters.status = statusSelect.value;
                 currentFilters.sort = sortSelect.value;
@@ -2778,29 +2754,29 @@ define([
                 currentFilters.duePreset = duePresetSelect.value;
 
                 // Get scoring dimension keys for filter helper
-                var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
+                var scoringDimKeys = scoringDimensions.map(function(d) { return d.key; });
 
                 // Apply custom filter using shared helper
-                kanban.options.customFilter = function (item) {
+                kanban.options.customFilter = function(item) {
                     return projectPassesFilters(item, currentFilters, scoringDimKeys);
                 };
 
                 // Apply sorting (Pipeline/Board view sorts PROJECTS)
                 if (currentFilters.sort && currentFilters.sort.startsWith('project-')) {
-                    kanban.options.customSort = function (a, b) {
+                    kanban.options.customSort = function(a, b) {
                         switch (currentFilters.sort) {
                             case 'project-score-desc':
                             case 'project-score-asc':
                                 var scoreA = 0, scoreB = 0;
-                                var dimensions = scoringDimensions.map(function (d) { return d.key; });
+                                var dimensions = scoringDimensions.map(function(d) { return d.key; });
                                 if (a.scoring) {
                                     var totalA = 0;
-                                    dimensions.forEach(function (dim) { if (a.scoring[dim] !== undefined) totalA += a.scoring[dim]; });
+                                    dimensions.forEach(function(dim) { if (a.scoring[dim] !== undefined) totalA += a.scoring[dim]; });
                                     scoreA = totalA / dimensions.length;
                                 }
                                 if (b.scoring) {
                                     var totalB = 0;
-                                    dimensions.forEach(function (dim) { if (b.scoring[dim] !== undefined) totalB += b.scoring[dim]; });
+                                    dimensions.forEach(function(dim) { if (b.scoring[dim] !== undefined) totalB += b.scoring[dim]; });
                                     scoreB = totalB / dimensions.length;
                                 }
                                 return currentFilters.sort === 'project-score-desc' ? scoreB - scoreA : scoreA - scoreB;
@@ -2846,32 +2822,32 @@ define([
             };
 
             // Helper function to close filter panel
-            var closeFilterPanel = function () {
+            var closeFilterPanel = function() {
                 if ($filterPanelContent && $filterPanelContent.is(':visible')) {
                     $filterPanelContent.slideUp(150);
                     $filterToggleBtn.removeClass('cp-filter-expanded');
                 }
             };
-
+            
             // Event handlers - close panel when filter is changed
-            $(assigneeSelect).change(function () {
+            $(assigneeSelect).change(function() {
                 applyFilters();
                 closeFilterPanel();
             });
-            $(statusSelect).change(function () {
+            $(statusSelect).change(function() {
                 applyFilters();
                 closeFilterPanel();
             });
-            $(sortSelect).change(function () {
+            $(sortSelect).change(function() {
                 applyFilters();
                 closeFilterPanel();
             });
-            $(scoreMin).on('input', function () {
+            $(scoreMin).on('input', function() {
                 var val = $(this).val();
                 $(scoreValue).text(val);
                 applyFilters();
             });
-            $(duePresetSelect).change(function () {
+            $(duePresetSelect).change(function() {
                 applyFilters();
                 closeFilterPanel();
             });
@@ -2884,7 +2860,7 @@ define([
                 h('span', ' Clear All Filters')
             ]);
 
-            $(clearFiltersBtn).on('click', function () {
+            $(clearFiltersBtn).on('click', function() {
                 // Reset all filters to defaults
                 currentFilters.assignee = '';
                 currentFilters.status = '';
@@ -2913,7 +2889,7 @@ define([
             $(advancedFilters).append(clearFiltersBtn);
 
             // Function to update filter/sort visibility based on current view
-            var updateFilterVisibilityForView = function (viewMode) {
+            var updateFilterVisibilityForView = function(viewMode) {
                 // Show all filter rows by default
                 $assigneeFilterDiv.show();
                 $statusFilterDiv.show();
@@ -2954,7 +2930,7 @@ define([
             };
 
             // Visibility filter event handlers
-            $(visibilityFilterToggle).on('click', '.cp-kanban-visibility-btn', function () {
+            $(visibilityFilterToggle).on('click', '.cp-kanban-visibility-btn', function() {
                 var newVisibility = $(this).attr('data-visibility');
                 if (newVisibility !== currentFilters.visibility) {
                     currentFilters.visibility = newVisibility;
@@ -2973,7 +2949,7 @@ define([
             });
 
             // Update assignee dropdown when board changes
-            onRemoteChange.reg(function () {
+            onRemoteChange.reg(function() {
                 updateAssigneeDropdown();
             });
 
@@ -2995,11 +2971,11 @@ define([
             var setTagFilterState = function (bool) {
                 //$hint.toggle(!bool);
                 //$reset.toggle(!!bool);
-                $hint.css('visibility', bool ? 'hidden' : 'visible');
+                $hint.css('visibility', bool? 'hidden': 'visible');
                 $hint.css('height', bool ? 0 : '');
                 $hint.css('padding-top', bool ? 0 : '');
                 $hint.css('padding-bottom', bool ? 0 : '');
-                $reset.css('visibility', bool ? 'visible' : 'hidden');
+                $reset.css('visibility', bool? 'visible': 'hidden');
                 $reset.css('height', !bool ? 0 : '');
                 $reset.css('padding-top', !bool ? 0 : '');
                 $reset.css('padding-bottom', !bool ? 0 : '');
@@ -3077,7 +3053,7 @@ define([
                 commitTags();
             });
 
-            let toggleTagsButton = h('button.btn.btn-toolbar-alt.cp-kanban-toggle-tags', { 'aria-expanded': 'true', title: 'Show/hide tag filters' }, [
+            let toggleTagsButton = h('button.btn.btn-toolbar-alt.cp-kanban-toggle-tags', {'aria-expanded': 'true', title: 'Show/hide tag filters'}, [
                 h('i.fa.fa-tags'),
                 h('span', Messages.fm_tagsName)
             ]);
@@ -3094,7 +3070,7 @@ define([
                 $toggleBtn.toggleClass('btn-toolbar-alt', visible);
                 $toggleBtn.toggleClass('btn-toolbar', !visible);
             };
-            $toggleBtn.click(function () {
+            $toggleBtn.click(function() {
                 toggleClicked = true;
                 toggle();
             });
@@ -3119,10 +3095,10 @@ define([
             // Use namespaced event for cleanup and prevent duplicates
             $(window).off('resize.kanban').on('resize.kanban', resizeTags);
 
-            var toggleOffclass = 'ontouchstart' in window ? 'cp-toggle-active' : 'cp-toggle-inactive';
-            var toggleOnclass = 'ontouchstart' in window ? 'cp-toggle-inactive' : 'cp-toggle-active';
-            var toggleDragOff = h(`button#toggle-drag-off.cp-kanban-view-drag.${toggleOffclass}.fa.fa-arrows`, { 'title': Messages.toggleArrows, 'tabindex': 0 });
-            var toggleDragOn = h(`button#toggle-drag-on.cp-kanban-view-drag.${toggleOnclass}.fa.fa-hand-o-up`, { 'title': Messages.toggleDrag, 'tabindex': 0 });
+            var toggleOffclass = 'ontouchstart' in window ? 'cp-toggle-active' : 'cp-toggle-inactive'; 
+            var toggleOnclass = 'ontouchstart' in window ? 'cp-toggle-inactive' : 'cp-toggle-active'; 
+            var toggleDragOff = h(`button#toggle-drag-off.cp-kanban-view-drag.${toggleOffclass}.fa.fa-arrows`, {'title': Messages.toggleArrows, 'tabindex': 0});
+            var toggleDragOn = h(`button#toggle-drag-on.cp-kanban-view-drag.${toggleOnclass}.fa.fa-hand-o-up`, {'title': Messages.toggleDrag, 'tabindex': 0});
             kanban.drag = 'ontouchstart' in window ? false : true;
             const updateDrag = state => {
                 return function () {
@@ -3149,12 +3125,6 @@ define([
             var $timelineContainer = $(timelineContainer);
             $timelineContainer.hide();
             $('#cp-app-kanban-container').append(timelineContainer);
-
-            // Dashboard analytics container
-            var dashboardContainer = h('div#cp-kanban-dashboard-container');
-            var $dashboardContainer = $(dashboardContainer);
-            $dashboardContainer.hide();
-            $('#cp-app-kanban-container').append(dashboardContainer);
 
             // Timeline state
             var timelineZoom = 'week'; // day, week, month, quarter
@@ -3197,8 +3167,8 @@ define([
 
                 if (DEBUG_KANBAN) {
                     console.log('[getAllTasks] Total items:', Object.keys(items).length,
-                        'Active items:', Object.keys(activeItemIds).length,
-                        'Orphaned items:', Object.keys(items).filter(function (id) { return !activeItemIds[id]; }));
+                                'Active items:', Object.keys(activeItemIds).length,
+                                'Orphaned items:', Object.keys(items).filter(function(id) { return !activeItemIds[id]; }));
                 }
 
                 Object.keys(items).forEach(function (itemId) {
@@ -3213,9 +3183,9 @@ define([
                     // Calculate project score
                     var projectScore = 0;
                     if (item.scoring) {
-                        var scoreDimKeys = scoringDimensions.map(function (d) { return d.key; });
+                        var scoreDimKeys = scoringDimensions.map(function(d) { return d.key; });
                         var totalScore = 0;
-                        scoreDimKeys.forEach(function (dim) {
+                        scoreDimKeys.forEach(function(dim) {
                             if (item.scoring[dim] !== undefined) totalScore += item.scoring[dim];
                         });
                         projectScore = totalScore / scoreDimKeys.length;
@@ -3278,8 +3248,8 @@ define([
                 if (DEBUG_KANBAN) {
                     var boardsItemsKeys = kanban.options.boards && kanban.options.boards.items ? Object.keys(kanban.options.boards.items) : [];
                     console.log('=== RENDER MYTASKS === allDocTasks.length:', allDocTasks ? allDocTasks.length : 0,
-                        'kanban.options.boards.items keys:', boardsItemsKeys,
-                        'currentFilters:', currentFilters);
+                                'kanban.options.boards.items keys:', boardsItemsKeys,
+                                'currentFilters:', currentFilters);
                 }
 
                 // Apply filters from shared currentFilters using shared helper
@@ -3291,8 +3261,8 @@ define([
                 if (DEBUG_KANBAN) {
                     var filteredOutCount = allDocTasks.length - displayTasks.length;
                     console.log('[renderMyTasksView] Filtered out:', filteredOutCount, 'tasks',
-                        'Remaining:', displayTasks.length,
-                        'Filters:', JSON.stringify(currentFilters));
+                                'Remaining:', displayTasks.length,
+                                'Filters:', JSON.stringify(currentFilters));
                 }
 
                 // Apply sorting (Tasks view sorts TASKS)
@@ -3812,32 +3782,32 @@ define([
                 });
 
                 // Helper to calculate project score
-                var getProjectScore = function (item) {
+                var getProjectScore = function(item) {
                     if (!item.scoring) return 0;
                     var total = 0;
-                    var dimensions = scoringDimensions.map(function (d) { return d.key; });
-                    dimensions.forEach(function (dim) {
+                    var dimensions = scoringDimensions.map(function(d) { return d.key; });
+                    dimensions.forEach(function(dim) {
                         if (item.scoring[dim] !== undefined) total += item.scoring[dim];
                     });
                     return total / dimensions.length;
                 };
 
                 // Get scoring dimension keys for filter helper
-                var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
+                var scoringDimKeys = scoringDimensions.map(function(d) { return d.key; });
 
                 // Track orphaned items for diagnostics
                 var orphanedIds = [];
-                Object.keys(items).forEach(function (id) {
+                Object.keys(items).forEach(function(id) {
                     if (!activeItemIds[id]) {
                         orphanedIds.push(id);
                     }
                 });
 
                 if (DEBUG_KANBAN) {
-                    console.log('=== RENDER TIMELINE === projects.length:', Object.keys(items).filter(function (id) { return activeItemIds[id]; }).length,
-                        'activeItemIds:', Object.keys(activeItemIds || {}),
-                        'orphaned:', orphanedIds,
-                        'currentFilters:', currentFilters);
+                    console.log('=== RENDER TIMELINE === projects.length:', Object.keys(items).filter(function(id) { return activeItemIds[id]; }).length,
+                                'activeItemIds:', Object.keys(activeItemIds || {}),
+                                'orphaned:', orphanedIds,
+                                'currentFilters:', currentFilters);
                 }
 
                 // Apply all filters consistently with other views using shared helper
@@ -3868,12 +3838,12 @@ define([
 
                 // Debug logging for filtered result
                 if (DEBUG_KANBAN) {
-                    var totalActiveItems = Object.keys(items).filter(function (id) { return activeItemIds[id]; }).length;
+                    var totalActiveItems = Object.keys(items).filter(function(id) { return activeItemIds[id]; }).length;
                     var filteredOutCount = totalActiveItems - projects.length;
                     console.log('[renderTimelineView] Total active items:', totalActiveItems,
-                        'Filtered out:', filteredOutCount,
-                        'Remaining projects:', projects.length,
-                        'Filters:', JSON.stringify(currentFilters));
+                                'Filtered out:', filteredOutCount,
+                                'Remaining projects:', projects.length,
+                                'Filters:', JSON.stringify(currentFilters));
                 }
 
                 // Apply sorting (Timeline view sorts PROJECTS)
@@ -4384,7 +4354,6 @@ define([
                     $kanbanContent.show();
                     $myTasksContainer.hide();
                     $timelineContainer.hide();
-                    $dashboardContainer.hide();
                     // Apply filters first to ensure sort/filter state is current
                     applyFilters();
                     // Re-render board to apply any filter changes made in other views
@@ -4396,7 +4365,6 @@ define([
                     $kanbanContent.hide();
                     $myTasksContainer.show();
                     $timelineContainer.hide();
-                    $dashboardContainer.hide();
                     if (DEBUG_KANBAN) {
                         console.log('=== SWITCH TO MYTASKS === calling renderMyTasksView()');
                     }
@@ -4405,22 +4373,10 @@ define([
                     $kanbanContent.hide();
                     $myTasksContainer.hide();
                     $timelineContainer.show();
-                    $dashboardContainer.hide();
                     if (DEBUG_KANBAN) {
                         console.log('=== SWITCH TO TIMELINE === calling renderTimelineView()');
                     }
                     renderTimelineView();
-                } else if (currentViewMode === 'dashboard') {
-                    $(document).off('.timeline-resize');
-                    $(document).off('.timeline-move');
-                    $kanbanContent.hide();
-                    $myTasksContainer.hide();
-                    $timelineContainer.hide();
-                    $dashboardContainer.show();
-                    if (DEBUG_KANBAN) {
-                        console.log('=== SWITCH TO DASHBOARD === calling renderDashboardView()');
-                    }
-                    renderDashboardView();
                 }
             };
 
@@ -4952,15 +4908,12 @@ define([
                 $(boardViewBtn).removeClass('cp-kanban-viewmode-active');
                 $(myTasksViewBtn).removeClass('cp-kanban-viewmode-active');
                 $(timelineViewBtn).removeClass('cp-kanban-viewmode-active');
-                $(dashboardViewBtn).removeClass('cp-kanban-viewmode-active');
                 if (mode === 'board') {
                     $(boardViewBtn).addClass('cp-kanban-viewmode-active');
                 } else if (mode === 'mytasks') {
                     $(myTasksViewBtn).addClass('cp-kanban-viewmode-active');
                 } else if (mode === 'timeline') {
                     $(timelineViewBtn).addClass('cp-kanban-viewmode-active');
-                } else if (mode === 'dashboard') {
-                    $(dashboardViewBtn).addClass('cp-kanban-viewmode-active');
                 }
             };
 
@@ -4985,21 +4938,12 @@ define([
                 renderCurrentView();
             });
 
-            $(dashboardViewBtn).on('click', function () {
-                if (currentViewMode === 'dashboard') { return; }
-                currentViewMode = 'dashboard';
-                setActiveViewBtn('dashboard');
-                renderCurrentView();
-            });
-
             // Re-render current view when remote changes occur (if in that view)
             onRemoteChange.reg(function () {
                 if (currentViewMode === 'mytasks') {
                     renderMyTasksView();
                 } else if (currentViewMode === 'timeline') {
                     renderTimelineView();
-                } else if (currentViewMode === 'dashboard') {
-                    renderDashboardView();
                 }
             });
 
@@ -5024,7 +4968,7 @@ define([
             var $filterToggleBtn = $(filterToggleBtn);
 
             // Update filter indicator when filters are active
-            var updateFilterIndicator = function () {
+            var updateFilterIndicator = function() {
                 var hasActiveFilters = false;
                 // Check advanced filters (tags removed)
                 if (currentFilters.assignee || currentFilters.status || currentFilters.minScore > 0 || currentFilters.duePreset) {
@@ -5037,14 +4981,14 @@ define([
                 }
             };
 
-            $filterToggleBtn.on('click', function () {
+            $filterToggleBtn.on('click', function() {
                 $filterPanelContent.slideToggle(150);
                 $filterToggleBtn.toggleClass('cp-filter-expanded');
             });
 
             // Hook into filter changes to update indicator
             var originalApplyFilters = applyFilters;
-            applyFilters = function () {
+            applyFilters = function() {
                 originalApplyFilters();
                 updateFilterIndicator();
             };
@@ -5055,7 +4999,7 @@ define([
             ]);
 
             // Update card detail visibility after any redraw (respects compact mode)
-            onRedraw.reg(function () {
+            onRedraw.reg(function() {
                 updateCardDetailVisibility();
             });
 
@@ -5064,10 +5008,10 @@ define([
                 'title': 'Toggle light/dark theme',
                 'aria-label': 'Toggle theme'
             }, [
-                h('i.fa.fa-moon-o', { 'aria-hidden': true })
+                h('i.fa.fa-moon-o', {'aria-hidden': true})
             ]);
-
-            $(themeToggle).click(function () {
+            
+            $(themeToggle).click(function() {
                 var $app = $('.cp-app-kanban');
                 var isDark = $app.hasClass('cp-kanban-dark-theme');
                 if (isDark) {
@@ -5164,7 +5108,7 @@ define([
         // This is a special case; normal item operations should go through jKanban's
         // addElement() and moveItem() APIs to maintain the activeItemIds invariant.
         var cleanData = function (boards) {
-            if (typeof (boards) !== "object") { return; }
+            if (typeof(boards) !== "object") { return; }
             var items = boards.items || {};
             var data = boards.data || {};
             var list = boards.list || [];
@@ -5189,7 +5133,7 @@ define([
             framework.localChange();
         };
 
-        framework.setFileImporter({ accept: ['.json', 'application/json'] }, function (content /*, file */) {
+        framework.setFileImporter({accept: ['.json', 'application/json']}, function (content /*, file */) {
             var parsed;
             try { parsed = JSON.parse(content); }
             catch (e) { return void console.error(e); }
@@ -5228,12 +5172,12 @@ define([
             try {
                 var id = kanban.inEditMode;
                 var newBoard;
-                var $el = $container.find('[data-id="' + id + '"]');
+                var $el = $container.find('[data-id="'+id+'"]');
                 if (id === "new") {
                     $el = $container.find('.kanban-item.new-item');
                     newBoard = $el.closest('.kanban-board').attr('data-id');
                 } else if (!$el.length) {
-                    $el = $container.find('[data-eid="' + id + '"]');
+                    $el = $container.find('[data-eid="'+id+'"]');
                 }
                 var isTop = $el && $el.hasClass('item-top');
                 if (!$el.length) { return; }
@@ -5271,7 +5215,7 @@ define([
 
                 // An item was being added: add a new item
                 if (id === "new" && !data.oldValue) {
-                    var $newBoard = $('.kanban-board[data-id="' + data.newBoard + '"]');
+                    var $newBoard = $('.kanban-board[data-id="'+data.newBoard+'"]');
                     var topSelector = ':not([data-top])';
                     if (data.isTop) { topSelector = '[data-top]'; }
                     $newBoard.find('.kanban-title-button' + topSelector).click();
@@ -5283,9 +5227,9 @@ define([
                 }
 
                 // Edit a board title or a card title
-                var $el = $container.find('.kanban-board[data-id="' + id + '"]');
+                var $el = $container.find('.kanban-board[data-id="'+id+'"]');
                 if (!$el.length) {
-                    $el = $container.find('.kanban-item[data-eid="' + id + '"]');
+                    $el = $container.find('.kanban-item[data-eid="'+id+'"]');
                 }
                 if (!$el.length) { return; }
 
@@ -5390,13 +5334,13 @@ define([
 
             // Add new cursor
             var avatar = getAvatar(cursor);
-            var $item = $('.kanban-item[data-eid="' + cursor.item + '"]');
+            var $item = $('.kanban-item[data-eid="'+cursor.item+'"]');
             if ($item.length) {
                 remoteCursors[id] = cursor;
                 $item.find('.cp-kanban-cursors').append(avatar);
                 return;
             }
-            var $board = $('.kanban-board[data-id="' + cursor.board + '"]');
+            var $board = $('.kanban-board[data-id="'+cursor.board+'"]');
             if ($board.length) {
                 remoteCursors[id] = cursor;
                 $board.find('header .cp-kanban-cursors').append(avatar);

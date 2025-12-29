@@ -1,3 +1,9 @@
+// SPDX-FileCopyrightText: 2023 XWiki CryptPad Team <contact@cryptpad.org> and contributors
+//
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
+// This file is used when a user tries to export the entire CryptDrive.
+// Pads from the code app will be exported using this format instead of plain text.
 define([
 ], function () {
     var module = {
@@ -47,8 +53,8 @@ define([
                     }
                 });
             }
-            c.items[(i + 1)] = {
-                id: (i + 1),
+            c.items[(i+1)] = {
+                id: (i+1),
                 title: obj.name,
                 body: obj.desc,
                 color: color,
@@ -62,7 +68,7 @@ define([
             var cards = [];
             content.cards.forEach(function (card, i) {
                 if (card.idList === _id) {
-                    cards.push(i + 1);
+                    cards.push(i+1);
                 }
             });
             c.data[id] = {
