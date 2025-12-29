@@ -68,6 +68,33 @@ define([
             onChange: function () {}
         };
 
+        // Shared color palette - single source of truth for all board/dot colors
+        // These match the board palette colors in app-kanban.less
+        var KANBAN_COLORS = {
+            // Palette colors (color1-color8 from board color picker)
+            palette: {
+                color1: '#3B82F6', // Blue
+                color2: '#F59E0B', // Orange/Amber
+                color3: '#10B981', // Green
+                color4: '#EF4444', // Red
+                color5: '#8B5CF6', // Purple
+                color6: '#EC4899', // Pink
+                color7: '#06B6D4', // Cyan
+                color8: '#84CC16'  // Lime
+            },
+            // Legacy color names (for backwards compatibility with old data)
+            named: {
+                blue: '#3B82F6',
+                '0AC': '#3B82F6',
+                orange: '#F59E0B',
+                'F91': '#F59E0B',
+                green: '#10B981',
+                '8C4': '#10B981'
+            },
+            // Fallback when no color is set (neutral gray dot)
+            fallback: '#6B7280'
+        };
+
         var __extendDefaults = function (source, properties) {
             var property;
             for (property in properties) {
@@ -1078,17 +1105,11 @@ define([
                 headerBoard.classList.add(value);
             });
             if (board.color !== '' && board.color !== undefined) {
-                if (/color/.test(board.color)) {
-                    // Palette color
-                    headerBoard.classList.add('cp-kanban-palette-'+board.color);
-                    boardNodeInner.classList.add('cp-kanban-palette-'+board.color);
-                } else if (!/^[0-9a-f]{6}$/.test(board.color)) {
-                    // "string" color (red, blue, etc.)
+                // Board color only affects the dot indicator (set below)
+                // Board background remains neutral - no colored backgrounds
+                if (!/color/.test(board.color) && !/^[0-9a-f]{6}$/.test(board.color)) {
+                    // Legacy "string" color (red, blue, etc.) - kept for backwards compatibility
                     headerBoard.classList.add("kanban-header-" + board.color);
-                } else {
-                    // Hex color code
-                    var textColor = self.options.getTextColor(board.color);
-                    headerBoard.setAttribute('style', 'background-color:#'+board.color+';color:'+textColor+';');
                 }
             }
 
@@ -1100,50 +1121,28 @@ define([
             var dotIndicator = document.createElement('div');
             dotIndicator.classList.add('kanban-header-dot');
             dotIndicator.setAttribute('data-board-id', board.id);
-            
-            // Set color based on board color or default
-            // Default colors based on typical Kanban column names
-            var defaultColors = {
-                'in progress': '#3B82F6', // Blue
-                'to do': '#F59E0B',       // Orange/Amber
-                'todo': '#F59E0B',
-                'done': '#10B981',        // Green
-                'completed': '#10B981',
-                'backlog': '#8B5CF6'      // Purple
-            };
-            
-            var dotColor = '#3B82F6'; // Fallback blue
-            var boardTitle = (board.title || '').toLowerCase();
-            
+
+            // Determine dot color using KANBAN_COLORS constants
+            // Color is explicitly set by user via board color picker
+            var dotColor = KANBAN_COLORS.fallback;
+
             if (board.color) {
-                if (/color/.test(board.color)) {
-                    // Use palette color - will be styled via CSS
+                // Check palette colors (color1, color2, etc.)
+                if (KANBAN_COLORS.palette[board.color]) {
                     dotIndicator.classList.add('cp-kanban-dot-color-' + board.color);
-                    // Set color for inline style too
-                    if (board.color === 'color0') dotColor = '#3B82F6';
-                    else if (board.color === 'color1') dotColor = '#F59E0B';
-                    else if (board.color === 'color2') dotColor = '#10B981';
-                    else if (board.color === 'color3') dotColor = '#EF4444';
-                    else if (board.color === 'color4') dotColor = '#8B5CF6';
-                } else if (board.color === 'blue' || board.color === '0AC') {
-                    dotColor = '#3B82F6';
-                } else if (board.color === 'orange' || board.color === 'F91') {
-                    dotColor = '#F59E0B';
-                } else if (board.color === 'green' || board.color === '8C4') {
-                    dotColor = '#10B981';
-                } else if (/^[0-9a-f]{6}$/i.test(board.color)) {
+                    dotColor = KANBAN_COLORS.palette[board.color];
+                }
+                // Check named colors (blue, orange, green - legacy compatibility)
+                else if (KANBAN_COLORS.named[board.color]) {
+                    dotColor = KANBAN_COLORS.named[board.color];
+                }
+                // Check for raw hex color (6 hex digits)
+                else if (/^[0-9a-f]{6}$/i.test(board.color)) {
                     dotColor = '#' + board.color;
                 }
-            } else {
-                // No color set, use default based on title
-                for (var key in defaultColors) {
-                    if (boardTitle.indexOf(key) !== -1) {
-                        dotColor = defaultColors[key];
-                        break;
-                    }
-                }
             }
-            
+            // No title-based fallback - users set colors explicitly via board edit modal
+
             dotIndicator.style.backgroundColor = dotColor;
             dotIndicator.style.color = dotColor; // For box-shadow currentColor glow effect
             headerContent.appendChild(dotIndicator);

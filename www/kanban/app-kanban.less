@@ -162,66 +162,33 @@
         }
 
         // Colored dot indicator (glowing ball)
+        // NOTE: Colors must match KANBAN_COLORS in jkanban_cp.js
+        // color0: #3B82F6 (Blue)
+        // color1: #F59E0B (Orange/Amber)
+        // color2: #10B981 (Green)
+        // color3: #EF4444 (Red)
+        // color4: #8B5CF6 (Purple)
         .kanban-header-dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
-            background-color: #3B82F6; // Default blue
+            background-color: #3B82F6; // Default blue (KANBAN_COLORS.fallback)
             box-shadow: 0 0 6px currentColor, 0 0 10px currentColor;
             filter: brightness(1.3);
-            pointer-events: none; // Not clickable - just a visual indicator
+            pointer-events: none;
             transition: all 0.2s ease;
         }
 
-        // Palette color dots with proper colors and glow
-        .cp-kanban-dot-color-color0,
-        .kanban-header-blue .kanban-header-dot {
-            background-color: #3B82F6 !important; // Blue
-            color: #3B82F6 !important;
-        }
-        .cp-kanban-dot-color-color1,
-        .kanban-header-orange .kanban-header-dot {
-            background-color: #F59E0B !important; // Orange/Amber
-            color: #F59E0B !important;
-        }
-        .cp-kanban-dot-color-color2,
-        .kanban-header-green .kanban-header-dot {
-            background-color: #10B981 !important; // Green
-            color: #10B981 !important;
-        }
-        .cp-kanban-dot-color-color3,
-        .kanban-header-red .kanban-header-dot {
-            background-color: #EF4444 !important; // Red
-            color: #EF4444 !important;
-        }
-        .cp-kanban-dot-color-color4,
-        .kanban-header-purple .kanban-header-dot {
-            background-color: #8B5CF6 !important; // Purple
-            color: #8B5CF6 !important;
-        }
-        
-        // Apply dot color based on header color classes
-        &.kanban-header-blue .kanban-header-dot { 
-            background-color: #3B82F6 !important;
-            color: #3B82F6 !important;
-        }
-        &.kanban-header-orange .kanban-header-dot { 
-            background-color: #F59E0B !important;
-            color: #F59E0B !important;
-        }
-        &.kanban-header-green .kanban-header-dot { 
-            background-color: #10B981 !important;
-            color: #10B981 !important;
-        }
-        &.kanban-header-red .kanban-header-dot { 
-            background-color: #EF4444 !important;
-            color: #EF4444 !important;
-        }
-        &.kanban-header-purple .kanban-header-dot { 
-            background-color: #8B5CF6 !important;
-            color: #8B5CF6 !important;
-        }
+        // Palette color dots - matches board palette colors (color1-color8)
+        .cp-kanban-dot-color-color1 { background-color: #3B82F6 !important; color: #3B82F6 !important; } // Blue
+        .cp-kanban-dot-color-color2 { background-color: #F59E0B !important; color: #F59E0B !important; } // Orange
+        .cp-kanban-dot-color-color3 { background-color: #10B981 !important; color: #10B981 !important; } // Green
+        .cp-kanban-dot-color-color4 { background-color: #EF4444 !important; color: #EF4444 !important; } // Red
+        .cp-kanban-dot-color-color5 { background-color: #8B5CF6 !important; color: #8B5CF6 !important; } // Purple
+        .cp-kanban-dot-color-color6 { background-color: #EC4899 !important; color: #EC4899 !important; } // Pink
+        .cp-kanban-dot-color-color7 { background-color: #06B6D4 !important; color: #06B6D4 !important; } // Cyan
+        .cp-kanban-dot-color-color8 { background-color: #84CC16 !important; color: #84CC16 !important; } // Lime
 
         .kanban-title-board {
             flex: 0 0 auto; // Don't flex-grow, let count badge come right after
@@ -330,23 +297,28 @@
         background-color: @kanban-header-bg;
     }
 
-    .kanban-colors(@kanban-colors; @index) when (@index > 0){
-        // loop through the @colors
-        .kanban-colors(@kanban-colors; (@index - 1));
-        @color: extract(@kanban-colors, @index);
-        // make a numbered class selector for each color
-        .cp-palette-color@{index}{
-            &.cp-kanban-palette-board {
-                background-color: @color !important;
-            }
-        }
-        .cp-kanban-palette-color@{index}{
-            background-color: @color !important;
-            &.kanban-board-inner {
-                background-color: fade(@color, 50%) !important;
-            }
-        }
-    }
+    // Modern saturated colors for board palette (replaces pastel legacy colors)
+    @board-color1: #3B82F6; // Blue
+    @board-color2: #F59E0B; // Orange/Amber
+    @board-color3: #10B981; // Green
+    @board-color4: #EF4444; // Red
+    @board-color5: #8B5CF6; // Purple
+    @board-color6: #EC4899; // Pink
+    @board-color7: #06B6D4; // Cyan
+    @board-color8: #84CC16; // Lime
+
+    // Board palette uses modern saturated colors
+    .cp-palette-color1.cp-kanban-palette-board { background-color: @board-color1 !important; }
+    .cp-palette-color2.cp-kanban-palette-board { background-color: @board-color2 !important; }
+    .cp-palette-color3.cp-kanban-palette-board { background-color: @board-color3 !important; }
+    .cp-palette-color4.cp-kanban-palette-board { background-color: @board-color4 !important; }
+    .cp-palette-color5.cp-kanban-palette-board { background-color: @board-color5 !important; }
+    .cp-palette-color6.cp-kanban-palette-board { background-color: @board-color6 !important; }
+    .cp-palette-color7.cp-kanban-palette-board { background-color: @board-color7 !important; }
+    .cp-palette-color8.cp-kanban-palette-board { background-color: @board-color8 !important; }
+
+    // Legacy board color loop removed - board backgrounds are now neutral
+    // Dot color is set via inline styles in jkanban_cp.js
     .kanban-card-colors(@kanban-card-colors; @index) when (@index > 0){
         // loop through the @colors
         .kanban-card-colors(@kanban-card-colors; (@index - 1));
@@ -366,8 +338,7 @@
             }
         }
     }
-    // call the loop
-    .kanban-colors(@kanban-colors; length(@kanban-colors));
+    // call the loop for card colors only (board backgrounds are now neutral)
     .kanban-card-colors(@kanban-card-colors; length(@kanban-card-colors));
 
     // Modern Modal Design - Two Column Layout (Image 2 Style)
@@ -560,11 +531,11 @@
 
     // RIGHT COLUMN - Details Sidebar
     .cp-kanban-modal-right-column {
-        padding: 40px 28px;
-        background: #FAFAFA; // Very light grey
+        padding: 16px;
+        background: #FAFAFA;
         border-left: 1px solid #E5E7EB;
         overflow-y: auto;
-        
+
         // Hide scrollbar but keep functionality
         &::-webkit-scrollbar {
             width: 5px;
@@ -573,92 +544,134 @@
             background: rgba(0, 0, 0, 0.1);
             border-radius: 3px;
         }
-    }
 
-    // Details header
-    .cp-kanban-details-header {
-        font-size: 11px;
-        font-weight: 600;
-        color: #6B7280 !important; // Medium grey for visibility in light mode
-        letter-spacing: 1px;
-        margin-bottom: 24px;
-        text-transform: uppercase;
-    }
+        // All direct child detail rows - consistent 14px spacing
+        > .cp-kanban-detail-row {
+            margin: 0 0 14px 0 !important;
+            padding: 0 !important;
 
-    // Detail row
-    .cp-kanban-detail-row {
-        margin-bottom: 24px;
-        
+            &:last-of-type {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        // Consistent label styling for all labels in right column
         .cp-kanban-detail-label {
             display: block;
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 600;
-            color: #374151 !important; // Darker grey for better visibility in light mode
-            margin-bottom: 10px;
+            color: #6B7280 !important;
+            margin: 0 0 4px 0 !important;
+            padding: 0 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        // Reset margins on inner elements that might have them
+        #cp-kanban-edit-tags {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        #cp-kanban-edit-assignee {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .cp-kanban-status-indicator {
+            margin: 0 !important;
+        }
+
+        .cp-kanban-dates-row {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .cp-kanban-scoring-row {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        // Hide the hidden div completely
+        > div[style*="display: none"] {
+            display: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 0 !important;
         }
     }
 
     // Status indicator
     .cp-kanban-status-indicator {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 10px;
-        padding: 10px 0;
-        background: transparent;
-        border: none;
-        
+        gap: 6px;
+        padding: 3px 8px;
+        background: rgba(59, 130, 246, 0.1);
+        border-radius: 4px;
+
         .cp-kanban-status-dot {
-            width: 10px;
-            height: 10px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: #3B82F6;
             flex-shrink: 0;
         }
-        
+
         .cp-kanban-status-text {
-            font-size: 14px;
-            color: #000000 !important; // BLACK text for light mode visibility
-            font-weight: 400;
+            font-size: 11px;
+            color: #3B82F6 !important;
+            font-weight: 500;
         }
     }
 
-    // Date input - Clean without duplicate icons
-    .cp-kanban-detail-row {
-        position: relative;
+    // Dates row - side by side
+    .cp-kanban-dates-row {
+        display: flex;
+        gap: 8px;
+
+        .cp-kanban-date-field {
+            flex: 1;
+            min-width: 0;
+
+            .cp-kanban-detail-label {
+                margin-bottom: 3px;
+            }
+        }
     }
-    
+
     .cp-kanban-date-input {
         width: 100%;
-        padding: 10px 12px;
-        padding-right: 36px; // Space for single calendar icon
+        padding: 4px 6px;
+        padding-right: 22px; // Space for calendar icon
         border: 1px solid #E5E7EB !important;
-        border-radius: 6px;
+        border-radius: 4px;
         background: #FFFFFF !important;
         color: #000000 !important; // BLACK text for light mode
-        font-size: 14px;
+        font-size: 11px;
         font-weight: 400;
         position: relative;
         -webkit-appearance: none;
         appearance: none;
-        
+
         &:focus {
             outline: none;
             border-color: #3B82F6 !important;
             color: #000000 !important;
             background: #FFFFFF !important;
         }
-        
-        // Style the calendar icon that browsers add - single icon only
+
+        // Style the calendar icon that browsers add
         &::-webkit-calendar-picker-indicator {
             cursor: pointer;
-            opacity: 1 !important; // Fully visible
+            opacity: 1 !important;
             position: absolute;
-            right: 10px;
-            width: 20px;
-            height: 20px;
+            right: 4px;
+            width: 14px;
+            height: 14px;
             filter: brightness(0); // Make icon black in light mode
         }
-        
+
         // Hide any duplicate calendar icons or spinners
         &::-webkit-inner-spin-button,
         &::-webkit-outer-spin-button {
@@ -666,7 +679,7 @@
             -webkit-appearance: none;
             appearance: none;
         }
-        
+
         // Firefox date picker
         &::-moz-calendar-picker-indicator {
             opacity: 1 !important;
@@ -674,88 +687,232 @@
         }
     }
 
-    // Assignee section styling
+    // Assignee section styling - 2 column grid
     .cp-kanban-assignee-compact {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2px 6px;
+
         label {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 0;
+            gap: 4px;
+            padding: 1px 0;
             color: #000000 !important; // BLACK text for light mode
-            font-size: 14px;
+            font-size: 11px;
             font-weight: 400;
             cursor: pointer;
-            
+            line-height: 1.2;
+
             input[type="checkbox"] {
-                width: 16px;
-                height: 16px;
+                width: 11px;
+                height: 11px;
+                margin: 0;
                 cursor: pointer;
+                flex-shrink: 0;
+                vertical-align: middle;
+            }
+
+            span {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
         }
     }
 
     // Tags in sidebar
     .cp-kanban-tags-row {
-        .cp-kanban-tags-header-sidebar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            
-            .cp-kanban-detail-label {
-                margin-bottom: 0;
-            }
-            
-            .cp-kanban-add-tag-btn-small {
-                width: 22px;
-                height: 22px;
-                padding: 0;
-                border: 1px solid #E5E7EB;
-                background: #FFFFFF;
-                border-radius: 4px;
-                color: #6B7280;
-                cursor: pointer;
-                transition: all 0.15s ease;
-                flex-shrink: 0;
-                
-                &:hover {
-                    background: #F9FAFB;
-                    color: #374151;
-                    border-color: #D1D5DB;
-                }
-                
-                i {
-                    font-size: 10px;
-                }
-            }
-        }
-        
         .cp-kanban-tags-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            padding-top: 6px;
-            
+            gap: 4px;
+
             .token-input {
                 width: 100%;
-                padding: 8px 10px;
+                padding: 5px 8px;
                 border: 1px solid #E5E7EB;
-                border-radius: 6px;
+                border-radius: 4px;
                 background: #FFFFFF;
                 color: #1F2937;
-                font-size: 13px;
-                
+                font-size: 11px;
+
                 &:focus {
                     outline: none;
                     border-color: #3B82F6;
                 }
-                
+
                 &::placeholder {
                     color: #9CA3AF;
+                }
+            }
+        }
+    }
+
+    // Scoring section in right sidebar
+    .cp-kanban-scoring-row {
+        .cp-kanban-score-progress-container {
+            width: 100%;
+            height: 5px;
+            background: #E5E7EB;
+            border-radius: 3px;
+            margin-bottom: 4px;
+            overflow: hidden;
+
+            .cp-kanban-score-progress-bar {
+                height: 100%;
+                background: #10b981;
+                border-radius: 3px;
+                transition: width 0.3s ease, background-color 0.3s ease;
+            }
+        }
+
+        .cp-kanban-scoring-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 4px;
+
+            h3 {
+                margin: 0;
+                font-size: 13px;
+                font-weight: 600;
+                color: #374151;
+            }
+
+            .cp-kanban-composite-score {
+                font-size: 15px;
+                font-weight: 700;
+                color: #10b981;
+            }
+
+            .cp-kanban-scoring-expand {
+                display: flex;
+                align-items: center;
+                gap: 3px;
+                font-size: 10px;
+                padding: 2px 6px;
+                background: transparent;
+                border: 1px solid #E5E7EB;
+                border-radius: 3px;
+                color: #6B7280;
+                cursor: pointer;
+                transition: all 0.15s ease;
+
+                &:hover {
+                    border-color: #10b981;
+                    color: #10b981;
+                }
+
+                i {
+                    font-size: 9px;
+                }
+            }
+        }
+
+        .cp-kanban-scoring-details {
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .cp-kanban-scoring-row {
+            margin-bottom: 0;
+            padding: 1px 0;
+
+            .cp-kanban-scoring-label {
+                display: block;
+                margin-bottom: 2px;
+                font-size: 10px;
+                color: #6B7280;
+                font-weight: 500;
+                line-height: 1.2;
+            }
+
+            .cp-kanban-scoring-input {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+
+                .cp-kanban-scoring-slider {
+                    flex: 1;
+                    height: 3px;
+                    background: #E5E7EB;
+                    outline: none;
+                    border-radius: 2px;
+                    cursor: pointer;
+                    -webkit-appearance: none;
+
+                    &::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        width: 10px;
+                        height: 10px;
+                        background: #10b981;
+                        cursor: pointer;
+                        border-radius: 50%;
+                        transition: transform 0.15s ease;
+
+                        &:hover {
+                            transform: scale(1.2);
+                        }
+                    }
+
+                    &::-moz-range-thumb {
+                        width: 10px;
+                        height: 10px;
+                        background: #10b981;
+                        cursor: pointer;
+                        border-radius: 50%;
+                        border: none;
+                    }
+                }
+
+                .cp-kanban-score-value {
+                    min-width: 18px;
+                    padding: 1px 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 600;
+                    font-size: 10px;
+                    color: #10b981;
+                    background: rgba(16, 185, 129, 0.12);
+                    border-radius: 2px;
+                }
+            }
+        }
+    }
+
+    // Board color picker in modal
+    .cp-kanban-color-row {
+        .cp-kanban-color-picker {
+            margin-top: 8px;
+
+            .cp-palette-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: flex-start;
+
+                .cp-palette-color {
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    border: 2px solid transparent;
+                    transition: all 0.15s ease;
+
+                    &:hover {
+                        transform: scale(1.1);
+                    }
+
+                    &.fa-check {
+                        border-color: @kanban-text-primary;
+                        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+                    }
                 }
             }
         }
@@ -769,12 +926,47 @@
     .cp-kanban-edit-modal {
             background: #1A1A1A;
         }
-        
+
         .cp-kanban-modal-right-column {
             background: #151515;
             border-left-color: #2D2D2D;
         }
-        
+
+        // Dark theme scoring styles
+        .cp-kanban-scoring-row {
+            .cp-kanban-score-progress-container {
+                background: #2D2D2D;
+            }
+
+            .cp-kanban-scoring-header {
+                h3 {
+                    color: #E5E5E5;
+                }
+
+                .cp-kanban-scoring-expand {
+                    border-color: #2D2D2D;
+                    color: #9CA3AF;
+
+                    &:hover {
+                        border-color: #10b981;
+                        color: #10b981;
+                    }
+                }
+            }
+
+            .cp-kanban-scoring-details {
+                border-top-color: #2D2D2D;
+            }
+
+            .cp-kanban-scoring-row .cp-kanban-scoring-label {
+                color: #9CA3AF;
+            }
+
+            .cp-kanban-scoring-row .cp-kanban-scoring-input .cp-kanban-scoring-slider {
+                background: #2D2D2D;
+            }
+        }
+
         .cp-kanban-title-input {
             color: #F9FAFB !important; // White text in dark mode
             
@@ -945,6 +1137,179 @@
             &:hover {
                 color: #FFFFFF !important; // Brighter white on hover
                 background: #3D3D3D !important;
+            }
+        }
+
+        // Dark mode - ALL nav buttons need white text
+        nav button {
+            color: #E5E5E5 !important;
+            background: #2D2D2D !important;
+            border-color: #3D3D3D !important;
+
+            &:hover {
+                color: #FFFFFF !important;
+                background: #3D3D3D !important;
+            }
+        }
+
+        // Dark mode subtasks section - COMPREHENSIVE FIX
+        #cp-kanban-edit-tasks {
+            // Task rows
+            .cp-kanban-task-row {
+                background: #1A1A1A !important;
+                border-color: #2D2D2D !important;
+
+                &:hover {
+                    border-color: #10B981 !important;
+                }
+
+                &.cp-kanban-task-done {
+                    background: rgba(16, 185, 129, 0.08) !important;
+                    border-color: rgba(16, 185, 129, 0.3) !important;
+                }
+            }
+
+            // Task title input
+            .cp-kanban-task-title {
+                background: #151515 !important;
+                color: #F9FAFB !important;
+                border-color: #2D2D2D !important;
+
+                &::placeholder {
+                    color: #6B7280 !important;
+                }
+
+                &:focus {
+                    border-color: #10B981 !important;
+                    color: #F9FAFB !important;
+                }
+            }
+
+            // Assignee dropdown
+            .cp-kanban-task-assignee {
+                background: #151515 !important;
+                color: #F9FAFB !important;
+                border-color: #2D2D2D !important;
+
+                option {
+                    background: #1A1A1A;
+                    color: #F9FAFB;
+                }
+
+                &:focus {
+                    border-color: #10B981 !important;
+                }
+            }
+
+            // Due date input
+            .cp-kanban-task-due-date {
+                background: #151515 !important;
+                color: #F9FAFB !important;
+                border-color: #2D2D2D !important;
+
+                &::-webkit-calendar-picker-indicator {
+                    filter: brightness(0) invert(1);
+                }
+
+                &:focus {
+                    border-color: #10B981 !important;
+                }
+            }
+
+            // Delete button
+            .cp-kanban-task-delete {
+                background: transparent !important;
+                color: #9CA3AF !important;
+                border-color: #2D2D2D !important;
+
+                &:hover {
+                    background: #EF4444 !important;
+                    border-color: #EF4444 !important;
+                    color: #FFFFFF !important;
+                }
+            }
+
+            // Checkbox
+            .cp-kanban-task-checkbox {
+                accent-color: #10B981;
+            }
+        }
+
+        // Add task button
+        .cp-kanban-task-add {
+            color: #10B981 !important;
+
+            &:hover {
+                color: #059669 !important;
+            }
+        }
+
+        // Scoring expand button
+        .cp-kanban-scoring-expand {
+            background: #1A1A1A !important;
+            color: #9CA3AF !important;
+            border-color: #2D2D2D !important;
+
+            &:hover {
+                color: #10B981 !important;
+                border-color: #10B981 !important;
+            }
+        }
+
+        // All generic .btn elements in modal
+        .cp-kanban-edit-modal .btn,
+        .cp-kanban-modal-content-wrapper .btn {
+            color: #E5E5E5 !important;
+
+            &:hover {
+                color: #FFFFFF !important;
+            }
+        }
+
+        // Filter/toggle buttons
+        .btn-toolbar,
+        .btn-toolbar-alt,
+        .btn-cancel,
+        .btn-secondary {
+            background: #2D2D2D !important;
+            color: #E5E5E5 !important;
+            border-color: #3D3D3D !important;
+
+            &:hover {
+                background: #3D3D3D !important;
+                color: #FFFFFF !important;
+            }
+        }
+
+        // Dark mode view switcher tabs (Timeline, Projects, Tasks)
+        .cp-kanban-view-switcher {
+            background: #1A1A1A !important;
+            border-color: #2D2D2D !important;
+
+            .cp-kanban-viewmode-btn {
+                color: #9CA3AF !important; // Visible gray for unselected tabs
+
+                &:hover {
+                    color: #E5E5E5 !important;
+                    background: #2D2D2D !important;
+                }
+
+                &.cp-kanban-viewmode-active {
+                    background: #3B82F6 !important; // Blue for active
+                    color: #FFFFFF !important;
+                }
+            }
+        }
+
+        // Dark mode color picker
+        .cp-kanban-color-row {
+            .cp-kanban-color-picker .cp-palette-container .cp-palette-color {
+                border-color: transparent;
+
+                &.fa-check {
+                    border-color: #FFFFFF;
+                    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+                }
             }
         }
     }
