@@ -276,7 +276,7 @@ define([
 
         var markdownEditorWrapper = h('div.cp-markdown-label-row');
 
-        var conflicts, conflictContainer, titleInput, tagsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle;
+        var conflicts, conflictContainer, titleInput, tagsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle, statusIndicator, statusText;
         var scoringSliders = {};
 
         // Composite score display with progress bar (always visible)
@@ -383,63 +383,62 @@ define([
                 
                 // RIGHT COLUMN - Details/Metadata Sidebar
                 h('div.cp-kanban-modal-right-column', [
-                    h('div.cp-kanban-details-header', [
-                        h('span', 'DETAILS')
-                    ]),
-                    
-                    // Status indicator
-                    h('div.cp-kanban-detail-row', [
+                    // Status indicator (shows board name)
+                    h('div.cp-kanban-detail-row.cp-kanban-status-row', [
                         h('span.cp-kanban-detail-label', 'Status'),
-                        h('div.cp-kanban-status-indicator', [
+                        statusIndicator = h('div.cp-kanban-status-indicator', [
                             h('span.cp-kanban-status-dot'),
-                            h('span.cp-kanban-status-text', 'In Progress')
+                            statusText = h('span.cp-kanban-status-text', '')
                         ])
                     ]),
-                    
-                    // Assignees
-                    h('div.cp-kanban-detail-row', [
+
+                    // Assignees (cards only)
+                    h('div.cp-kanban-detail-row.cp-kanban-assignee-row', [
                         h('span.cp-kanban-detail-label', 'Assignee'),
                         assigneeInput = h('div#cp-kanban-edit-assignee.cp-kanban-assignee-compact')
                     ]),
                     
-                    // Due Date
-                    h('div.cp-kanban-detail-row', [
-                        h('span.cp-kanban-detail-label', 'Due Date'),
-                        dueDateInput = h('input#cp-kanban-edit-due-date', { 
-                            type: 'date',
-                            class: 'cp-kanban-date-input'
-                        })
-                    ]),
-                    
-                    // Start Date
-                    h('div.cp-kanban-detail-row', [
-                        h('span.cp-kanban-detail-label', 'Start Date'),
-                        startDateInput = h('input#cp-kanban-edit-start-date', { 
-                            type: 'date',
-                            class: 'cp-kanban-date-input'
-                        })
+                    // Dates Row (Start & Due side by side)
+                    h('div.cp-kanban-detail-row.cp-kanban-dates-row', [
+                        h('div.cp-kanban-date-field', [
+                            h('span.cp-kanban-detail-label', 'Start'),
+                            startDateInput = h('input#cp-kanban-edit-start-date', {
+                                type: 'date',
+                                class: 'cp-kanban-date-input'
+                            })
+                        ]),
+                        h('div.cp-kanban-date-field', [
+                            h('span.cp-kanban-detail-label', 'Due'),
+                            dueDateInput = h('input#cp-kanban-edit-due-date', {
+                                type: 'date',
+                                class: 'cp-kanban-date-input'
+                            })
+                        ])
                     ]),
                     
                     // Tags Section
                     h('div.cp-kanban-detail-row.cp-kanban-tags-row', [
-                        h('div.cp-kanban-tags-header-sidebar', [
-                            h('span.cp-kanban-detail-label', 'Tags'),
-                            h('button.cp-kanban-add-tag-btn-small', {
-                                type: 'button',
-                                title: 'Add tag'
-                            }, [h('i.fa.fa-plus')])
-                        ]),
+                        h('span.cp-kanban-detail-label', 'Tags'),
                         tagsDiv = h('div#cp-kanban-edit-tags.cp-kanban-tags-list')
                     ]),
-                    
-                    // Hidden sections
-                    h('div', { style: 'display: none;' }, [
-                        colors,
-                        completedToggle = h('input#cp-kanban-edit-completed', { type: 'checkbox' }),
+
+                    // Scoring Section (cards only)
+                    h('div.cp-kanban-detail-row.cp-kanban-scoring-row', [
+                        h('span.cp-kanban-detail-label', 'Project Score'),
+                        scoreProgressContainer,
                         scoringHeader,
-                        scoringDetailsContainer,
-                        scoreProgressBar,
-                        scoreProgressContainer
+                        scoringDetailsContainer
+                    ]),
+
+                    // Board Color Section (boards only)
+                    h('div.cp-kanban-detail-row.cp-kanban-color-row', [
+                        h('span.cp-kanban-detail-label', 'Board Color'),
+                        h('div.cp-kanban-color-picker', [colors])
+                    ]),
+
+                    // Hidden sections (completed toggle not shown in new UI)
+                    h('div', { style: 'display: none;' }, [
+                        completedToggle = h('input#cp-kanban-edit-completed', { type: 'checkbox' })
                     ])
                 ])
             ]),
@@ -580,7 +579,7 @@ define([
         
         // Plus button click handler - will be attached after modal is created
         var attachAddTagHandler = function() {
-            var $addTagBtn = $(tagsDiv).closest('.cp-kanban-edit-modal').find('.cp-kanban-add-tag-btn');
+            var $addTagBtn = $(tagsDiv).closest('.cp-kanban-edit-modal').find('.cp-kanban-add-tag-btn-small');
             $addTagBtn.off('click').on('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1238,25 +1237,31 @@ define([
 
 
         var setId = function (_isBoard, _id) {
-            // Reset the mdoal with a new id
+            // Reset the modal with a new id
             isBoard = _isBoard;
             id = Number(_id);
+
+            // Card-specific sections (hide when editing a board)
+            var cardOnlySections = '.cp-kanban-status-row, .cp-kanban-assignee-row, .cp-kanban-dates-row, .cp-kanban-tags-row, .cp-kanban-scoring-row, .cp-kanban-tasks-section, .cp-kanban-description-section';
+            // Board-specific sections (hide when editing a card)
+            var boardOnlySections = '.cp-kanban-color-row';
+
             if (_isBoard) {
                 onCursorUpdate.fire({
                     board: _id
                 });
                 dataObject = kanban.getBoardJSON(id);
-                $(content)
-                    .find('#cp-kanban-edit-body, #cp-kanban-edit-tags, [for="cp-kanban-edit-body"], [for="cp-kanban-edit-tags"]')
-                    .hide();
+                // Hide card-specific sections, show board-specific sections
+                $(content).find(cardOnlySections).hide();
+                $(content).find(boardOnlySections).show();
             } else {
                 onCursorUpdate.fire({
                     item: _id
                 });
                 dataObject = kanban.getItemJSON(id);
-                $(content)
-                    .find('#cp-kanban-edit-body, #cp-kanban-edit-tags, [for="cp-kanban-edit-body"], [for="cp-kanban-edit-tags"]')
-                    .show();
+                // Show card-specific sections, hide board-specific sections
+                $(content).find(cardOnlySections).show();
+                $(content).find(boardOnlySections).hide();
             }
             // Also reset the buttons
             $modal.find('nav').after(UI.dialog.getButtons(button)).remove();
@@ -1288,7 +1293,14 @@ define([
 
         // Expose attachAddTagHandler on tags object
         tags.attachAddTagHandler = attachAddTagHandler;
-        
+
+        // Status display (shows board name)
+        var status = {
+            setValue: function (boardName) {
+                $(statusText).text(boardName || 'Unknown');
+            }
+        };
+
         return {
             modal: modal,
             setId: setId,
@@ -1302,7 +1314,8 @@ define([
             completed: completed,
             scoring: scoring,
             tasks: tasks,
-            conflict: conflict
+            conflict: conflict,
+            status: status
         };
     };
     var getItemEditModal = function (framework, kanban, eid) {
@@ -1317,12 +1330,28 @@ define([
             if (!editModal[type]) { return; }
             editModal[type].setValue(item[type]);
         });
-        
-        // Scoring data is now loaded automatically via PROPERTIES system - no external API needed!
-        
+
+        // Update status to show which board the item is on
+        var boardName = '';
+        var itemId = Number(eid);
+        Object.keys(boards.data || {}).forEach(function (boardId) {
+            var board = boards.data[boardId];
+            if (board && Array.isArray(board.item)) {
+                var found = board.item.some(function(id) {
+                    return Number(id) === itemId;
+                });
+                if (found) {
+                    boardName = board.title || 'Untitled';
+                }
+            }
+        });
+        if (editModal.status) {
+            editModal.status.setValue(boardName);
+        }
+
         UI.openCustomModal(editModal.modal, {wide: true});
         editModal.body.refresh();
-        
+
         // Attach add tag button handler after modal is opened
         setTimeout(function() {
             attachAddTagHandler();
