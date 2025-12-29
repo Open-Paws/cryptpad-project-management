@@ -638,6 +638,8 @@ define([
     };
 
     window.addEventListener('message', function (event) {
+        // Security: Only accept messages from the expected sandbox origin
+        if (event.origin !== trimmedSafe) { return; }
         try {
             var msg = JSON.parse(event.data);
             if (msg.command === 'READY') { return void sandboxIframeReady.fire(); }

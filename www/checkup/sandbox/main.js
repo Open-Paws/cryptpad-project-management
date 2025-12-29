@@ -4,13 +4,16 @@
 
 define([
     'jquery',
+    '/api/config',
     '/common/common-util.js',
     '/checkup/checkup-tools.js',
 
     '/components/tweetnacl/nacl-fast.min.js',
     'css!/components/components-font-awesome/css/font-awesome.min.css',
     'less!/checkup/app-checkup.less',
-], function ($, Util, Tools) {
+], function ($, ApiConfig, Util, Tools) {
+    // Expected parent origin (main CryptPad domain)
+    var expectedOrigin = ApiConfig.httpUnsafeOrigin;
     var postMessage = function (content) {
         window.parent.postMessage(JSON.stringify(content), '*');
     };
@@ -56,6 +59,8 @@ define([
     };
 
     window.addEventListener("message", function (event) {
+        // Security: Only accept messages from the expected parent origin
+        if (event.origin !== expectedOrigin) { return; }
         var txid, command;
         if (event && event.data) {
             try {
