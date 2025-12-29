@@ -11,6 +11,5 @@ permissions:
 jobs:
   ai-pr-review:
     uses: Open-Paws/Open-Paws-Automations/.github/workflows/ai-pr-review.yml@main
-    secrets:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    secrets: inherit
 
