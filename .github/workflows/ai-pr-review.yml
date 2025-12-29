@@ -7,5 +7,3 @@ on:
 jobs:
   ai-review:
     uses: Open-Paws/Open-Paws-Automations/.github/workflows/ai-pr-review.yml@thekaailashsharma-patch-1
-    secrets:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
