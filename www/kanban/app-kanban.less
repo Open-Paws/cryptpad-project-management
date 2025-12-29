@@ -2452,7 +2452,7 @@
             }
         }
 
-        // Completed badge styling
+        // Completed badge styling (legacy - kept for compatibility)
         .kanban-completed-badge {
             display: inline-flex;
             align-items: center;
@@ -2467,6 +2467,56 @@
 
             i {
                 margin-right: 2px;
+            }
+        }
+
+        // Project completion toggle - interactive checkbox on card face
+        .kanban-completed-row {
+            margin-top: 4px;
+        }
+
+        .kanban-completed-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            background: rgba(107, 114, 128, 0.1); // Gray background for unchecked state
+            color: @kanban-text-secondary;
+
+            &:hover {
+                background: rgba(107, 114, 128, 0.18);
+            }
+
+            .kanban-completed-checkbox {
+                display: none; // Hide checkbox, use icon instead
+            }
+
+            i {
+                font-size: 14px;
+            }
+
+            .kanban-completed-text {
+                white-space: nowrap;
+            }
+        }
+
+        // When project is marked complete
+        .kanban-item-completed .kanban-completed-toggle,
+        .kanban-completed-toggle:has(.kanban-completed-checkbox:checked) {
+            background: fade(@kanban-success, 15%);
+            color: @kanban-success;
+
+            &:hover {
+                background: fade(@kanban-success, 22%);
+            }
+
+            i {
+                color: @kanban-success;
             }
         }
 
@@ -4476,6 +4526,1089 @@
 
             .cp-timeline-bar-title {
                 display: none;
+            }
+        }
+    }
+
+    // ============================================
+    // Task Row Action Buttons (Recurrence, Dependencies, Move)
+    // ============================================
+    .cp-kanban-task-row {
+        .cp-kanban-task-recurrence,
+        .cp-kanban-task-deps,
+        .cp-kanban-task-move {
+            padding: 4px 8px;
+            margin-left: 4px;
+            font-size: 12px;
+            background: var(--kanban-surface);
+            border: 1px solid var(--kanban-border);
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--kanban-text-secondary);
+            transition: all 0.15s ease;
+
+            &:hover {
+                background: var(--kanban-surface-hover);
+                border-color: var(--kanban-border-hover);
+                color: var(--kanban-text-primary);
+            }
+
+            &.active {
+                background: #3b82f6;
+                border-color: #3b82f6;
+                color: white;
+            }
+
+            &.has-deps {
+                background: #f0f9ff;
+                border-color: #3b82f6;
+                color: #3b82f6;
+            }
+        }
+
+        &.cp-kanban-task-instance {
+            background: #fefce8;
+            border-left: 3px solid #eab308;
+        }
+    }
+
+    // Recurrence Modal
+    .cp-recurrence-modal {
+        .cp-recurrence-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+
+            label {
+                min-width: 60px;
+                font-weight: 500;
+            }
+
+            select,
+            input {
+                padding: 6px 10px;
+                border: 1px solid var(--kanban-border);
+                border-radius: 4px;
+            }
+        }
+    }
+
+    // Dependencies Modal
+    .cp-dependencies-modal {
+        .cp-dep-task-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .cp-dep-task-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-bottom: 1px solid var(--kanban-border);
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+
+    // ============================================
+    // Dashboard Analytics View
+    // ============================================
+    #cp-kanban-dashboard-container {
+        flex: 1;
+        padding: 24px;
+        overflow-y: auto;
+        background: var(--kanban-board-bg);
+    }
+
+    .cp-dashboard {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .cp-dashboard-header {
+        margin-bottom: 24px;
+
+        h2 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--kanban-text-primary);
+        }
+
+        .cp-dashboard-subtitle {
+            margin: 0;
+            color: var(--kanban-text-secondary);
+            font-size: 14px;
+        }
+    }
+
+    // Hero Section - At-a-glance status
+    .cp-dashboard-hero {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 24px 28px;
+        border-radius: 16px;
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        border: 1px solid #a7f3d0;
+
+        .hero-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+
+            i {
+                font-size: 28px;
+                color: #059669;
+            }
+        }
+
+        .hero-content {
+            flex: 1;
+
+            .hero-message {
+                font-size: 24px;
+                font-weight: 700;
+                color: #065f46;
+                margin-bottom: 4px;
+            }
+
+            .hero-detail {
+                font-size: 14px;
+                color: #047857;
+                font-weight: 500;
+            }
+        }
+
+        .hero-progress {
+            flex-shrink: 0;
+
+            .progress-ring {
+                position: relative;
+                width: 64px;
+                height: 64px;
+
+                svg {
+                    width: 100%;
+                    height: 100%;
+                    transform: rotate(-90deg);
+                }
+
+                .progress-bg {
+                    fill: none;
+                    stroke: rgba(255, 255, 255, 0.6);
+                    stroke-width: 3;
+                }
+
+                .progress-fill {
+                    fill: none;
+                    stroke: #059669;
+                    stroke-width: 3;
+                    stroke-linecap: round;
+                }
+
+                .progress-text {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: #065f46;
+                }
+            }
+        }
+
+        // Attention state (overdue items)
+        &.attention {
+            background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+            border-color: #fca5a5;
+
+            .hero-icon {
+                background: rgba(255, 255, 255, 0.9);
+                i { color: #dc2626; }
+            }
+
+            .hero-message { color: #991b1b; }
+            .hero-detail { color: #b91c1c; }
+
+            .progress-ring {
+                .progress-fill { stroke: #dc2626; }
+                .progress-text { color: #991b1b; }
+            }
+        }
+
+        // Today state (items due today)
+        &.today {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: #fcd34d;
+
+            .hero-icon {
+                background: rgba(255, 255, 255, 0.9);
+                i { color: #d97706; }
+            }
+
+            .hero-message { color: #92400e; }
+            .hero-detail { color: #b45309; }
+
+            .progress-ring {
+                .progress-fill { stroke: #d97706; }
+                .progress-text { color: #92400e; }
+            }
+        }
+
+        // Upcoming state (items due this week)
+        &.upcoming {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: #93c5fd;
+
+            .hero-icon {
+                background: rgba(255, 255, 255, 0.9);
+                i { color: #2563eb; }
+            }
+
+            .hero-message { color: #1e40af; }
+            .hero-detail { color: #1d4ed8; }
+
+            .progress-ring {
+                .progress-fill { stroke: #2563eb; }
+                .progress-text { color: #1e40af; }
+            }
+        }
+    }
+
+    .cp-dashboard-section {
+        background: var(--kanban-surface);
+        border: 1px solid var(--kanban-border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+
+        h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--kanban-text-primary);
+        }
+    }
+
+    .cp-dashboard-columns {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cp-dashboard-column-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .cp-col-name {
+            min-width: 120px;
+            font-weight: 500;
+            color: var(--kanban-text-primary);
+        }
+
+        .cp-col-bar {
+            flex: 1;
+            height: 24px;
+            background: var(--kanban-border);
+            border-radius: 4px;
+            overflow: hidden;
+
+            .cp-col-bar-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #10b981, #34d399);
+                transition: width 0.3s ease;
+            }
+        }
+
+        .cp-col-count {
+            min-width: 40px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--kanban-text-secondary);
+        }
+    }
+
+    // Dashboard two-column grid layout (legacy)
+    .cp-dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    // Dashboard 2x2 grid layout
+    .cp-dashboard-grid-2x2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-bottom: 24px;
+
+        @media (max-width: 900px) {
+            grid-template-columns: 1fr;
+        }
+
+        // Sections in the 2x2 grid don't need bottom margin since grid handles spacing
+        .cp-dashboard-section {
+            margin-bottom: 0;
+        }
+    }
+
+    // Full-width section at bottom
+    .cp-dashboard-full-width {
+        .cp-dashboard-section {
+            margin-bottom: 0;
+        }
+    }
+
+    .cp-dashboard-col {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    // Upcoming Deadlines Section
+    .cp-dashboard-deadlines {
+        h3 {
+            margin-bottom: 20px;
+        }
+    }
+
+    .cp-dashboard-deadline-group {
+        margin-bottom: 16px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--kanban-text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            .count {
+                background: var(--kanban-border);
+                color: var(--kanban-text-secondary);
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 11px;
+                font-weight: 600;
+            }
+        }
+
+        &.overdue .group-header {
+            color: #dc2626;
+
+            .count {
+                background: #fecaca;
+                color: #dc2626;
+            }
+        }
+
+        &.today .group-header {
+            color: #d97706;
+
+            .count {
+                background: #fef3c7;
+                color: #d97706;
+            }
+        }
+
+        &.week .group-header .count {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                padding: 8px 12px;
+                background: var(--kanban-board-bg);
+                border-radius: 6px;
+                margin-bottom: 6px;
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .item-type {
+                    color: var(--kanban-text-secondary);
+                    font-size: 11px;
+                    margin-right: 4px;
+                }
+
+                .item-title {
+                    color: var(--kanban-text-primary);
+                    font-weight: 500;
+                }
+
+                .item-suffix {
+                    color: var(--kanban-text-secondary);
+                    font-size: 12px;
+                    margin-left: auto;
+                    padding-left: 12px;
+                }
+            }
+        }
+    }
+
+    // Workload by Assignee Section
+    .cp-dashboard-workload {
+        h3 {
+            margin-bottom: 16px;
+        }
+    }
+
+    .cp-dashboard-workload-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cp-dashboard-workload-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .workload-name {
+            min-width: 100px;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--kanban-text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cp-dashboard-workload-bar {
+            flex: 1;
+            height: 20px;
+            background: var(--kanban-border);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+
+            .bar-fill {
+                height: 100%;
+                background: linear-gradient(90deg, #10b981, #34d399);
+                transition: width 0.3s ease;
+            }
+
+            .bar-overdue-indicator {
+                position: absolute;
+                right: 4px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 8px;
+                height: 8px;
+                background: #ef4444;
+                border-radius: 50%;
+            }
+        }
+
+        .workload-stats {
+            min-width: 120px;
+            text-align: right;
+            font-size: 12px;
+            color: var(--kanban-text-secondary);
+        }
+    }
+
+    // Score Distribution Section
+    .cp-dashboard-scores {
+        h3 {
+            margin-bottom: 16px;
+        }
+    }
+
+    .cp-dashboard-score-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .score-bar-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .score-label {
+            min-width: 100px;
+            font-size: 13px;
+            color: var(--kanban-text-secondary);
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 16px;
+            background: var(--kanban-border);
+            border-radius: 4px;
+            overflow: hidden;
+
+            .score-bar-fill {
+                height: 100%;
+                transition: width 0.3s ease;
+            }
+        }
+
+        .score-count {
+            min-width: 30px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--kanban-text-primary);
+        }
+
+        &.high .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        &.medium .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        &.low .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+
+        &.unscored .score-bar .score-bar-fill {
+            background: var(--kanban-text-secondary);
+            opacity: 0.5;
+        }
+    }
+
+    .cp-dashboard-top-dimensions {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--kanban-border);
+
+        h4 {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--kanban-text-secondary);
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                padding: 4px 0;
+                font-size: 13px;
+                color: var(--kanban-text-primary);
+
+                &::before {
+                    content: '•';
+                    color: #8b5cf6;
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+
+    // Tag Cloud Section
+    .cp-dashboard-tags-section {
+        h3 {
+            margin-bottom: 16px;
+        }
+    }
+
+    .cp-dashboard-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--kanban-board-bg);
+            border: 1px solid var(--kanban-border);
+            border-radius: 16px;
+            font-size: 13px;
+            color: var(--kanban-text-primary);
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: var(--kanban-border);
+            }
+
+            .count {
+                color: var(--kanban-text-secondary);
+                font-size: 11px;
+            }
+        }
+    }
+
+    // Quick Stats Section - compact metrics grid
+    .cp-dashboard-quickstats {
+        h3 {
+            margin-bottom: 16px;
+        }
+
+        .quickstats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .quickstat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            background: var(--kanban-board-bg);
+            border-radius: 8px;
+            border: 1px solid var(--kanban-border);
+            transition: all 0.15s ease;
+
+            &:hover {
+                border-color: var(--kanban-border-hover, #D1D5DB);
+            }
+        }
+
+        .quickstat-label {
+            font-size: 13px;
+            color: var(--kanban-text-secondary);
+            font-weight: 500;
+        }
+
+        .quickstat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--kanban-text-primary);
+
+            &.warning {
+                color: #d97706;
+            }
+
+            &.danger {
+                color: #dc2626;
+            }
+
+            &.highlight {
+                color: #8B5CF6;
+            }
+        }
+    }
+}
+
+// ========================================
+// Recurrence & Dependencies Visual Indicators
+// ========================================
+
+// Board View (jkanban_cp.js) - Task indicators within cards
+.cp-kanban-task-recurrence-icon {
+    color: #8B5CF6; // Purple for recurring
+    margin-left: 4px;
+    font-size: 11px;
+}
+
+.cp-kanban-task-instance-icon {
+    color: #F59E0B; // Amber for instances
+    margin-left: 4px;
+    font-size: 11px;
+}
+
+.cp-kanban-task-deps-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 4px;
+    padding: 1px 4px;
+    background: rgba(59, 130, 246, 0.15);
+    border-radius: 3px;
+    font-size: 10px;
+    color: #3B82F6;
+
+    i {
+        font-size: 9px;
+    }
+}
+
+// Board View - Project dependency indicator
+.cp-kanban-project-deps-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 6px;
+    padding: 2px 6px;
+    background: rgba(59, 130, 246, 0.12);
+    border-radius: 4px;
+    font-size: 11px;
+    color: #3B82F6;
+
+    i {
+        font-size: 10px;
+    }
+}
+
+// Tasks View - Action buttons
+.cp-mytasks-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--kanban-border, #E5E7EB);
+    border-radius: 4px;
+    color: var(--kanban-text-muted, #6B7280);
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        background: var(--kanban-surface, #F9FAFB);
+        border-color: var(--kanban-border-hover, #D1D5DB);
+        color: var(--kanban-text-primary, #111827);
+    }
+
+    i {
+        font-size: 12px;
+    }
+}
+
+.cp-mytasks-recurrence-btn {
+    &.active {
+        background: rgba(139, 92, 246, 0.1);
+        border-color: #8B5CF6;
+        color: #8B5CF6;
+    }
+}
+
+.cp-mytasks-deps-btn {
+    &.active {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: #3B82F6;
+        color: #3B82F6;
+    }
+}
+
+.cp-mytasks-instance-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #F59E0B;
+    font-size: 11px;
+}
+
+// Timeline View - Indicators
+.cp-timeline-bar-content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cp-timeline-recurrence-icon {
+    color: #8B5CF6;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+
+.cp-timeline-instance-icon {
+    color: #F59E0B;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+
+.cp-timeline-dep-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 10px;
+    color: #3B82F6;
+    flex-shrink: 0;
+
+    i {
+        font-size: 9px;
+    }
+}
+
+// Modal - Project Dependencies Section
+.cp-kanban-project-deps-row {
+    .cp-kanban-project-deps-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        max-height: 150px;
+        overflow-y: auto;
+        padding: 4px 0;
+    }
+}
+
+.cp-kanban-project-dep-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--kanban-surface, #F9FAFB);
+    border: 1px solid var(--kanban-border, #E5E7EB);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover {
+        background: var(--kanban-hover, #F3F4F6);
+        border-color: var(--kanban-border-hover, #D1D5DB);
+    }
+
+    input[type="checkbox"] {
+        accent-color: #3B82F6;
+    }
+
+    span {
+        font-size: 13px;
+        color: var(--kanban-text-primary, #111827);
+    }
+}
+
+// Dark theme overrides for indicators
+.cp-kanban-dark-theme {
+    .cp-mytasks-action-btn {
+        border-color: #2D2D2D;
+        color: #9CA3AF;
+
+        &:hover {
+            background: #1A1A1A;
+            border-color: #404040;
+            color: #E5E5E5;
+        }
+    }
+
+    .cp-mytasks-recurrence-btn.active {
+        background: rgba(139, 92, 246, 0.2);
+        border-color: #8B5CF6;
+        color: #A78BFA;
+    }
+
+    .cp-mytasks-deps-btn.active {
+        background: rgba(59, 130, 246, 0.2);
+        border-color: #3B82F6;
+        color: #60A5FA;
+    }
+
+    .cp-kanban-project-dep-label {
+        background: #1A1A1A;
+        border-color: #2D2D2D;
+
+        &:hover {
+            background: #252525;
+            border-color: #404040;
+        }
+
+        span {
+            color: #E5E5E5;
+        }
+    }
+
+    .cp-kanban-task-deps-badge {
+        background: rgba(59, 130, 246, 0.25);
+        color: #60A5FA;
+    }
+
+    .cp-kanban-project-deps-indicator {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60A5FA;
+    }
+
+    .cp-timeline-dep-indicator {
+        color: #60A5FA;
+    }
+
+    .cp-timeline-recurrence-icon {
+        color: #A78BFA;
+    }
+
+    .cp-mytasks-instance-badge {
+        color: #FBBF24;
+    }
+
+    // Dashboard dark mode overrides
+    .cp-dashboard-hero {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.25) 100%);
+        border-color: #10b981;
+
+        .hero-icon {
+            background: rgba(0, 0, 0, 0.3);
+            i { color: #34d399; }
+        }
+
+        .hero-message { color: #6ee7b7; }
+        .hero-detail { color: #a7f3d0; }
+
+        .progress-ring {
+            .progress-bg { stroke: rgba(255, 255, 255, 0.1); }
+            .progress-fill { stroke: #34d399; }
+            .progress-text { color: #6ee7b7; }
+        }
+
+        &.attention {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.25) 100%);
+            border-color: #ef4444;
+
+            .hero-icon i { color: #f87171; }
+            .hero-message { color: #fca5a5; }
+            .hero-detail { color: #fecaca; }
+
+            .progress-ring {
+                .progress-fill { stroke: #f87171; }
+                .progress-text { color: #fca5a5; }
+            }
+        }
+
+        &.today {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.25) 100%);
+            border-color: #f59e0b;
+
+            .hero-icon i { color: #fbbf24; }
+            .hero-message { color: #fcd34d; }
+            .hero-detail { color: #fef3c7; }
+
+            .progress-ring {
+                .progress-fill { stroke: #fbbf24; }
+                .progress-text { color: #fcd34d; }
+            }
+        }
+
+        &.upcoming {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.25) 100%);
+            border-color: #3b82f6;
+
+            .hero-icon i { color: #60a5fa; }
+            .hero-message { color: #93c5fd; }
+            .hero-detail { color: #bfdbfe; }
+
+            .progress-ring {
+                .progress-fill { stroke: #60a5fa; }
+                .progress-text { color: #93c5fd; }
+            }
+        }
+    }
+
+    .cp-dashboard-deadline-group {
+        &.overdue .group-header {
+            color: #f87171;
+
+            .count {
+                background: rgba(239, 68, 68, 0.2);
+                color: #f87171;
+            }
+        }
+
+        &.today .group-header {
+            color: #fbbf24;
+
+            .count {
+                background: rgba(245, 158, 11, 0.2);
+                color: #fbbf24;
+            }
+        }
+
+        &.week .group-header .count {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        ul li {
+            background: #1a1a1a;
+        }
+    }
+
+    .cp-dashboard-workload-bar .bar-overdue-indicator {
+        background: #f87171;
+    }
+
+    .score-bar-row {
+        &.high .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        &.medium .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24);
+        }
+
+        &.low .score-bar .score-bar-fill {
+            background: linear-gradient(90deg, #ef4444, #f87171);
+        }
+    }
+
+    .cp-dashboard-top-dimensions ul li::before {
+        color: #a78bfa;
+    }
+
+    .cp-dashboard-tags .tag {
+        background: #1a1a1a;
+        border-color: #2d2d2d;
+
+        &:hover {
+            background: #252525;
+        }
+    }
+
+    // Quick Stats dark mode
+    .cp-dashboard-quickstats {
+        .quickstat-item {
+            background: #1a1a1a;
+            border-color: #2d2d2d;
+
+            &:hover {
+                border-color: #3d3d3d;
+            }
+        }
+
+        .quickstat-value {
+            &.warning {
+                color: #fbbf24;
+            }
+
+            &.danger {
+                color: #f87171;
+            }
+
+            &.highlight {
+                color: #a78bfa;
             }
         }
     }

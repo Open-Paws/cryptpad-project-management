@@ -236,8 +236,108 @@ define([
             createdBy: createdBy || '',
             start_date: '',
             due_date: '',
-            dependencies: []
+            dependencies: [],
+            // Recurrence fields
+            recurrence: null, // { type: 'daily'|'weekly'|'monthly', interval: number, endDate: '' }
+            parentTaskId: null, // For generated instances (deprecated, use recurrenceParentId)
+            isRecurrenceInstance: false,
+            recurrenceParentId: null // Points to original recurring task for "edit all" feature
         };
+    };
+
+    // Calculate next due date based on recurrence settings
+    var getNextDueDate = function (currentDueDate, recurrence) {
+        if (!currentDueDate || !recurrence || !recurrence.type) { return null; }
+        var date = new Date(currentDueDate);
+        var interval = recurrence.interval || 1;
+
+        switch (recurrence.type) {
+            case 'daily':
+                date.setDate(date.getDate() + interval);
+                break;
+            case 'weekly':
+                date.setDate(date.getDate() + (7 * interval));
+                break;
+            case 'monthly':
+                date.setMonth(date.getMonth() + interval);
+                break;
+            default:
+                return null;
+        }
+        return date.toISOString().split('T')[0]; // YYYY-MM-DD
+    };
+
+    // Generate next recurrence instance when a recurring task is completed
+    var generateNextRecurrence = function (task) {
+        if (!task.recurrence || !task.recurrence.type || !task.due_date) {
+            return null;
+        }
+
+        var nextDueDate = getNextDueDate(task.due_date, task.recurrence);
+        if (!nextDueDate) { return null; }
+
+        // Check if next date exceeds end date
+        if (task.recurrence.endDate) {
+            var endDate = new Date(task.recurrence.endDate);
+            var nextDate = new Date(nextDueDate);
+            if (nextDate > endDate) {
+                return null; // Don't generate instance past end date
+            }
+        }
+
+        // Create the next instance
+        var nextTask = {
+            id: Util.createRandomInteger(),
+            title: task.title,
+            assignee: task.assignee || '',
+            done: false,
+            createdBy: task.createdBy || '',
+            start_date: task.start_date || '',
+            due_date: nextDueDate,
+            dependencies: [], // Don't copy dependencies to new instance
+            recurrence: Object.assign({}, task.recurrence), // Copy recurrence settings
+            parentTaskId: null,
+            isRecurrenceInstance: true,
+            recurrenceParentId: task.recurrenceParentId || task.id // Track original parent
+        };
+
+        return nextTask;
+    };
+
+    // Check if all dependencies are met for a task
+    var checkDependenciesMet = function (task, allTasks) {
+        var deps = task.dependencies || [];
+        if (deps.length === 0) {
+            return { met: true, blocking: [] };
+        }
+
+        var blocking = [];
+        deps.forEach(function (depId) {
+            var depTask = allTasks.find(function (t) { return t.id === depId; });
+            if (depTask && !depTask.done) {
+                blocking.push(depTask);
+            }
+        });
+
+        return { met: blocking.length === 0, blocking: blocking };
+    };
+
+    // Check if all project dependencies are met
+    var checkProjectDependenciesMet = function (project, allProjects) {
+        var deps = project.dependencies || [];
+        if (deps.length === 0) {
+            return { met: true, blocking: [] };
+        }
+
+        var blocking = [];
+        deps.forEach(function (depId) {
+            var depProject = allProjects[depId];
+            if (depProject && !depProject.completed) {
+                blocking.push(depProject);
+            }
+        });
+
+        return { met: blocking.length === 0, blocking: blocking };
     };
     var createEditModal = function (framework, kanban) {
         if (framework.isReadOnly()) { return; }
@@ -276,7 +376,7 @@ define([
 
         var markdownEditorWrapper = h('div.cp-markdown-label-row');
 
-        var conflicts, conflictContainer, titleInput, tagsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle, statusIndicator, statusText;
+        var conflicts, conflictContainer, titleInput, tagsDiv, projectDepsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle, statusIndicator, statusText;
         var scoringSliders = {};
 
         // Composite score display with progress bar (always visible)
@@ -420,6 +520,12 @@ define([
                     h('div.cp-kanban-detail-row.cp-kanban-tags-row', [
                         h('span.cp-kanban-detail-label', 'Tags'),
                         tagsDiv = h('div#cp-kanban-edit-tags.cp-kanban-tags-list')
+                    ]),
+
+                    // Project Dependencies Section (projects only, shown in modal for cards/projects)
+                    h('div.cp-kanban-detail-row.cp-kanban-project-deps-row', [
+                        h('span.cp-kanban-detail-label', 'Depends On'),
+                        projectDepsDiv = h('div#cp-kanban-edit-project-deps.cp-kanban-project-deps-list')
                     ]),
 
                     // Scoring Section (cards only)
@@ -831,15 +937,12 @@ define([
         // Update composite score display with progress bar
         var updateCompositeScore = function() {
             var total = 0;
-            var count = 0;
-            Object.keys(scoringSliders).forEach(function(key) {
+            // Always divide by all dimensions (10) - a 0 score is still a score
+            Object.keys(scoringSliders).forEach(function (key) {
                 var val = scoringData[key] || 0;
-                if (val > 0) {
-                    total += val;
-                    count++;
-                }
+                total += val;
             });
-            var composite = count > 0 ? Math.round((total / count) * 10) / 10 : 0;
+            var composite = Math.round((total / scoringDimensions.length) * 10) / 10;
             $(compositeScoreDisplay).text(composite + '/10');
 
             // Update progress bar width and color
@@ -1069,9 +1172,21 @@ define([
 
                 // Event handlers
                 $(checkbox).off('change').on('change', function () {
+                    var checkboxEl = this;
                     var currentTasks = (dataObject.tasks || []).slice();
-                    if (currentTasks[index]) {
-                        currentTasks[index] = Object.assign({}, currentTasks[index], { done: this.checked });
+                    if (!currentTasks[index]) { return; }
+
+                    var completeTaskAction = function () {
+                        currentTasks[index] = Object.assign({}, currentTasks[index], { done: checkboxEl.checked });
+
+                        // If completing a recurring task, generate next instance
+                        if (checkboxEl.checked && task.recurrence && task.recurrence.type && task.due_date) {
+                            var nextTask = generateNextRecurrence(task);
+                            if (nextTask) {
+                                currentTasks.push(nextTask);
+                            }
+                        }
+
                         dataObject.tasks = currentTasks;
 
                         // Set flag to prevent re-render during local change
@@ -1083,9 +1198,41 @@ define([
                             isLocalTaskChange = false;
                         }, 100);
 
-                        // Update visual state
-                        $(taskRow).toggleClass('cp-kanban-task-done', this.checked);
+                        // Update visual state and re-render if recurrence generated new task
+                        if (checkboxEl.checked && task.recurrence && task.recurrence.type) {
+                            renderTasksList(dataObject.tasks);
+                        } else {
+                            $(taskRow).toggleClass('cp-kanban-task-done', checkboxEl.checked);
+                        }
+                    };
+
+                    // Check dependencies when trying to complete a task
+                    if (checkboxEl.checked) {
+                        var depCheck = checkDependenciesMet(task, currentTasks);
+                        if (!depCheck.met) {
+                            var blockingNames = depCheck.blocking.map(function (t) {
+                                return t.title || 'Untitled task';
+                            }).join('\n• ');
+
+                            UI.confirm(
+                                h('div', [
+                                    h('p', 'This task has incomplete dependencies:'),
+                                    h('p', { style: 'margin-left: 10px; color: #EF4444;' }, '• ' + blockingNames),
+                                    h('p', 'Complete anyway?')
+                                ]),
+                                function (yes) {
+                                    if (yes) {
+                                        completeTaskAction();
+                                    } else {
+                                        checkboxEl.checked = false;
+                                    }
+                                }
+                            );
+                            return;
+                        }
                     }
+
+                    completeTaskAction();
                 });
 
                 $(titleInput).off('change keyup').on('change keyup', function () {
@@ -1114,6 +1261,145 @@ define([
                         dataObject.tasks = currentTasks;
                         commit();
                     }
+                });
+
+                // Recurrence button handler
+                $(recurrenceBtn).off('click').on('click', function () {
+                    // Require due date before setting recurrence
+                    if (!task.due_date) {
+                        UI.warn('Please set a due date before adding recurrence');
+                        return;
+                    }
+
+                    var currentRecurrence = task.recurrence || {};
+                    var typeSelect = h('select', [
+                        h('option', { value: '' }, 'None'),
+                        h('option', { value: 'daily', selected: currentRecurrence.type === 'daily' ? 'selected' : undefined }, 'Daily'),
+                        h('option', { value: 'weekly', selected: currentRecurrence.type === 'weekly' ? 'selected' : undefined }, 'Weekly'),
+                        h('option', { value: 'monthly', selected: currentRecurrence.type === 'monthly' ? 'selected' : undefined }, 'Monthly')
+                    ]);
+                    var intervalInput = h('input', {
+                        type: 'number',
+                        min: 1,
+                        max: 99,
+                        value: currentRecurrence.interval || 1,
+                        style: 'width: 60px;'
+                    });
+                    var endDateInput = h('input', { type: 'date', value: currentRecurrence.endDate || '' });
+
+                    var modalContent = h('div.cp-recurrence-modal', [
+                        h('div.cp-recurrence-row', [h('label', 'Repeat: '), typeSelect]),
+                        h('div.cp-recurrence-row', [h('label', 'Every: '), intervalInput, h('span', ' time(s)')]),
+                        h('div.cp-recurrence-row', [h('label', 'Until: '), endDateInput])
+                    ]);
+
+                    UI.confirm(modalContent, function (yes) {
+                        if (!yes) { return; }
+                        var newRecurrence = null;
+                        if ($(typeSelect).val()) {
+                            newRecurrence = {
+                                type: $(typeSelect).val(),
+                                interval: parseInt($(intervalInput).val()) || 1,
+                                endDate: $(endDateInput).val() || ''
+                            };
+                        }
+                        task.recurrence = newRecurrence;
+                        var currentTasks = (dataObject.tasks || []).slice();
+                        currentTasks[index] = task;
+                        dataObject.tasks = currentTasks;
+                        commit();
+                        renderTasksList(dataObject.tasks);
+                    }, { ok: 'Save', cancel: 'Cancel' });
+                });
+
+                // Dependencies button handler
+                $(depsBtn).off('click').on('click', function () {
+                    var allTasks = (dataObject.tasks || []).slice();
+                    var currentDeps = task.dependencies || [];
+
+                    var taskOptions = allTasks.map(function (t, idx) {
+                        if (idx === index) { return null; }
+                        var isChecked = currentDeps.indexOf(t.id) !== -1;
+                        return h('label.cp-dep-task-option', [
+                            h('input', {
+                                type: 'checkbox',
+                                checked: isChecked ? 'checked' : undefined,
+                                'data-task-id': t.id
+                            }),
+                            h('span', ' ' + (t.title || 'Untitled task'))
+                        ]);
+                    }).filter(Boolean);
+
+                    if (taskOptions.length === 0) {
+                        UI.warn('No other tasks to create dependencies with');
+                        return;
+                    }
+
+                    var modalContent = h('div.cp-dependencies-modal', [
+                        h('p', 'This task depends on:'),
+                        h('div.cp-dep-task-list', taskOptions)
+                    ]);
+
+                    UI.confirm(modalContent, function (yes) {
+                        if (!yes) { return; }
+                        var newDeps = [];
+                        $(modalContent).find('input:checked').each(function () {
+                            var taskId = parseInt($(this).attr('data-task-id'));
+                            if (taskId) { newDeps.push(taskId); }
+                        });
+                        task.dependencies = newDeps;
+                        var currentTasks = (dataObject.tasks || []).slice();
+                        currentTasks[index] = task;
+                        dataObject.tasks = currentTasks;
+                        commit();
+                        renderTasksList(dataObject.tasks);
+                    }, { ok: 'Save', cancel: 'Cancel' });
+                });
+
+                // Move button handler
+                $(moveBtn).off('click').on('click', function () {
+                    var boards = kanban.options.boards || {};
+                    var items = boards.items || {};
+
+                    var otherProjects = Object.keys(items).filter(function (itemId) {
+                        return itemId !== String(id);
+                    }).map(function (itemId) {
+                        return h('option', { value: itemId }, items[itemId].title || 'Untitled');
+                    });
+
+                    if (otherProjects.length === 0) {
+                        UI.warn('No other projects to move task to');
+                        return;
+                    }
+
+                    var projectSelect = h('select.cp-move-project-select', otherProjects);
+                    var modalContent = h('div.cp-move-task-modal', [
+                        h('p', 'Move task to:'),
+                        projectSelect
+                    ]);
+
+                    UI.confirm(modalContent, function (yes) {
+                        if (!yes) { return; }
+                        var targetProjectId = $(projectSelect).val();
+                        if (!targetProjectId) { return; }
+
+                        var targetItem = items[targetProjectId];
+                        if (!targetItem) { return; }
+
+                        // Add task to target project
+                        var targetTasks = (targetItem.tasks || []).slice();
+                        targetTasks.push(Object.assign({}, task, { id: Util.createRandomInteger() }));
+                        targetItem.tasks = targetTasks;
+
+                        // Remove from current project
+                        var currentTasks = (dataObject.tasks || []).slice();
+                        currentTasks.splice(index, 1);
+                        dataObject.tasks = currentTasks;
+
+                        commit();
+                        renderTasksList(dataObject.tasks);
+                        UI.log('Task moved successfully');
+                    }, { ok: 'Move', cancel: 'Cancel' });
                 });
 
                 $(deleteBtn).off('click').on('click', function () {
@@ -1242,7 +1528,7 @@ define([
             id = Number(_id);
 
             // Card-specific sections (hide when editing a board)
-            var cardOnlySections = '.cp-kanban-status-row, .cp-kanban-assignee-row, .cp-kanban-dates-row, .cp-kanban-tags-row, .cp-kanban-scoring-row, .cp-kanban-tasks-section, .cp-kanban-description-section';
+            var cardOnlySections = '.cp-kanban-status-row, .cp-kanban-assignee-row, .cp-kanban-dates-row, .cp-kanban-tags-row, .cp-kanban-scoring-row, .cp-kanban-tasks-section, .cp-kanban-description-section, .cp-kanban-project-deps-row';
             // Board-specific sections (hide when editing a card)
             var boardOnlySections = '.cp-kanban-color-row';
 
@@ -1294,6 +1580,71 @@ define([
         // Expose attachAddTagHandler on tags object
         tags.attachAddTagHandler = attachAddTagHandler;
 
+        // Project Dependencies (other projects this one depends on)
+        var $projectDeps = $(projectDepsDiv);
+        var dependencies = {
+            getValue: function () {
+                var selected = [];
+                $projectDeps.find('.cp-kanban-project-dep-checkbox:checked').each(function () {
+                    selected.push(Number($(this).val()));
+                });
+                return selected;
+            },
+            setValue: function (deps, preserveCursor) {
+                if (isBoard) { return; } // Dependencies are not available for boards
+
+                $projectDeps.empty();
+                deps = deps || [];
+
+                // Get all projects (items) except the current one
+                var boards = kanban.options.boards || {};
+                var items = boards.items || {};
+                var currentId = id;
+
+                var otherProjects = Object.keys(items).filter(function (itemId) {
+                    return Number(itemId) !== currentId;
+                }).map(function (itemId) {
+                    return {
+                        id: Number(itemId),
+                        title: items[itemId].title || 'Untitled'
+                    };
+                }).sort(function (a, b) {
+                    return a.title.localeCompare(b.title);
+                });
+
+                if (otherProjects.length === 0) {
+                    $projectDeps.append(h('em', { style: 'color: #888; font-size: 12px;' }, 'No other projects to depend on'));
+                    return;
+                }
+
+                otherProjects.forEach(function (project) {
+                    var isChecked = deps.indexOf(project.id) !== -1;
+
+                    var checkbox = h('input.cp-kanban-project-dep-checkbox', {
+                        type: 'checkbox',
+                        value: project.id
+                    });
+                    checkbox.checked = isChecked;
+
+                    var label = h('label.cp-kanban-project-dep-label', [
+                        checkbox,
+                        h('span', project.title)
+                    ]);
+
+                    $(checkbox).off('change').on('change', function () {
+                        var selected = [];
+                        $projectDeps.find('.cp-kanban-project-dep-checkbox:checked').each(function () {
+                            selected.push(Number($(this).val()));
+                        });
+                        dataObject.dependencies = selected;
+                        commit();
+                    });
+
+                    $projectDeps.append(label);
+                });
+            }
+        };
+
         // Status display (shows board name)
         var status = {
             setValue: function (boardName) {
@@ -1314,6 +1665,7 @@ define([
             completed: completed,
             scoring: scoring,
             tasks: tasks,
+            dependencies: dependencies,
             conflict: conflict,
             status: status
         };
@@ -1353,8 +1705,10 @@ define([
         editModal.body.refresh();
 
         // Attach add tag button handler after modal is opened
-        setTimeout(function() {
-            attachAddTagHandler();
+        setTimeout(function () {
+            if (editModal.tags && editModal.tags.attachAddTagHandler) {
+                editModal.tags.attachAddTagHandler();
+            }
         }, 100);
     };
     var getBoardEditModal = function (framework, kanban, id) {
@@ -3024,6 +3378,21 @@ define([
                     });
                     $(titleInput).hide();
 
+                    // Recurrence indicator/button
+                    var hasRecurrence = task.recurrence && task.recurrence.type;
+                    var recurrenceBtn = h('button.cp-mytasks-action-btn.cp-mytasks-recurrence-btn' + (hasRecurrence ? '.active' : ''), {
+                        title: hasRecurrence ? ('Recurring ' + task.recurrence.type) : 'Set recurrence'
+                    }, [h('i.fa.fa-repeat')]);
+
+                    // Dependencies indicator/button
+                    var depCount = (task.dependencies || []).length;
+                    var depsBtn = h('button.cp-mytasks-action-btn.cp-mytasks-deps-btn' + (depCount > 0 ? '.has-deps' : ''), {
+                        title: depCount > 0 ? (depCount + ' dependencies') : 'Set dependencies'
+                    }, [
+                        h('i.fa.fa-link'),
+                        depCount > 0 ? h('span.cp-mytasks-dep-count', String(depCount)) : null
+                    ].filter(Boolean));
+
                     // Edit button
                     var editBtn = h('button.cp-mytasks-action-btn.cp-mytasks-edit-btn', {
                         title: 'Edit task'
@@ -3035,7 +3404,12 @@ define([
                     }, [h('i.fa.fa-trash')]);
 
                     // Actions container
-                    var actionsContainer = h('div.cp-mytasks-actions', [editBtn, deleteBtn]);
+                    var actionsContainer = h('div.cp-mytasks-actions', [
+                        recurrenceBtn,
+                        depsBtn,
+                        editBtn,
+                        deleteBtn
+                    ].filter(Boolean));
 
                     var rowClass = 'cp-mytasks-row' + (task.done ? ' cp-mytasks-done' : '');
                     var taskRow = h('div.' + rowClass.replace(/\s+/g, '.'), [
@@ -3051,22 +3425,80 @@ define([
 
                     // Checkbox handler
                     $(checkbox).on('change', function () {
+                        console.log('[Checkbox Debug] Checkbox changed for task:', task.title, 'checked:', this.checked);
+                        console.log('[Checkbox Debug] taskData:', taskData);
+                        var checkboxEl = this;
                         var boards = kanban.options.boards || {};
                         var item = boards.items[taskData.projectId];
-                        if (!item || !Array.isArray(item.tasks)) { return; }
+                        console.log('[Checkbox Debug] Found item:', item ? item.title : 'NOT FOUND');
+                        if (!item || !Array.isArray(item.tasks)) {
+                            console.log('[Checkbox Debug] ERROR: item or item.tasks not found');
+                            return;
+                        }
 
                         var currentTasks = item.tasks.slice();
-                        if (currentTasks[taskData.taskIndex]) {
+                        console.log('[Checkbox Debug] currentTasks length:', currentTasks.length, 'looking for index:', taskData.taskIndex);
+                        var taskToComplete = currentTasks[taskData.taskIndex];
+                        if (!taskToComplete) {
+                            console.log('[Checkbox Debug] ERROR: taskToComplete not found at index', taskData.taskIndex);
+                            return;
+                        }
+                        console.log('[Checkbox Debug] taskToComplete:', taskToComplete.title, 'recurrence:', taskToComplete.recurrence, 'due_date:', taskToComplete.due_date);
+
+                        var completeTaskAction = function () {
                             currentTasks[taskData.taskIndex] = Object.assign({}, currentTasks[taskData.taskIndex], {
-                                done: this.checked
+                                done: checkboxEl.checked
                             });
+
+                            // If completing a recurring task, generate next instance
+                            console.log('[Recurrence Debug] Completing task:', taskToComplete.title);
+                            console.log('[Recurrence Debug] Has recurrence?', taskToComplete.recurrence);
+                            console.log('[Recurrence Debug] Has due_date?', taskToComplete.due_date);
+                            if (checkboxEl.checked && taskToComplete.recurrence && taskToComplete.recurrence.type && taskToComplete.due_date) {
+                                console.log('[Recurrence Debug] Generating next instance...');
+                                var nextTask = generateNextRecurrence(taskToComplete);
+                                console.log('[Recurrence Debug] Next task generated:', nextTask);
+                                if (nextTask) {
+                                    currentTasks.push(nextTask);
+                                    console.log('[Recurrence Debug] Added to currentTasks, new length:', currentTasks.length);
+                                }
+                            }
+
                             item.tasks = currentTasks;
                             framework.localChange();
                             updateBoards(framework, kanban, kanban.options.boards);
                             setTimeout(function () {
                                 renderMyTasksView();
                             }, 100);
+                        };
+
+                        // Check dependencies when trying to complete a task
+                        if (checkboxEl.checked) {
+                            var depCheck = checkDependenciesMet(taskToComplete, currentTasks);
+                            if (!depCheck.met) {
+                                var blockingNames = depCheck.blocking.map(function (t) {
+                                    return t.title || 'Untitled task';
+                                }).join('\n• ');
+
+                                UI.confirm(
+                                    h('div', [
+                                        h('p', 'This task has incomplete dependencies:'),
+                                        h('p', { style: 'margin-left: 10px; color: #EF4444;' }, '• ' + blockingNames),
+                                        h('p', 'Complete anyway?')
+                                    ]),
+                                    function (yes) {
+                                        if (yes) {
+                                            completeTaskAction();
+                                        } else {
+                                            checkboxEl.checked = false;
+                                        }
+                                    }
+                                );
+                                return;
+                            }
                         }
+
+                        completeTaskAction();
                     });
 
                     // Click on project name to open editor
@@ -3142,6 +3574,124 @@ define([
                         setTimeout(function () {
                             renderMyTasksView();
                         }, 100);
+                    });
+
+                    // Recurrence button handler
+                    $(recurrenceBtn).on('click', function (e) {
+                        e.stopPropagation();
+
+                        // Require due date
+                        if (!task.due_date) {
+                            UI.warn('Please set a due date before adding recurrence');
+                            return;
+                        }
+
+                        var currentRecurrence = task.recurrence || {};
+                        var typeSelect = h('select', [
+                            h('option', { value: '' }, 'None'),
+                            h('option', { value: 'daily', selected: currentRecurrence.type === 'daily' ? 'selected' : undefined }, 'Daily'),
+                            h('option', { value: 'weekly', selected: currentRecurrence.type === 'weekly' ? 'selected' : undefined }, 'Weekly'),
+                            h('option', { value: 'monthly', selected: currentRecurrence.type === 'monthly' ? 'selected' : undefined }, 'Monthly')
+                        ]);
+                        var intervalInput = h('input', {
+                            type: 'number',
+                            min: 1,
+                            max: 99,
+                            value: currentRecurrence.interval || 1,
+                            style: 'width: 60px;'
+                        });
+                        var endDateInput = h('input', { type: 'date', value: currentRecurrence.endDate || '' });
+
+                        var modalContent = h('div.cp-recurrence-modal', [
+                            h('div.cp-recurrence-row', [h('label', 'Repeat: '), typeSelect]),
+                            h('div.cp-recurrence-row', [h('label', 'Every: '), intervalInput, h('span', ' time(s)')]),
+                            h('div.cp-recurrence-row', [h('label', 'Until: '), endDateInput])
+                        ]);
+
+                        UI.confirm(modalContent, function (yes) {
+                            if (!yes) { return; }
+                            var boards = kanban.options.boards || {};
+                            var item = boards.items[taskData.projectId];
+                            if (!item || !Array.isArray(item.tasks)) { return; }
+
+                            var newRecurrence = null;
+                            if ($(typeSelect).val()) {
+                                newRecurrence = {
+                                    type: $(typeSelect).val(),
+                                    interval: parseInt($(intervalInput).val()) || 1,
+                                    endDate: $(endDateInput).val() || ''
+                                };
+                            }
+                            console.log('[Recurrence Save] Setting recurrence on task:', taskData.taskIndex, 'in project:', taskData.projectId);
+                            console.log('[Recurrence Save] New recurrence value:', newRecurrence);
+
+                            var currentTasks = item.tasks.slice();
+                            currentTasks[taskData.taskIndex] = Object.assign({}, currentTasks[taskData.taskIndex], {
+                                recurrence: newRecurrence
+                            });
+                            console.log('[Recurrence Save] Updated task:', currentTasks[taskData.taskIndex]);
+                            item.tasks = currentTasks;
+                            framework.localChange();
+                            updateBoards(framework, kanban, kanban.options.boards);
+                            setTimeout(function () {
+                                renderMyTasksView();
+                            }, 100);
+                        }, { ok: 'Save', cancel: 'Cancel' });
+                    });
+
+                    // Dependencies button handler
+                    $(depsBtn).on('click', function (e) {
+                        e.stopPropagation();
+
+                        var boards = kanban.options.boards || {};
+                        var item = boards.items[taskData.projectId];
+                        if (!item || !Array.isArray(item.tasks)) { return; }
+
+                        var allTasks = item.tasks;
+                        var currentDeps = task.dependencies || [];
+
+                        var taskOptions = allTasks.map(function (t, idx) {
+                            if (idx === taskData.taskIndex) { return null; } // Skip self
+                            var isChecked = currentDeps.indexOf(t.id) !== -1;
+                            return h('label.cp-dep-task-option', [
+                                h('input', {
+                                    type: 'checkbox',
+                                    checked: isChecked ? 'checked' : undefined,
+                                    'data-task-id': t.id
+                                }),
+                                h('span', ' ' + (t.title || 'Untitled task'))
+                            ]);
+                        }).filter(Boolean);
+
+                        if (taskOptions.length === 0) {
+                            UI.warn('No other tasks to create dependencies with');
+                            return;
+                        }
+
+                        var modalContent = h('div.cp-dependencies-modal', [
+                            h('p', 'This task depends on:'),
+                            h('div.cp-dep-task-list', taskOptions)
+                        ]);
+
+                        UI.confirm(modalContent, function (yes) {
+                            if (!yes) { return; }
+                            var newDeps = [];
+                            $(modalContent).find('input:checked').each(function () {
+                                var taskId = parseInt($(this).attr('data-task-id'));
+                                if (taskId) { newDeps.push(taskId); }
+                            });
+
+                            var currentTasks = item.tasks.slice();
+                            currentTasks[taskData.taskIndex] = Object.assign({}, currentTasks[taskData.taskIndex], {
+                                dependencies: newDeps
+                            });
+                            item.tasks = currentTasks;
+                            framework.localChange();
+                            updateBoards(framework, kanban, kanban.options.boards);
+                            setTimeout(function () {
+                                renderMyTasksView();
+                            }, 100);
+                        }, { ok: 'Save', cancel: 'Cancel' });
                     });
 
                     return taskRow;
@@ -3464,12 +4014,23 @@ define([
                         projectBarStyle += ' background-color: ' + project.color + ';';
                         projectBarStyle += ' color: ' + getTextColor(project.color) + ';';
                     }
+                    // Build project bar label with indicators
+                    var projectBarLabelContent = [h('span.cp-timeline-bar-label', project.title)];
+
+                    // Add dependency indicator for project
+                    var projectDepCount = (project.dependencies || []).length;
+                    if (projectDepCount > 0) {
+                        projectBarLabelContent.push(h('span.cp-timeline-dep-indicator', {
+                            title: projectDepCount + ' dependenc' + (projectDepCount === 1 ? 'y' : 'ies')
+                        }, [h('i.fa.fa-link'), ' ' + projectDepCount]));
+                    }
+
                     var projectBar = h('div.cp-timeline-bar.cp-timeline-project-bar', {
                         style: projectBarStyle,
                         'data-id': project.id,
                         title: project.title + '\n' + formatDateShort(projectStart) + ' - ' + formatDateShort(projectEnd)
                     }, [
-                        h('span.cp-timeline-bar-label', project.title),
+                        h('span.cp-timeline-bar-content', projectBarLabelContent),
                         h('div.cp-timeline-bar-resize-handle.left'),
                         h('div.cp-timeline-bar-resize-handle.right')
                     ]);
@@ -3679,11 +4240,29 @@ define([
                             taskBarStyle += ' color: ' + getTextColor(project.color) + ';';
                         }
 
+                        // Build task bar label with indicators
+                        var taskBarLabelContent = [h('span.cp-timeline-bar-label', task.title || 'Task')];
+
+                        // Add recurrence indicator
+                        if (task.recurrence && task.recurrence.type) {
+                            taskBarLabelContent.push(h('i.fa.fa-repeat.cp-timeline-recurrence-icon', {
+                                title: 'Recurring: ' + task.recurrence.type + (task.recurrence.interval > 1 ? ' (every ' + task.recurrence.interval + ')' : '')
+                            }));
+                        }
+
+                        // Add dependency indicator
+                        var taskDepCount = (task.dependencies || []).length;
+                        if (taskDepCount > 0) {
+                            taskBarLabelContent.push(h('span.cp-timeline-dep-indicator', {
+                                title: taskDepCount + ' dependenc' + (taskDepCount === 1 ? 'y' : 'ies')
+                            }, [h('i.fa.fa-link')]));
+                        }
+
                         var taskBar = h('div.cp-timeline-bar.cp-timeline-task-bar' + (task.done ? '.done' : ''), {
                             style: taskBarStyle,
                             title: (task.title || 'Untitled task') + '\n' + formatDateShort(taskStart) + ' - ' + formatDateShort(taskEnd)
                         }, [
-                            h('span.cp-timeline-bar-label', task.title || 'Task'),
+                            h('span.cp-timeline-bar-content', taskBarLabelContent),
                             h('div.cp-timeline-bar-resize-handle.left'),
                             h('div.cp-timeline-bar-resize-handle.right')
                         ]);
@@ -3801,6 +4380,491 @@ define([
                 }
             };
 
+            // Dashboard analytics view render function
+            var renderDashboardView = function () {
+                $dashboardContainer.empty();
+
+                var boards = kanban.options.boards || {};
+                var items = boards.items || {};
+                var data = boards.data || {};
+
+                // Date helpers
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+                var tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                var endOfWeek = new Date(today);
+                endOfWeek.setDate(endOfWeek.getDate() + (7 - endOfWeek.getDay()));
+                var endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+                var isToday = function (dateStr) {
+                    if (!dateStr) return false;
+                    var d = new Date(dateStr);
+                    d.setHours(0, 0, 0, 0);
+                    return d.getTime() === today.getTime();
+                };
+                var isThisWeek = function (dateStr) {
+                    if (!dateStr) return false;
+                    var d = new Date(dateStr);
+                    d.setHours(0, 0, 0, 0);
+                    return d > today && d <= endOfWeek;
+                };
+                var isThisMonth = function (dateStr) {
+                    if (!dateStr) return false;
+                    var d = new Date(dateStr);
+                    d.setHours(0, 0, 0, 0);
+                    return d > endOfWeek && d <= endOfMonth;
+                };
+                var isOverdue = function (dateStr) {
+                    if (!dateStr) return false;
+                    var d = new Date(dateStr);
+                    d.setHours(0, 0, 0, 0);
+                    return d < today;
+                };
+                var getDaysOverdue = function (dateStr) {
+                    if (!dateStr) return 0;
+                    var d = new Date(dateStr);
+                    d.setHours(0, 0, 0, 0);
+                    return Math.floor((today - d) / (1000 * 60 * 60 * 24));
+                };
+                var formatDueDate = function (dateStr) {
+                    if (!dateStr) return '';
+                    var d = new Date(dateStr);
+                    var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                    return days[d.getDay()];
+                };
+
+                // Calculate metrics
+                var totalProjects = Object.keys(items).length;
+                var completedProjects = 0;
+                var totalTasks = 0;
+                var completedTasks = 0;
+                var totalScore = 0;
+                var scoredCount = 0;
+
+                // New metrics
+                var allTasks = [];
+                var dueTodayItems = [];
+                var dueThisWeekItems = [];
+                var dueThisMonthItems = [];
+                var overdueItems = [];
+                var noDueDateItems = [];
+                var blockedTasks = [];
+                var recurringTasks = [];
+                var unassignedItems = [];
+                var highPriorityProjects = [];
+
+                // Workload tracking
+                var workloadByAssignee = {};
+
+                // Tag tracking
+                var tagCounts = {};
+
+                // Score distribution
+                var scoreHigh = 0;
+                var scoreMedium = 0;
+                var scoreLow = 0;
+                var scoreUnscored = 0;
+
+                // Dimension totals for averages
+                var dimensionTotals = {};
+                var dimensionCounts = {};
+                scoringDimensions.forEach(function (dim) {
+                    dimensionTotals[dim.key] = 0;
+                    dimensionCounts[dim.key] = 0;
+                });
+
+                // Column counts for status breakdown
+                var columnCounts = {};
+                Object.keys(data).forEach(function (boardId) {
+                    var board = data[boardId];
+                    columnCounts[boardId] = {
+                        name: board.title || 'Unknown',
+                        count: (board.item || []).length,
+                        color: board.color || ''
+                    };
+                });
+
+                // Process each project/item
+                Object.keys(items).forEach(function (itemId) {
+                    var item = items[itemId];
+                    if (item.completed) { completedProjects++; }
+
+                    // Track tags
+                    (item.tags || []).forEach(function (tag) {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+
+                    // Track unassigned projects
+                    if (!item.assignee || item.assignee.trim() === '') {
+                        unassignedItems.push({ type: 'project', title: item.title || 'Untitled', id: itemId });
+                    }
+
+                    // Process tasks
+                    var tasks = item.tasks || [];
+                    tasks.forEach(function (task, taskIndex) {
+                        totalTasks++;
+                        if (task.done) { completedTasks++; }
+
+                        // Build allTasks list with context
+                        var taskWithContext = {
+                            type: 'task',
+                            title: task.title || 'Untitled Task',
+                            projectTitle: item.title || 'Untitled Project',
+                            projectId: itemId,
+                            taskIndex: taskIndex,
+                            due_date: task.due_date,
+                            done: task.done,
+                            assignee: task.assignee,
+                            dependencies: task.dependencies || [],
+                            recurrence: task.recurrence
+                        };
+                        allTasks.push(taskWithContext);
+
+                        // Track workload by assignee
+                        var assignee = task.assignee || 'Unassigned';
+                        if (!workloadByAssignee[assignee]) {
+                            workloadByAssignee[assignee] = { total: 0, done: 0, overdue: 0 };
+                        }
+                        workloadByAssignee[assignee].total++;
+                        if (task.done) workloadByAssignee[assignee].done++;
+                        if (!task.done && isOverdue(task.due_date)) workloadByAssignee[assignee].overdue++;
+
+                        // Track recurring tasks
+                        if (task.recurrence && task.recurrence.type && !task.done) {
+                            recurringTasks.push(taskWithContext);
+                        }
+
+                        // Track blocked tasks (incomplete dependencies)
+                        if (!task.done && task.dependencies && task.dependencies.length > 0) {
+                            var hasIncomplete = task.dependencies.some(function (depId) {
+                                var depTask = tasks.find(function (t) { return t.id === depId; });
+                                return depTask && !depTask.done;
+                            });
+                            if (hasIncomplete) {
+                                blockedTasks.push(taskWithContext);
+                            }
+                        }
+
+                        // Categorize by due date (only incomplete tasks)
+                        if (!task.done) {
+                            if (!task.due_date) {
+                                noDueDateItems.push(taskWithContext);
+                            } else if (isOverdue(task.due_date)) {
+                                overdueItems.push(Object.assign({}, taskWithContext, { days: getDaysOverdue(task.due_date) }));
+                            } else if (isToday(task.due_date)) {
+                                dueTodayItems.push(taskWithContext);
+                            } else if (isThisWeek(task.due_date)) {
+                                dueThisWeekItems.push(taskWithContext);
+                            } else if (isThisMonth(task.due_date)) {
+                                dueThisMonthItems.push(taskWithContext);
+                            }
+                        }
+                    });
+
+                    // Calculate score
+                    if (item.scoring) {
+                        var scoreSum = 0;
+                        var scoreCount = 0;
+                        scoringDimensions.forEach(function (dim) {
+                            var val = item.scoring[dim.key] || 0;
+                            if (val > 0) {
+                                scoreSum += val;
+                                scoreCount++;
+                                dimensionTotals[dim.key] += val;
+                                dimensionCounts[dim.key]++;
+                            }
+                        });
+                        if (scoreCount > 0) {
+                            var avgItemScore = scoreSum / scoringDimensions.length;
+                            totalScore += avgItemScore;
+                            scoredCount++;
+
+                            // Categorize by score level
+                            if (avgItemScore >= 7) {
+                                scoreHigh++;
+                                highPriorityProjects.push({ title: item.title || 'Untitled', score: avgItemScore.toFixed(1), id: itemId });
+                            } else if (avgItemScore >= 4) {
+                                scoreMedium++;
+                            } else {
+                                scoreLow++;
+                            }
+                        } else {
+                            scoreUnscored++;
+                        }
+                    } else {
+                        scoreUnscored++;
+                    }
+
+                    // Check project due dates (only incomplete)
+                    if (!item.completed) {
+                        if (!item.due_date) {
+                            noDueDateItems.push({ type: 'project', title: item.title || 'Untitled', id: itemId });
+                        } else if (isOverdue(item.due_date)) {
+                            overdueItems.push({ type: 'project', title: item.title || 'Untitled', days: getDaysOverdue(item.due_date), id: itemId });
+                        } else if (isToday(item.due_date)) {
+                            dueTodayItems.push({ type: 'project', title: item.title || 'Untitled', id: itemId, due_date: item.due_date });
+                        } else if (isThisWeek(item.due_date)) {
+                            dueThisWeekItems.push({ type: 'project', title: item.title || 'Untitled', id: itemId, due_date: item.due_date });
+                        } else if (isThisMonth(item.due_date)) {
+                            dueThisMonthItems.push({ type: 'project', title: item.title || 'Untitled', id: itemId, due_date: item.due_date });
+                        }
+                    }
+                });
+
+                var avgScore = scoredCount > 0 ? (totalScore / scoredCount).toFixed(1) : '0';
+                var taskCompletionPct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+                // Sort overdue by days (most overdue first)
+                overdueItems.sort(function (a, b) { return b.days - a.days; });
+
+                // Calculate top scoring dimensions
+                var dimensionAverages = scoringDimensions.map(function (dim) {
+                    var avg = dimensionCounts[dim.key] > 0 ? dimensionTotals[dim.key] / dimensionCounts[dim.key] : 0;
+                    return { key: dim.key, label: dim.label, avg: avg };
+                }).sort(function (a, b) { return b.avg - a.avg; });
+
+                // ===== BUILD DASHBOARD HTML =====
+
+                // Hero Summary - One glanceable status
+                var heroStatus = 'on-track';
+                var heroMessage = 'All clear';
+                var heroDetail = totalProjects + ' projects, ' + taskCompletionPct + '% tasks done';
+
+                if (overdueItems.length > 0) {
+                    heroStatus = 'attention';
+                    heroMessage = overdueItems.length + ' item' + (overdueItems.length === 1 ? '' : 's') + ' overdue';
+                    heroDetail = 'Needs attention today';
+                } else if (dueTodayItems.length > 0) {
+                    heroStatus = 'today';
+                    heroMessage = dueTodayItems.length + ' due today';
+                    heroDetail = 'Stay on track';
+                } else if (dueThisWeekItems.length > 0) {
+                    heroStatus = 'upcoming';
+                    heroMessage = dueThisWeekItems.length + ' due this week';
+                    heroDetail = 'Plan ahead';
+                }
+
+                var heroSection = h('div.cp-dashboard-hero.' + heroStatus, [
+                    h('div.hero-icon', [
+                        h('i.fa.' + (heroStatus === 'attention' ? 'fa-exclamation-circle' :
+                            heroStatus === 'today' ? 'fa-clock-o' :
+                            heroStatus === 'upcoming' ? 'fa-calendar' : 'fa-check-circle'))
+                    ]),
+                    h('div.hero-content', [
+                        h('div.hero-message', heroMessage),
+                        h('div.hero-detail', heroDetail)
+                    ]),
+                    h('div.hero-progress', [
+                        h('div.progress-ring', [
+                            h('svg', { viewBox: '0 0 36 36' }, [
+                                h('path.progress-bg', {
+                                    d: 'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831'
+                                }),
+                                h('path.progress-fill', {
+                                    d: 'M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831',
+                                    'stroke-dasharray': taskCompletionPct + ', 100'
+                                })
+                            ]),
+                            h('div.progress-text', taskCompletionPct + '%')
+                        ])
+                    ])
+                ]);
+
+                // Upcoming Deadlines Section
+                var renderDeadlineGroup = function (title, items, className) {
+                    if (items.length === 0) return null;
+                    return h('div.cp-dashboard-deadline-group' + (className ? '.' + className : ''), [
+                        h('div.group-header', [
+                            h('span', title),
+                            h('span.count', String(items.length))
+                        ]),
+                        h('ul', items.slice(0, 5).map(function (item) {
+                            var suffix = '';
+                            if (item.days) {
+                                suffix = ' (' + item.days + ' day' + (item.days === 1 ? '' : 's') + ' overdue)';
+                            } else if (item.due_date && !isToday(item.due_date)) {
+                                suffix = ' (' + formatDueDate(item.due_date) + ')';
+                            }
+                            var prefix = item.type === 'task' ? 'Task: ' : '';
+                            return h('li', [
+                                h('span.item-type', prefix),
+                                h('span.item-title', item.title),
+                                suffix ? h('span.item-suffix', suffix) : null
+                            ].filter(Boolean));
+                        }))
+                    ]);
+                };
+
+                var deadlinesSection = h('div.cp-dashboard-section.cp-dashboard-deadlines', [
+                    h('h3', 'Upcoming Deadlines'),
+                    renderDeadlineGroup('Overdue', overdueItems, 'overdue'),
+                    renderDeadlineGroup('Today', dueTodayItems, 'today'),
+                    renderDeadlineGroup('This Week', dueThisWeekItems, 'week'),
+                    renderDeadlineGroup('This Month', dueThisMonthItems, 'month')
+                ].filter(Boolean));
+
+                // Workload by Assignee Section
+                var maxWorkload = Math.max.apply(null, Object.values(workloadByAssignee).map(function (w) { return w.total; }).concat([1]));
+                var workloadRows = Object.keys(workloadByAssignee)
+                    .sort(function (a, b) { return workloadByAssignee[b].total - workloadByAssignee[a].total; })
+                    .slice(0, 8)
+                    .map(function (assignee) {
+                        var w = workloadByAssignee[assignee];
+                        var pct = Math.round((w.total / maxWorkload) * 100);
+                        var donePct = w.total > 0 ? Math.round((w.done / w.total) * 100) : 0;
+                        return h('div.cp-dashboard-workload-row', [
+                            h('span.workload-name', assignee),
+                            h('div.cp-dashboard-workload-bar', [
+                                h('div.bar-fill', { style: 'width: ' + pct + '%' }),
+                                w.overdue > 0 ? h('div.bar-overdue-indicator') : null
+                            ].filter(Boolean)),
+                            h('span.workload-stats', w.total + ' tasks' + (w.overdue > 0 ? ' (' + w.overdue + ' overdue)' : ''))
+                        ]);
+                    });
+
+                var workloadSection = workloadRows.length > 0 ? h('div.cp-dashboard-section.cp-dashboard-workload', [
+                    h('h3', 'Workload by Assignee'),
+                    h('div.cp-dashboard-workload-list', workloadRows)
+                ]) : null;
+
+                // Score Distribution Section
+                var maxScoreCount = Math.max(scoreHigh, scoreMedium, scoreLow, scoreUnscored, 1);
+                var scoreSection = h('div.cp-dashboard-section.cp-dashboard-scores', [
+                    h('h3', 'Impact Score Distribution'),
+                    h('div.cp-dashboard-score-bars', [
+                        h('div.score-bar-row.high', [
+                            h('span.score-label', 'High (7-10)'),
+                            h('div.score-bar', [
+                                h('div.score-bar-fill', { style: 'width: ' + Math.round((scoreHigh / maxScoreCount) * 100) + '%' })
+                            ]),
+                            h('span.score-count', String(scoreHigh))
+                        ]),
+                        h('div.score-bar-row.medium', [
+                            h('span.score-label', 'Medium (4-6)'),
+                            h('div.score-bar', [
+                                h('div.score-bar-fill', { style: 'width: ' + Math.round((scoreMedium / maxScoreCount) * 100) + '%' })
+                            ]),
+                            h('span.score-count', String(scoreMedium))
+                        ]),
+                        h('div.score-bar-row.low', [
+                            h('span.score-label', 'Low (1-3)'),
+                            h('div.score-bar', [
+                                h('div.score-bar-fill', { style: 'width: ' + Math.round((scoreLow / maxScoreCount) * 100) + '%' })
+                            ]),
+                            h('span.score-count', String(scoreLow))
+                        ]),
+                        h('div.score-bar-row.unscored', [
+                            h('span.score-label', 'Unscored'),
+                            h('div.score-bar', [
+                                h('div.score-bar-fill', { style: 'width: ' + Math.round((scoreUnscored / maxScoreCount) * 100) + '%' })
+                            ]),
+                            h('span.score-count', String(scoreUnscored))
+                        ])
+                    ]),
+                    dimensionAverages[0] && dimensionAverages[0].avg > 0 ? h('div.cp-dashboard-top-dimensions', [
+                        h('h4', 'Top Dimensions'),
+                        h('ul', dimensionAverages.slice(0, 3).filter(function (d) { return d.avg > 0; }).map(function (d) {
+                            return h('li', d.label + ': ' + d.avg.toFixed(1) + ' avg');
+                        }))
+                    ]) : null
+                ].filter(Boolean));
+
+                // Column breakdown
+                var columnRows = Object.keys(columnCounts).map(function (id) {
+                    var col = columnCounts[id];
+                    var pct = totalProjects > 0 ? Math.round((col.count / totalProjects) * 100) : 0;
+                    return h('div.cp-dashboard-column-row', [
+                        h('span.cp-col-name', col.name),
+                        h('div.cp-col-bar', [
+                            h('div.cp-col-bar-fill', { style: 'width: ' + pct + '%' })
+                        ]),
+                        h('span.cp-col-count', String(col.count))
+                    ]);
+                });
+
+                var columnSection = h('div.cp-dashboard-section', [
+                    h('h3', 'Projects by Status'),
+                    h('div.cp-dashboard-columns', columnRows)
+                ]);
+
+                // Tag Cloud Section
+                var tagArray = Object.keys(tagCounts).map(function (tag) {
+                    return { tag: tag, count: tagCounts[tag] };
+                }).sort(function (a, b) { return b.count - a.count; });
+
+                var tagSection = tagArray.length > 0 ? h('div.cp-dashboard-section.cp-dashboard-tags-section', [
+                    h('h3', 'Tags'),
+                    h('div.cp-dashboard-tags', tagArray.slice(0, 12).map(function (t) {
+                        return h('span.tag', [
+                            t.tag,
+                            h('span.count', '(' + t.count + ')')
+                        ]);
+                    }))
+                ]) : null;
+
+                // Quick Stats Section - compact metrics with mini visualizations
+                var quickStatsSection = h('div.cp-dashboard-section.cp-dashboard-quickstats', [
+                    h('h3', 'Quick Stats'),
+                    h('div.quickstats-grid', [
+                        // Timeline row
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'Due Today'),
+                            h('span.quickstat-value' + (dueTodayItems.length > 0 ? '.warning' : ''), String(dueTodayItems.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'This Week'),
+                            h('span.quickstat-value', String(dueThisWeekItems.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'This Month'),
+                            h('span.quickstat-value', String(dueThisMonthItems.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'No Date'),
+                            h('span.quickstat-value' + (noDueDateItems.length > 5 ? '.warning' : ''), String(noDueDateItems.length))
+                        ]),
+                        // Status row
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'Blocked'),
+                            h('span.quickstat-value' + (blockedTasks.length > 0 ? '.danger' : ''), String(blockedTasks.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'Recurring'),
+                            h('span.quickstat-value', String(recurringTasks.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'Unassigned'),
+                            h('span.quickstat-value' + (unassignedItems.length > 3 ? '.warning' : ''), String(unassignedItems.length))
+                        ]),
+                        h('div.quickstat-item', [
+                            h('span.quickstat-label', 'High Priority'),
+                            h('span.quickstat-value.highlight', String(highPriorityProjects.length))
+                        ])
+                    ])
+                ]);
+
+                // Assemble dashboard - Priority order:
+                // Row 1: Upcoming Deadlines (most important) | Quick Stats
+                // Row 2: Workload by Assignee | Projects by Status
+                // Row 3: Impact Score Distribution (full width, least important)
+                var dashboardContent = h('div.cp-dashboard', [
+                    heroSection,
+                    h('div.cp-dashboard-grid-2x2', [
+                        deadlinesSection,   // Top left - most important
+                        quickStatsSection,  // Top right
+                        workloadSection,    // Bottom left
+                        columnSection       // Bottom right (Projects by Status)
+                    ].filter(Boolean)),
+                    // Full-width bottom section
+                    h('div.cp-dashboard-full-width', [
+                        scoreSection
+                    ].filter(Boolean))
+                ].filter(Boolean));
+
+                $dashboardContainer.append(dashboardContent);
+            };
+
             // View switcher buttons
             var boardViewBtn = h('button.cp-kanban-viewmode-btn.cp-kanban-viewmode-active', {
                 'data-mode': 'board',
@@ -3824,10 +4888,20 @@ define([
                 ' Timeline'
             ]);
 
+            // Dashboard view button
+            var dashboardViewBtn = h('button.cp-kanban-viewmode-btn', {
+                'data-mode': 'dashboard',
+                title: 'Dashboard - Analytics overview'
+            }, [
+                h('i.fa.fa-tachometer'),
+                ' Dashboard'
+            ]);
+
             var viewSwitcher = h('div.cp-kanban-view-switcher', [
                 boardViewBtn,
                 timelineViewBtn,
-                myTasksViewBtn
+                myTasksViewBtn,
+                dashboardViewBtn
             ]);
 
             var setActiveViewBtn = function (mode) {
