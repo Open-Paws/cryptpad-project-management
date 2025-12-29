@@ -706,6 +706,7 @@ define([
             };
 
             // Calculate final score from scoring data
+            // Always divide by all 10 dimensions - a 0 score is still a valid score
             var finalScore = 0;
             if (element.scoring) {
                 var scoringDimensions = [
@@ -716,17 +717,14 @@ define([
                 ];
 
                 var total = 0;
-                var count = 0;
                 scoringDimensions.forEach(function(dim) {
-                    if (element.scoring[dim] !== undefined && element.scoring[dim] > 0) {
-                        total += element.scoring[dim];
-                        count++;
+                    var val = element.scoring[dim];
+                    if (val !== undefined && val > 0) {
+                        total += val;
                     }
                 });
 
-                if (count > 0) {
-                    finalScore = Math.round((total / scoringDimensions.length) * 10) / 10;
-                }
+                finalScore = Math.round((total / scoringDimensions.length) * 10) / 10;
             }
 
             // ROW 1: Score row with full-width progress bar
@@ -845,16 +843,73 @@ define([
                 }
             }
 
-            // Add completed badge if project is marked complete
-            if (element.completed) {
-                var completedRow = document.createElement('div');
-                completedRow.className = 'kanban-metric-row';
-                var completedBadge = document.createElement('div');
-                completedBadge.className = 'kanban-completed-badge';
-                completedBadge.innerHTML = '<i class="fa fa-check-circle"></i> Complete';
-                completedBadge.setAttribute('title', 'This project is marked as complete');
-                completedRow.appendChild(completedBadge);
-                metricsContainer.appendChild(completedRow);
+            // Add project completion toggle (always show for quick marking)
+            var completedRow = document.createElement('div');
+            completedRow.className = 'kanban-metric-row kanban-completed-row';
+
+            var completedLabel = document.createElement('label');
+            completedLabel.className = 'kanban-completed-toggle';
+
+            var completedCheckbox = document.createElement('input');
+            completedCheckbox.type = 'checkbox';
+            completedCheckbox.className = 'kanban-completed-checkbox';
+            completedCheckbox.checked = !!element.completed;
+
+            var completedText = document.createElement('span');
+            completedText.className = 'kanban-completed-text';
+            completedText.textContent = element.completed ? 'Complete' : 'Mark complete';
+
+            var completedIcon = document.createElement('i');
+            completedIcon.className = 'fa ' + (element.completed ? 'fa-check-circle' : 'fa-circle-o');
+
+            completedLabel.appendChild(completedCheckbox);
+            completedLabel.appendChild(completedIcon);
+            completedLabel.appendChild(completedText);
+            completedRow.appendChild(completedLabel);
+
+            // Add change handler to update project.completed
+            (function(projectElement, checkbox, icon, text, row) {
+                checkbox.addEventListener('change', function(e) {
+                    e.stopPropagation();
+
+                    projectElement.completed = this.checked;
+
+                    // Update visual state
+                    if (this.checked) {
+                        icon.className = 'fa fa-check-circle';
+                        text.textContent = 'Complete';
+                        nodeItem.classList.add('kanban-item-completed');
+                    } else {
+                        icon.className = 'fa fa-circle-o';
+                        text.textContent = 'Mark complete';
+                        nodeItem.classList.remove('kanban-item-completed');
+                    }
+
+                    self.onChange();
+                });
+
+                checkbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                completedLabel.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            })(element, completedCheckbox, completedIcon, completedText, completedRow);
+
+            metricsContainer.appendChild(completedRow);
+
+            // Add project dependencies indicator
+            var projectDepCount = (element.dependencies || []).length;
+            if (projectDepCount > 0) {
+                var depsRow = document.createElement('div');
+                depsRow.className = 'kanban-metric-row';
+                var depsBadge = document.createElement('div');
+                depsBadge.className = 'kanban-project-deps-badge';
+                depsBadge.innerHTML = '<i class="fa fa-link"></i> ' + projectDepCount + ' dependenc' + (projectDepCount === 1 ? 'y' : 'ies');
+                depsBadge.setAttribute('title', 'This project depends on ' + projectDepCount + ' other project(s)');
+                depsRow.appendChild(depsBadge);
+                metricsContainer.appendChild(depsRow);
             }
 
             // Add assignees if present
@@ -910,6 +965,44 @@ define([
                     checkbox.checked = !!task.done;
                     checkbox.setAttribute('data-task-index', taskIndex);
 
+                    // Add change handler to update task.done in the data model
+                    (function(taskRef, taskItem, projectElement) {
+                        checkbox.addEventListener('change', function(e) {
+                            e.stopPropagation(); // Prevent card click from firing
+
+                            // Find the task in the project's tasks array by reference
+                            var taskIndex = projectElement.tasks.indexOf(taskRef);
+                            if (taskIndex === -1) {
+                                // Fallback: find by id if reference doesn't match
+                                for (var i = 0; i < projectElement.tasks.length; i++) {
+                                    if (projectElement.tasks[i].id === taskRef.id) {
+                                        taskIndex = i;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (taskIndex !== -1) {
+                                projectElement.tasks[taskIndex].done = this.checked;
+
+                                // Update visual state
+                                if (this.checked) {
+                                    taskItem.classList.add('kanban-card-task-done');
+                                } else {
+                                    taskItem.classList.remove('kanban-card-task-done');
+                                }
+
+                                // Trigger onChange to save the data
+                                self.onChange();
+                            }
+                        });
+
+                        // Prevent click from propagating to card
+                        checkbox.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                    })(task, taskItem, element);
+
                     var taskTitle = document.createElement('span');
                     taskTitle.className = 'kanban-card-task-title';
                     taskTitle.textContent = task.title || 'Untitled task';
@@ -924,6 +1017,24 @@ define([
 
                     taskItem.appendChild(checkbox);
                     taskItem.appendChild(taskTitle);
+
+                    // Add recurrence indicator if task has recurrence settings
+                    if (task.recurrence && task.recurrence.type) {
+                        var recurrenceIcon = document.createElement('i');
+                        recurrenceIcon.className = 'fa fa-repeat cp-kanban-recurring-icon';
+                        recurrenceIcon.title = 'Recurring ' + task.recurrence.type + (task.recurrence.interval > 1 ? ' (every ' + task.recurrence.interval + ')' : '');
+                        taskItem.appendChild(recurrenceIcon);
+                    }
+
+                    // Add dependency indicator if task has dependencies
+                    var depCount = (task.dependencies || []).length;
+                    if (depCount > 0) {
+                        var depsIcon = document.createElement('span');
+                        depsIcon.className = 'cp-kanban-deps-badge';
+                        depsIcon.innerHTML = '<i class="fa fa-link"></i>' + depCount;
+                        depsIcon.title = depCount + ' dependenc' + (depCount === 1 ? 'y' : 'ies');
+                        taskItem.appendChild(depsIcon);
+                    }
 
                     // Add due date badge if present
                     if (task.due_date) {
