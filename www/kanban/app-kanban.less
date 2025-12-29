@@ -1312,6 +1312,104 @@
                 }
             }
         }
+
+        // Dark mode for PR #3 feature components
+
+        // Task row action buttons (Recurrence, Dependencies, Move)
+        .cp-kanban-task-row {
+            .cp-kanban-task-recurrence,
+            .cp-kanban-task-deps,
+            .cp-kanban-task-move {
+                background: #2D2D2D !important;
+                border-color: #3D3D3D !important;
+                color: #9CA3AF !important;
+
+                &:hover {
+                    background: #3D3D3D !important;
+                    border-color: #4D4D4D !important;
+                    color: #E5E5E5 !important;
+                }
+
+                &.active {
+                    background: #3B82F6 !important;
+                    border-color: #3B82F6 !important;
+                    color: #FFFFFF !important;
+                }
+
+                &.has-deps {
+                    background: rgba(59, 130, 246, 0.15) !important;
+                    border-color: #3B82F6 !important;
+                    color: #60A5FA !important;
+                }
+            }
+
+            &.cp-kanban-task-instance {
+                background: rgba(234, 179, 8, 0.15) !important;
+                border-left-color: #EAB308 !important;
+            }
+        }
+
+        // Recurrence Modal
+        .cp-recurrence-modal {
+            .cp-recurrence-row {
+                label {
+                    color: #E5E5E5 !important;
+                }
+
+                select,
+                input {
+                    background: #1A1A1A !important;
+                    color: #F9FAFB !important;
+                    border-color: #2D2D2D !important;
+                }
+            }
+        }
+
+        // Dependencies Modal
+        .cp-dependencies-modal {
+            p {
+                color: #E5E5E5 !important;
+            }
+
+            .cp-dep-task-option {
+                border-color: #2D2D2D !important;
+                color: #E5E5E5 !important;
+
+                input[type="checkbox"] {
+                    accent-color: #3B82F6;
+                }
+            }
+        }
+
+        // Dashboard Analytics View
+        #cp-kanban-dashboard-container {
+            background: #0D0D0D !important;
+        }
+
+        .cp-dashboard-stat {
+            background: #1A1A1A !important;
+            border-color: #2D2D2D !important;
+
+            &.warning {
+                background: rgba(245, 158, 11, 0.15) !important;
+                border-color: #F59E0B !important;
+
+                .cp-stat-value {
+                    color: #FBBF24 !important;
+                }
+            }
+        }
+
+        .cp-dashboard-section {
+            background: #1A1A1A !important;
+            border-color: #2D2D2D !important;
+        }
+
+        .cp-dashboard-column-row {
+            .cp-col-bar {
+                background: #2D2D2D !important;
+            }
+        }
     }
 
     // Responsive - Stack columns on smaller screens
