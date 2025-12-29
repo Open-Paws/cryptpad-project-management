@@ -48,7 +48,7 @@ jobs:
             return result
 
       # ------------------------------------------------------------
-      # 2. Generate AI review with Gemini
+      # 2. Generate AI review with Gemini (CONCISE MODE)
       # ------------------------------------------------------------
       - name: Generate AI review with Gemini
         env:
@@ -59,7 +59,6 @@ jobs:
           echo "$PR_DATA"
           echo "====================="
 
-          # Encode PR data safely so JSON never breaks
           ENCODED_PR_DATA=$(echo "$PR_DATA" | base64 -w 0)
 
           cat << EOF > request.json
@@ -69,20 +68,17 @@ jobs:
                 "role": "user",
                 "parts": [
                   {
-                    "text": "You are a senior software engineer performing a professional pull request review.\n\nRULES:\n- Follow the output format EXACTLY\n- Be detailed, critical, and constructive\n- Do NOT hallucinate\n- If something cannot be determined, say so explicitly\n\nIMPORTANT:\nThe PR data below is Base64 encoded. Decode it before reviewing.\n\nOUTPUT FORMAT:\n<!-- ai-pr-review -->\n\n## 🤖 AI PR Review\n\n### 📌 Overview\n- **Purpose:**\n- **Scope:**\n- **Risk level:**\n\n---\n\n### 📊 Change Summary\n\n---\n\n### 🧠 Detailed Code Review\n\n---\n\n### 🔐 Security Review\n\n---\n\n### 🧪 Testing Assessment\n\n---\n\n### ❗ Issues & Suggestions\n\n---\n\n### ✅ Final Recommendation\n\n\nBASE64_PR_DATA:\n$ENCODED_PR_DATA"
+                    "text": "You are a senior software engineer performing a pull request review.\n\nCRITICAL RULES (MUST FOLLOW):\n- Use ONLY bullet points (no paragraphs).\n- Maximum 3 bullet points per section.\n- Each bullet must be ONE sentence.\n- Be concise and reviewer-friendly.\n- Do NOT explain obvious changes.\n- Do NOT repeat the diff.\n- Do NOT write essays.\n\nOUTPUT FORMAT (FOLLOW EXACTLY):\n\n<!-- ai-pr-review -->\n\n## 🤖 AI PR Review (Concise)\n\n### 📌 Overview\n- Purpose:\n- Scope:\n- Risk level:\n\n---\n\n### 📊 Change Summary (Table)\n| Area | Files | Summary |\n|-----|------|--------|\n| UI | | |\n| Logic | | |\n| CI/CD | | |\n\n---\n\n### 🧠 Key Review Points\n- Architecture:\n- Correctness:\n- Edge cases:\n\n---\n\n### 🔐 Security & Quality\n- Security:\n- Accessibility:\n- Maintainability:\n\n---\n\n### 🧪 Testing Gaps\n- Missing tests:\n- Risk areas:\n\n---\n\n### ✅ Recommendation\n- Verdict:\n- Required fixes:\n\nIMPORTANT:\n- The PR data below is Base64 encoded.\n- Decode it before reviewing.\n- If information is insufficient, say \"Not enough context\".\n\nBASE64_PR_DATA:\n$ENCODED_PR_DATA"
                   }
                 ]
               }
             ],
             "generationConfig": {
               "temperature": 0.2,
+              "maxOutputTokens": 900
             }
           }
           EOF
-
-          echo "==== REQUEST.JSON ===="
-          cat request.json
-          echo "======================"
 
           curl -s \
             -X POST \
@@ -91,13 +87,6 @@ jobs:
             -d @request.json \
             > response.json
 
-          echo "==== GEMINI RESPONSE (RAW) ===="
-          cat response.json
-          echo "==============================="
-
-          # 🔥 CRITICAL FIX:
-          # -r = raw output (unescapes \n)
-          # sed = remove leading/trailing quotes if present
           jq -r '.candidates[0].content.parts[0].text' response.json \
             | sed '1s/^"//; $s/"$//' > review.md || {
               echo "❌ Gemini did not return candidates"
