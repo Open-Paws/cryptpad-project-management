@@ -75,7 +75,6 @@ jobs:
             ],
             "generationConfig": {
               "temperature": 0.2,
-              "maxOutputTokens": 900
             }
           }
           EOF
