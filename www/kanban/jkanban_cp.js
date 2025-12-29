@@ -1092,6 +1092,62 @@ define([
                 }
             }
 
+            // Create header content wrapper
+            var headerContent = document.createElement('div');
+            headerContent.classList.add('kanban-header-content');
+            
+            // Colored dot indicator (glowing ball)
+            var dotIndicator = document.createElement('div');
+            dotIndicator.classList.add('kanban-header-dot');
+            dotIndicator.setAttribute('data-board-id', board.id);
+            
+            // Set color based on board color or default
+            // Default colors based on typical Kanban column names
+            var defaultColors = {
+                'in progress': '#3B82F6', // Blue
+                'to do': '#F59E0B',       // Orange/Amber
+                'todo': '#F59E0B',
+                'done': '#10B981',        // Green
+                'completed': '#10B981',
+                'backlog': '#8B5CF6'      // Purple
+            };
+            
+            var dotColor = '#3B82F6'; // Fallback blue
+            var boardTitle = (board.title || '').toLowerCase();
+            
+            if (board.color) {
+                if (/color/.test(board.color)) {
+                    // Use palette color - will be styled via CSS
+                    dotIndicator.classList.add('cp-kanban-dot-color-' + board.color);
+                    // Set color for inline style too
+                    if (board.color === 'color0') dotColor = '#3B82F6';
+                    else if (board.color === 'color1') dotColor = '#F59E0B';
+                    else if (board.color === 'color2') dotColor = '#10B981';
+                    else if (board.color === 'color3') dotColor = '#EF4444';
+                    else if (board.color === 'color4') dotColor = '#8B5CF6';
+                } else if (board.color === 'blue' || board.color === '0AC') {
+                    dotColor = '#3B82F6';
+                } else if (board.color === 'orange' || board.color === 'F91') {
+                    dotColor = '#F59E0B';
+                } else if (board.color === 'green' || board.color === '8C4') {
+                    dotColor = '#10B981';
+                } else if (/^[0-9a-f]{6}$/i.test(board.color)) {
+                    dotColor = '#' + board.color;
+                }
+            } else {
+                // No color set, use default based on title
+                for (var key in defaultColors) {
+                    if (boardTitle.indexOf(key) !== -1) {
+                        dotColor = defaultColors[key];
+                        break;
+                    }
+                }
+            }
+            
+            dotIndicator.style.backgroundColor = dotColor;
+            dotIndicator.style.color = dotColor; // For box-shadow currentColor glow effect
+            headerContent.appendChild(dotIndicator);
+
             var titleBoard = document.createElement('div');
             titleBoard.classList.add('kanban-title-board');
 
@@ -1109,17 +1165,39 @@ define([
             titleBoard.innerText = shortName;
             if (description) {
                 titleBoard.setAttribute('title', description);
-                // Add info icon for discoverability
-                var infoIcon = document.createElement('i');
-                infoIcon.className = 'fa fa-info-circle cp-kanban-header-info';
-                infoIcon.setAttribute('title', description);
-                titleBoard.appendChild(document.createTextNode(' '));
-                titleBoard.appendChild(infoIcon);
             }
 
             titleBoard.clickfn = board.boardTitleClick;
             __onboardTitleClickHandler(titleBoard);
-            headerBoard.appendChild(titleBoard);
+            headerContent.appendChild(titleBoard);
+
+            // Count badge showing number of items
+            var countBadge = document.createElement('div');
+            countBadge.classList.add('kanban-header-count');
+            var itemCount = (board.item || []).length;
+            countBadge.innerText = itemCount;
+            headerContent.appendChild(countBadge);
+
+            // Action buttons container
+            var actionButtons = document.createElement('div');
+            actionButtons.classList.add('kanban-header-actions');
+
+            // Plus button
+            var plusButton = document.createElement('button');
+            plusButton.classList.add('kanban-header-action-btn', 'kanban-header-plus');
+            plusButton.setAttribute('title', 'Add item');
+            plusButton.setAttribute('aria-label', 'Add item');
+            var plusIcon = document.createElement('i');
+            plusIcon.className = 'fa fa-plus';
+            plusButton.appendChild(plusIcon);
+            // Add click handler for adding items - will be connected by framework
+            plusButton.dataset.boardId = board.id;
+            actionButtons.appendChild(plusButton);
+
+            // Ellipsis button removed as per user request - edit functionality moved to other UI elements
+
+            headerContent.appendChild(actionButtons);
+            headerBoard.appendChild(headerContent);
 
             var nodeCursors = document.createElement('div');
             nodeCursors.classList.add('cp-kanban-cursors');

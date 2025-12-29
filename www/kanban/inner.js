@@ -338,95 +338,113 @@ define([
 
         var scoringElements = [scoringHeader, scoringDetailsContainer];
         
-        var content = h('div.cp-kanban-modal-content', [
-            // Conflicts warning
+        // Modern two-column layout matching Image 2
+        var content = h('div.cp-kanban-modal-content-wrapper', [
+            // Conflicts warning (if any)
             conflictContainer = h('div#cp-kanban-edit-conflicts', [
                 h('div', Messages.kanban_conflicts),
                 conflicts = h('div.cp-kanban-cursors')
             ]),
-
-            // ===== GROUP 1: Primary Content =====
-            h('div.cp-kanban-modal-group.cp-kanban-group-primary', [
-                h('label.cp-kanban-section-label', { for: 'cp-kanban-edit-title' }, [
-                    h('i.fa.fa-heading'),
-                    ' Title'
-                ]),
-                titleInput = h('input#cp-kanban-edit-title', { placeholder: 'Enter project title...' }),
-
-                h('div.cp-kanban-tasks-section', [
-                    h('label.cp-kanban-section-label', [
-                        h('i.fa.fa-check-square'),
-                        ' Tasks'
+            
+            // Main two-column layout
+            h('div.cp-kanban-modal-two-column', [
+                // LEFT COLUMN - Main Content
+                h('div.cp-kanban-modal-left-column', [
+                    // Title (Large, prominent)
+                    h('div.cp-kanban-title-section', [
+                        titleInput = h('input#cp-kanban-edit-title', { 
+                            placeholder: 'Task title...',
+                            class: 'cp-kanban-title-input'
+                        })
                     ]),
-                    tasksContainer = h('div#cp-kanban-edit-tasks')
-                ]),
-
-                h('div.cp-kanban-description-section', [
-                    h('div.cp-kanban-description-header', [
-                        h('label.cp-kanban-section-label', { for: 'cp-kanban-edit-body' }, [
-                            h('i.fa.fa-align-left'),
-                            ' Description'
-                        ]),
-                        markdownEditorWrapper
-                    ]),
-                    h('div#cp-kanban-edit-body', [
-                        text = h('textarea')
-                    ])
-                ])
-            ]),
-
-            // ===== GROUP 2: Metadata (Assignees + Schedule side by side) =====
-            h('div.cp-kanban-modal-group.cp-kanban-group-metadata', [
-                h('div.cp-kanban-metadata-row', [
-                    // Assignees column
-                    h('div.cp-kanban-assignee-column', [
-                        h('label.cp-kanban-section-label', { for: 'cp-kanban-edit-assignee' }, [
-                            h('i.fa.fa-user'),
-                            ' Assignees'
-                        ]),
-                        assigneeInput = h('div#cp-kanban-edit-assignee.cp-kanban-assignee-checkboxes')
-                    ]),
-                    // Schedule column
-                    h('div.cp-kanban-schedule-column', [
-                        h('label.cp-kanban-section-label', [
-                            h('i.fa.fa-calendar'),
-                            ' Schedule'
-                        ]),
-                        h('div.cp-kanban-dates-row', [
-                            h('div.cp-kanban-date-field', [
-                                h('label.cp-kanban-date-label', { for: 'cp-kanban-edit-start-date' }, 'Start'),
-                                startDateInput = h('input#cp-kanban-edit-start-date', { type: 'date' })
+                    
+                    // Description with rich editor
+                    h('div.cp-kanban-description-section', [
+                        h('div.cp-kanban-description-header', [
+                            h('label.cp-kanban-section-label-inline', [
+                                h('span', 'Description')
                             ]),
-                            h('div.cp-kanban-date-field', [
-                                h('label.cp-kanban-date-label', { for: 'cp-kanban-edit-due-date' }, 'Due'),
-                                dueDateInput = h('input#cp-kanban-edit-due-date', { type: 'date' })
-                            ])
+                            markdownEditorWrapper
+                        ]),
+                        h('div#cp-kanban-edit-body.cp-kanban-description-body', [
+                            text = h('textarea', { placeholder: 'Add a more detailed description...' })
                         ])
+                    ]),
+                    
+                    // Tasks/Subtasks Section
+                    h('div.cp-kanban-tasks-section', [
+                        h('div.cp-kanban-section-header', [
+                            h('i.fa.fa-check-circle-o.cp-kanban-section-icon'),
+                            h('span.cp-kanban-section-title', 'Subtasks')
+                        ]),
+                        tasksContainer = h('div#cp-kanban-edit-tasks')
+                    ])
+                ]),
+                
+                // RIGHT COLUMN - Details/Metadata Sidebar
+                h('div.cp-kanban-modal-right-column', [
+                    h('div.cp-kanban-details-header', [
+                        h('span', 'DETAILS')
+                    ]),
+                    
+                    // Status indicator
+                    h('div.cp-kanban-detail-row', [
+                        h('span.cp-kanban-detail-label', 'Status'),
+                        h('div.cp-kanban-status-indicator', [
+                            h('span.cp-kanban-status-dot'),
+                            h('span.cp-kanban-status-text', 'In Progress')
+                        ])
+                    ]),
+                    
+                    // Assignees
+                    h('div.cp-kanban-detail-row', [
+                        h('span.cp-kanban-detail-label', 'Assignee'),
+                        assigneeInput = h('div#cp-kanban-edit-assignee.cp-kanban-assignee-compact')
+                    ]),
+                    
+                    // Due Date
+                    h('div.cp-kanban-detail-row', [
+                        h('span.cp-kanban-detail-label', 'Due Date'),
+                        dueDateInput = h('input#cp-kanban-edit-due-date', { 
+                            type: 'date',
+                            class: 'cp-kanban-date-input'
+                        })
+                    ]),
+                    
+                    // Start Date
+                    h('div.cp-kanban-detail-row', [
+                        h('span.cp-kanban-detail-label', 'Start Date'),
+                        startDateInput = h('input#cp-kanban-edit-start-date', { 
+                            type: 'date',
+                            class: 'cp-kanban-date-input'
+                        })
+                    ]),
+                    
+                    // Tags Section
+                    h('div.cp-kanban-detail-row.cp-kanban-tags-row', [
+                        h('div.cp-kanban-tags-header-sidebar', [
+                            h('span.cp-kanban-detail-label', 'Tags'),
+                            h('button.cp-kanban-add-tag-btn-small', {
+                                type: 'button',
+                                title: 'Add tag'
+                            }, [h('i.fa.fa-plus')])
+                        ]),
+                        tagsDiv = h('div#cp-kanban-edit-tags.cp-kanban-tags-list')
+                    ]),
+                    
+                    // Hidden sections
+                    h('div', { style: 'display: none;' }, [
+                        colors,
+                        completedToggle = h('input#cp-kanban-edit-completed', { type: 'checkbox' }),
+                        scoringHeader,
+                        scoringDetailsContainer,
+                        scoreProgressBar,
+                        scoreProgressContainer
                     ])
                 ])
             ]),
-
-            // Hidden tags/colors containers (keep data but don't show UI)
-            tagsDiv = h('div#cp-kanban-edit-tags', { style: 'display: none;' }),
-            h('div', { style: 'display: none;' }, [colors]),
-
-            // ===== GROUP 4: Advanced =====
-            h('div.cp-kanban-modal-group.cp-kanban-group-advanced', [
-                h('div.cp-kanban-status-toggles', [
-                    h('div.cp-kanban-completed-section', [
-                        completedToggle = h('label.cp-kanban-completed-toggle-label', {
-                            title: 'Mark this project as complete'
-                        }, [
-                            h('input#cp-kanban-edit-completed', { type: 'checkbox' }),
-                            h('i.fa.fa-check-circle'),
-                            h('span', 'Mark as Complete')
-                        ])
-                    ]),
-                ]),
-                h('div.cp-kanban-scoring-section', scoringElements)
-            ]),
-
-            // Auto-save indicator - shows briefly after changes
+            
+            // Auto-save indicator
             h('div.cp-kanban-autosave-indicator', [
                 h('i.fa.fa-check'),
                 h('span', 'Saved')
@@ -557,14 +575,35 @@ define([
 
 
         // Tags
+        var $tags = $(tagsDiv); // Define jQuery reference to tags container
         var _field, initialTags;
+        
+        // Plus button click handler - will be attached after modal is created
+        var attachAddTagHandler = function() {
+            var $addTagBtn = $(tagsDiv).closest('.cp-kanban-edit-modal').find('.cp-kanban-add-tag-btn');
+            $addTagBtn.off('click').on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isBoard) { return; }
+                // If input doesn't exist yet, initialize it
+                if (!_field) {
+                    tags.setValue([]);
+                }
+                // Focus the input field
+                var $input = $tags.find('.token-input');
+                if ($input.length) {
+                    $input.focus();
+                }
+            });
+        };
+        
         var tags = {
             getValue: function () {
                 if (!_field) { return; }
                 return _field.getTokens();
             },
             setValue: function (tags, preserveCursor) {
-                if (isBoard) { return; }
+                if (isBoard) { return; } // Tags are not available for boards
                 if (preserveCursor && initialTags && Sortify(tags || []) === initialTags) {
                     // Don't redraw if there is no change
                     return;
@@ -572,6 +611,7 @@ define([
                 initialTags = Sortify(tags || []);
                 $tags.empty();
                 var input = UI.dialog.textInput();
+                input.placeholder = 'Type tag name and press Enter...';
                 $tags.append(input);
                 var existing = getExistingTags(kanban.options.boards);
                 _field = UI.tokenField(input, existing).preventDuplicates(function (val) {
@@ -602,6 +642,9 @@ define([
                 _field.tokenfield.on('tokenfield:createdtoken', commitTags);
                 _field.tokenfield.on('tokenfield:editedtoken', commitTags);
                 _field.tokenfield.on('tokenfield:removedtoken', commitTags);
+                
+                // Attach the plus button handler after input is created
+                attachAddTagHandler();
             }
         };
 
@@ -1243,6 +1286,9 @@ define([
             });
         });
 
+        // Expose attachAddTagHandler on tags object
+        tags.attachAddTagHandler = attachAddTagHandler;
+        
         return {
             modal: modal,
             setId: setId,
@@ -1276,6 +1322,11 @@ define([
         
         UI.openCustomModal(editModal.modal, {wide: true});
         editModal.body.refresh();
+        
+        // Attach add tag button handler after modal is opened
+        setTimeout(function() {
+            attachAddTagHandler();
+        }, 100);
     };
     var getBoardEditModal = function (framework, kanban, id) {
         // Create modal if needed
@@ -1451,18 +1502,83 @@ define([
                 e.stopPropagation();
             }).insertAfter($(el).find('.kanban-item-text'));
         });
+        // Function to update count badges
+        var updateCountBadges = function() {
+            $container.find('.kanban-board').each(function (i, el) {
+                var $header = $(el).find('.kanban-board-header');
+                var $countBadge = $header.find('.kanban-header-count');
+                if ($countBadge.length) {
+                    var itemCount = $(el).find('.kanban-item:not(.new-item)').length;
+                    $countBadge.text(itemCount);
+                }
+            });
+        };
+
         $container.find('.kanban-board').each(function (i, el) {
             var itemId = $(el).attr('data-id');
-            $(h('button', {
-                'class': 'kanban-edit-item',
-                'title': Messages.kanban_editBoard,
-                'aria-label': Messages.kanban_editBoard
-            }, [
-                h('i.fa.fa-pencil', {'aria-hidden': true})
-            ])).click(function (e) {
-                getBoardEditModal(framework, kanban, itemId);
-                e.stopPropagation();
-            }).appendTo($(el).find('.kanban-board-header'));
+            var $header = $(el).find('.kanban-board-header');
+            var $actions = $header.find('.kanban-header-actions');
+            
+            // Connect plus button to add item functionality
+            var $plusBtn = $header.find('.kanban-header-plus');
+            if ($plusBtn.length) {
+                $plusBtn.off('click').on('click', function(e) {
+                    e.stopPropagation();
+                    if (framework.isReadOnly() || framework.isLocked()) { return; }
+                    var $addBtn = $(el).find('.kanban-add-project-btn');
+                    if ($addBtn.length) {
+                        $addBtn.click();
+                    }
+                });
+            }
+
+            // Ellipsis button removed - click on column title to edit board instead
+            var $title = $header.find('.kanban-title-board');
+            if ($title.length) {
+                $title.css('cursor', 'pointer');
+                $title.off('click').on('click', function(e) {
+                    e.stopPropagation();
+                    if (!framework.isReadOnly() && !framework.isLocked()) {
+                        getBoardEditModal(framework, kanban, itemId);
+                    }
+                });
+            }
+            
+            // Dot is now non-clickable visual indicator (removed click handler)
+            
+            // Add edit button to actions if it doesn't exist (hidden, using ellipsis instead)
+            if ($actions.length && !$actions.find('.kanban-edit-item').length) {
+                var $editBtn = $(h('button', {
+                    'class': 'kanban-edit-item kanban-header-action-btn',
+                    'title': Messages.kanban_editBoard,
+                    'aria-label': Messages.kanban_editBoard,
+                    'style': 'display: none;' // Hidden, ellipsis handles edit
+                }, [
+                    h('i.fa.fa-pencil', {'aria-hidden': true})
+                ]));
+                $editBtn.click(function (e) {
+                    getBoardEditModal(framework, kanban, itemId);
+                    e.stopPropagation();
+                }).appendTo($actions);
+            } else if (!$actions.length) {
+                // Fallback if actions container doesn't exist
+                $(h('button', {
+                    'class': 'kanban-edit-item',
+                    'title': Messages.kanban_editBoard,
+                    'aria-label': Messages.kanban_editBoard
+                }, [
+                    h('i.fa.fa-pencil', {'aria-hidden': true})
+                ])).click(function (e) {
+                    getBoardEditModal(framework, kanban, itemId);
+                    e.stopPropagation();
+                }).appendTo($header);
+            }
+        });
+        
+        // Update count badges initially and register for updates
+        updateCountBadges();
+        onRedraw.reg(function() {
+            updateCountBadges();
         });
     };
 
@@ -2322,16 +2438,36 @@ define([
                 }
             };
 
-            // Event handlers
-            $(assigneeSelect).change(applyFilters);
-            $(statusSelect).change(applyFilters);
-            $(sortSelect).change(applyFilters);
+            // Helper function to close filter panel
+            var closeFilterPanel = function() {
+                if ($filterPanelContent && $filterPanelContent.is(':visible')) {
+                    $filterPanelContent.slideUp(150);
+                    $filterToggleBtn.removeClass('cp-filter-expanded');
+                }
+            };
+            
+            // Event handlers - close panel when filter is changed
+            $(assigneeSelect).change(function() {
+                applyFilters();
+                closeFilterPanel();
+            });
+            $(statusSelect).change(function() {
+                applyFilters();
+                closeFilterPanel();
+            });
+            $(sortSelect).change(function() {
+                applyFilters();
+                closeFilterPanel();
+            });
             $(scoreMin).on('input', function() {
                 var val = $(this).val();
                 $(scoreValue).text(val);
                 applyFilters();
             });
-            $(duePresetSelect).change(applyFilters);
+            $(duePresetSelect).change(function() {
+                applyFilters();
+                closeFilterPanel();
+            });
 
             // Add "Clear All Filters" button
             var clearFiltersBtn = h('button.btn.btn-secondary.cp-kanban-clear-filters', {
@@ -3764,9 +3900,39 @@ define([
                 updateCardDetailVisibility();
             });
 
+            // Theme toggle button
+            var themeToggle = h('button.cp-kanban-theme-toggle', {
+                'title': 'Toggle light/dark theme',
+                'aria-label': 'Toggle theme'
+            }, [
+                h('i.fa.fa-moon-o', {'aria-hidden': true})
+            ]);
+            
+            $(themeToggle).click(function() {
+                var $app = $('.cp-app-kanban');
+                var isDark = $app.hasClass('cp-kanban-dark-theme');
+                if (isDark) {
+                    $app.removeClass('cp-kanban-dark-theme');
+                    localStorage.setItem('cp-kanban-theme', 'light');
+                    $(themeToggle).find('i').removeClass('fa-sun-o').addClass('fa-moon-o');
+                } else {
+                    $app.addClass('cp-kanban-dark-theme');
+                    localStorage.setItem('cp-kanban-theme', 'dark');
+                    $(themeToggle).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+                }
+            });
+
+            // Initialize theme from localStorage or system preference
+            var savedTheme = localStorage.getItem('cp-kanban-theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                $('.cp-app-kanban').addClass('cp-kanban-dark-theme');
+                $(themeToggle).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+            }
+
             var container = h('div#cp-kanban-controls', [
                 viewSwitcher,
                 filterPanel,
+                themeToggle,
                 h('div.cp-kanban-changeView.drag', [
                     toggleDragOff,
                     toggleDragOn
