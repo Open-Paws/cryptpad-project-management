@@ -233,16 +233,23 @@ define([
             $(commentsContainer).empty();
             commentsArray = commentsArray || [];
 
-            commentsArray.forEach(function (comment) {
-                var date = new Date(comment.time);
-                var timeStr = date.toLocaleString();
+            var metadataMgr = framework._.cpNfInner.metadataMgr;
+            var currentUser = metadataMgr.getUserData();
 
-                var commentEl = h('div.cp-kanban-comment', [
-                    h('div.cp-kanban-comment-header', [
-                        h('span.cp-kanban-comment-author', comment.name || Messages.anonymous),
-                        h('span.cp-kanban-comment-time', timeStr)
-                    ]),
-                    h('div.cp-kanban-comment-text', comment.text)
+            commentsArray.forEach(function (comment) {
+                var isSelf = comment.author === currentUser.curvePublic;
+                var date = new Date(comment.time);
+                var timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                var dateStr = date.toLocaleDateString();
+
+                var commentEl = h('div.cp-kanban-comment' + (isSelf ? '.self' : ''), [
+                    h('div.cp-kanban-comment-bubble', [
+                        !isSelf ? h('div.cp-kanban-comment-author', comment.name || Messages.anonymous) : null,
+                        h('div.cp-kanban-comment-text', comment.text),
+                        h('div.cp-kanban-comment-footer', [
+                            h('span.cp-kanban-comment-time', timeStr + (new Date().toDateString() !== date.toDateString() ? ' ' + dateStr : ''))
+                        ])
+                    ])
                 ]);
                 $(commentsContainer).append(commentEl);
             });
@@ -276,11 +283,18 @@ define([
             renderComments(dataObject.comments);
         };
 
-        var sidebar = h('div.cp-kanban-comments-sidebar', { style: 'display:none;' }, [
+        var backdrop = h('div.cp-kanban-sidebar-backdrop', {
+            style: 'display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:99999;',
+            onclick: function () { hide(); }
+        });
+
+        var sidebar = h('div.cp-kanban-comments-sidebar', {
+            style: 'display:none; position:fixed; top:0; right:0; z-index:100000;'
+        }, [
             h('div.cp-kanban-sidebar-header', [
                 h('h2', 'Comments'),
                 h('button.cp-kanban-sidebar-close', {
-                    onclick: function () { $(sidebar).hide(); }
+                    onclick: function () { hide(); }
                 }, '×')
             ]),
             h('div.cp-kanban-sidebar-content', [
@@ -298,14 +312,20 @@ define([
                             }
                         }
                     }),
-                    h('button.btn.btn-primary.cp-kanban-comment-send-btn', {
+                    h('button.cp-kanban-comment-send-btn', {
                         onclick: function () { addComment(); }
                     }, 'Send')
                 ])
             ])
         ]);
 
+        document.body.appendChild(backdrop);
         document.body.appendChild(sidebar);
+
+        var hide = function () {
+            $(sidebar).hide();
+            $(backdrop).hide();
+        };
 
         var show = function (_id) {
             id = Number(_id);
@@ -314,6 +334,7 @@ define([
 
             $(sidebar).find('.cp-kanban-sidebar-item-title').text(dataObject.title || 'Untitled');
             renderComments(dataObject.comments);
+            $(backdrop).show();
             $(sidebar).show();
         };
 
@@ -321,15 +342,24 @@ define([
             if (!$(sidebar).is(':visible')) { return; }
             dataObject = kanban.getItemJSON(id);
             if (!dataObject) {
-                $(sidebar).hide();
+                hide();
                 return;
             }
             renderComments(dataObject.comments);
         });
 
+        var toggle = function (_id) {
+            if ($(sidebar).is(':visible') && id === Number(_id)) {
+                hide();
+                return;
+            }
+            show(_id);
+        };
+
         return {
             show: show,
-            hide: function () { $(sidebar).hide(); }
+            hide: hide,
+            toggle: toggle
         };
     };
     var PROPERTIES = ['title', 'body', 'tags', 'color', 'assignee', 'start_date', 'due_date', 'scoring', 'tasks', 'createdBy', 'dependencies', 'completed', 'comments'];
@@ -2235,7 +2265,7 @@ define([
             },
             openComments: function (id) {
                 if (framework.isReadOnly() || framework.isLocked()) { return; }
-                commentsSidebar.show(id);
+                commentsSidebar.toggle(id);
             },
             onChange: function () {
                 verbose("Board object has changed");
