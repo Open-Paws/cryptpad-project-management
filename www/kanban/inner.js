@@ -549,8 +549,6 @@ define([
                     h('span.cp-kanban-sidebar-count', '0')
                 ]),
                 h('div.cp-kanban-sidebar-header-actions', [
-                    h('i.fa.fa-sliders'),
-                    h('i.fa.fa-bell-o'),
                     h('button.cp-kanban-sidebar-close', {
                         onclick: function () { hide(); }
                     }, '×')
