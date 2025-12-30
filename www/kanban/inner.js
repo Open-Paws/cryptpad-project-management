@@ -229,34 +229,261 @@ define([
         var dataObject;
         var commentsContainer, commentInput;
 
-        var renderComments = function (commentsArray) {
-            $(commentsContainer).empty();
+        var replyingTo = null;
+
+        var scrollToComment = function (commentId) {
+            var el = document.getElementById('cp-kanban-comment-' + commentId);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                $(el).addClass('highlight');
+                setTimeout(function () { $(el).removeClass('highlight'); }, 2000);
+            }
+        };
+
+        var showReactionUsers = function (e, emoji, users) {
+            e.stopPropagation();
+            $('.cp-kanban-reaction-users').remove();
+
+            var metadataMgr = framework._.cpNfInner.metadataMgr;
+            var userNames = users.map(function (pub) {
+                if (pub === metadataMgr.getUserData().curvePublic) { return 'You'; }
+                var peer = metadataMgr.getPeerData(pub);
+                return (peer && peer.name) || 'Anonymous';
+            });
+
+            var list = h('div.cp-kanban-reaction-users', {
+                style: 'top:' + (e.clientY - 10) + 'px; left:' + e.clientX + 'px;'
+            }, [
+                h('div.reaction-user-list', userNames.map(function (name) {
+                    return h('div.user-name', name);
+                }))
+            ]);
+
+            $('body').append(list);
+            $(document).one('click', function () { $('.cp-kanban-reaction-users').remove(); });
+        };
+
+        var renderComments = function (commentsArray, container, isReply) {
+            var targetContainer = container || commentsContainer;
+            if (!container) { $(targetContainer).empty(); }
             commentsArray = commentsArray || [];
 
             var metadataMgr = framework._.cpNfInner.metadataMgr;
             var currentUser = metadataMgr.getUserData();
+
+            // Sort comments by time
+            commentsArray.sort(function (a, b) { return a.time - b.time; });
 
             commentsArray.forEach(function (comment) {
                 var isSelf = comment.author === currentUser.curvePublic;
                 var date = new Date(comment.time);
                 var timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 var dateStr = date.toLocaleDateString();
+                var displayTime = (new Date().toDateString() !== date.toDateString() ? dateStr : timeStr);
 
-                var commentEl = h('div.cp-kanban-comment' + (isSelf ? '.self' : ''), [
-                    h('div.cp-kanban-comment-bubble', [
-                        !isSelf ? h('div.cp-kanban-comment-author', comment.name || Messages.anonymous) : null,
-                        h('div.cp-kanban-comment-text', comment.text),
-                        h('div.cp-kanban-comment-footer', [
-                            h('span.cp-kanban-comment-time', timeStr + (new Date().toDateString() !== date.toDateString() ? ' ' + dateStr : ''))
+                // Get avatar if available, otherwise use initials
+                var avatar;
+                if (comment.name) {
+                    var initials = comment.name.split(' ').map(function (n) { return n[0]; }).join('').toUpperCase().slice(0, 2);
+                    avatar = h('div.cp-kanban-comment-avatar' + (isReply ? '.small' : ''), initials);
+                } else {
+                    avatar = h('div.cp-kanban-comment-avatar.anonymous' + (isReply ? '.small' : ''), '?');
+                }
+
+                // Reactions
+                var reactionsEl = h('div.cp-kanban-comment-reactions');
+                if (comment.reactions) {
+                    Object.keys(comment.reactions).forEach(function (emoji) {
+                        var users = comment.reactions[emoji] || [];
+                        if (users.length === 0) { return; }
+                        var hasReacted = users.indexOf(currentUser.curvePublic) !== -1;
+                        $(reactionsEl).append(h('div.cp-kanban-comment-reaction' + (hasReacted ? '.active' : ''), {
+                            onclick: function (e) {
+                                e.stopPropagation();
+                                addReaction(comment.id, emoji);
+                            },
+                            onmouseenter: function (e) {
+                                showReactionUsers(e, emoji, users);
+                            }
+                        }, [
+                            h('span.emoji', emoji),
+                            h('span.count', users.length)
+                        ]));
+                    });
+                }
+
+                // Quote
+                var quoteEl = null;
+                if (comment.replyTo) {
+                    quoteEl = h('div.cp-kanban-comment-quote', {
+                        onclick: function (e) {
+                            e.stopPropagation();
+                            scrollToComment(comment.replyTo.id);
+                        }
+                    }, [
+                        h('div.quote-content', [
+                            h('div.quote-author', comment.replyTo.name || 'Anonymous'),
+                            h('div.quote-text', comment.replyTo.text)
                         ])
+                    ]);
+                }
+
+                var commentEl = h('div.cp-kanban-comment' + (isSelf ? '.self' : '') + (isReply ? '.reply' : ''), {
+                    id: 'cp-kanban-comment-' + comment.id
+                }, [
+                    avatar,
+                    h('div.cp-kanban-comment-main', [
+                        h('div.cp-kanban-comment-header', [
+                            h('span.cp-kanban-comment-author', (isSelf ? 'You' : (comment.name || Messages.anonymous))),
+                            h('span.cp-kanban-comment-time', displayTime)
+                        ]),
+                        h('div.cp-kanban-comment-bubble', [
+                            quoteEl,
+                            (function () {
+                                var t = h('div.cp-kanban-comment-text');
+                                try {
+                                    var html = DiffMd.render(comment.text, true);
+                                    // Ensure links open in new tab
+                                    var temp = document.createElement('div');
+                                    temp.innerHTML = html;
+                                    $(temp).find('a').attr('target', '_blank').attr('rel', 'noopener noreferrer');
+
+                                    // Simple Link Preview logic
+                                    var urlRegex = /(https?:\/\/[^\s]+)/g;
+                                    var match = comment.text.match(urlRegex);
+                                    if (match && match[0]) {
+                                        var url = match[0];
+                                        var domain = url.split('/')[2];
+                                        var preview = h('div.cp-kanban-link-preview', {
+                                            onclick: function (e) {
+                                                e.stopPropagation();
+                                                window.open(url, '_blank');
+                                            }
+                                        }, [
+                                            h('div.preview-info', [
+                                                h('div.preview-domain', domain),
+                                                h('div.preview-url', url)
+                                            ]),
+                                            h('i.fa.fa-external-link')
+                                        ]);
+                                        t.innerHTML = temp.innerHTML;
+                                        $(t).append(preview);
+                                    } else {
+                                        t.innerHTML = temp.innerHTML;
+                                    }
+                                } catch (e) {
+                                    console.error(e);
+                                    t.textContent = comment.text;
+                                }
+                                return t;
+                            }())
+                        ]),
+                        reactionsEl,
+                        h('div.cp-kanban-comment-actions', [
+                            h('span.cp-kanban-comment-action', {
+                                onclick: function () { setReplyingTo(comment); }
+                            }, 'Reply')
+                        ]),
+                        // Recursive replies (legacy support)
+                        h('div.cp-kanban-comment-replies-list')
                     ])
                 ]);
-                $(commentsContainer).append(commentEl);
+
+                $(targetContainer).append(commentEl);
+
+                // Render replies if any (legacy support)
+                if (comment.replies && comment.replies.length > 0) {
+                    renderComments(comment.replies, $(commentEl).find('.cp-kanban-comment-replies-list'), true);
+                }
             });
 
-            if ($(commentsContainer)[0]) {
-                $(commentsContainer).scrollTop($(commentsContainer)[0].scrollHeight);
+            if (!container) {
+                var totalCount = countComments(dataObject.comments);
+                $(sidebar).find('.cp-kanban-sidebar-count').text(totalCount);
+                if ($(commentsContainer)[0]) {
+                    $(commentsContainer).scrollTop($(commentsContainer)[0].scrollHeight);
+                }
             }
+        };
+
+        var countComments = function (comments) {
+            var count = 0;
+            (comments || []).forEach(function (c) {
+                count++;
+                if (c.replies) { count += countComments(c.replies); }
+            });
+            return count;
+        };
+
+        var findComment = function (comments, id) {
+            for (var i = 0; i < comments.length; i++) {
+                if (comments[i].id === id) { return comments[i]; }
+                if (comments[i].replies) {
+                    var found = findComment(comments[i].replies, id);
+                    if (found) { return found; }
+                }
+            }
+            return null;
+        };
+
+        var setReplyingTo = function (comment) {
+            replyingTo = comment;
+            updateReplyIndicator();
+            $(commentInput).focus();
+        };
+
+        var updateReplyIndicator = function () {
+            $('.cp-kanban-reply-indicator').remove();
+            if (!replyingTo) { return; }
+            var indicator = h('div.cp-kanban-reply-indicator', [
+                h('div.reply-content', {
+                    onclick: function () { scrollToComment(replyingTo.id); }
+                }, [
+                    h('div.reply-header', [
+                        h('span.reply-author', replyingTo.name || 'Anonymous')
+                    ]),
+                    h('div.reply-text', replyingTo.text)
+                ]),
+                h('div.reply-close', {
+                    onclick: function (e) {
+                        e.stopPropagation();
+                        replyingTo = null;
+                        updateReplyIndicator();
+                    }
+                }, h('i.fa.fa-times'))
+            ]);
+            $(commentInput).before(indicator);
+        };
+
+        var addReaction = function (commentId, emoji) {
+            var comment = findComment(dataObject.comments, commentId);
+            if (!comment) { return; }
+            var currentUser = framework._.cpNfInner.metadataMgr.getUserData();
+            comment.reactions = comment.reactions || {};
+            comment.reactions[emoji] = comment.reactions[emoji] || [];
+            var index = comment.reactions[emoji].indexOf(currentUser.curvePublic);
+            if (index === -1) {
+                comment.reactions[emoji].push(currentUser.curvePublic);
+            } else {
+                comment.reactions[emoji].splice(index, 1);
+            }
+            saveAndRefresh();
+        };
+
+        var showEmojiPicker = function (e, commentId) {
+            var emojis = ['👍', '❤️', '😂', '😮', '😢', '🔥'];
+            var picker = h('div.cp-kanban-emoji-picker', {
+                style: 'position:fixed; top:' + (e.clientY - 40) + 'px; left:' + e.clientX + 'px; z-index:100001;'
+            }, emojis.map(function (emoji) {
+                return h('span.emoji-item', {
+                    onclick: function () {
+                        addReaction(commentId, emoji);
+                        $('.cp-kanban-emoji-picker').remove();
+                    }
+                }, emoji);
+            }));
+            $('body').append(picker);
+            $(document).one('click', function () { $('.cp-kanban-emoji-picker').remove(); });
         };
 
         var addComment = function () {
@@ -271,13 +498,29 @@ define([
                 author: user.curvePublic,
                 name: user.name,
                 text: text,
-                time: +new Date()
+                time: +new Date(),
+                replies: [],
+                reactions: {}
             };
+
+            if (replyingTo) {
+                newComment.replyTo = {
+                    id: replyingTo.id,
+                    name: replyingTo.name,
+                    text: replyingTo.text
+                };
+                replyingTo = null;
+                updateReplyIndicator();
+            }
 
             dataObject.comments = dataObject.comments || [];
             dataObject.comments.push(newComment);
 
             $(commentInput).val('');
+            saveAndRefresh();
+        };
+
+        var saveAndRefresh = function () {
             framework.localChange();
             _updateBoards(framework, kanban, kanban.options.boards);
             renderComments(dataObject.comments);
@@ -292,10 +535,18 @@ define([
             style: 'display:none; position:fixed; top:0; right:0; z-index:100000;'
         }, [
             h('div.cp-kanban-sidebar-header', [
-                h('h2', 'Comments'),
-                h('button.cp-kanban-sidebar-close', {
-                    onclick: function () { hide(); }
-                }, '×')
+                h('div.cp-kanban-sidebar-title-row', [
+                    h('i.fa.fa-comments'),
+                    h('span.cp-kanban-sidebar-title', 'Activity'),
+                    h('span.cp-kanban-sidebar-count', '0')
+                ]),
+                h('div.cp-kanban-sidebar-header-actions', [
+                    h('i.fa.fa-sliders'),
+                    h('i.fa.fa-bell-o'),
+                    h('button.cp-kanban-sidebar-close', {
+                        onclick: function () { hide(); }
+                    }, '×')
+                ])
             ]),
             h('div.cp-kanban-sidebar-content', [
                 h('div.cp-kanban-sidebar-item-info', [
@@ -304,7 +555,7 @@ define([
                 commentsContainer = h('div.cp-kanban-comments-list'),
                 h('div.cp-kanban-comment-form', [
                     commentInput = h('textarea.cp-kanban-comment-input', {
-                        placeholder: 'Write a comment...',
+                        placeholder: 'Write a comment... (Markdown supported)',
                         onkeydown: function (e) {
                             if (e.keyCode === 13 && !e.shiftKey) {
                                 e.preventDefault();
@@ -312,9 +563,15 @@ define([
                             }
                         }
                     }),
-                    h('button.cp-kanban-comment-send-btn', {
-                        onclick: function () { addComment(); }
-                    }, 'Send')
+                    h('div.cp-kanban-comment-form-footer', [
+                        h('div.cp-kanban-comment-form-tools'),
+                        h('button.cp-kanban-comment-send-btn', {
+                            onclick: function () { addComment(); }
+                        }, [
+                            'Send ',
+                            h('i.fa.fa-paper-plane')
+                        ])
+                    ])
                 ])
             ])
         ]);

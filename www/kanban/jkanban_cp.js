@@ -844,27 +844,21 @@ define([
                 }
             }
 
-            // ROW 4: Comments indicator
+            // Minimalistic Comments Button (Bottom Right)
             var commentCount = Array.isArray(element.comments) ? element.comments.length : 0;
-            var commentsRow = document.createElement('div');
-            commentsRow.className = 'kanban-metric-row kanban-comments-row';
-            commentsRow.setAttribute('title', commentCount + ' comments');
+            var commentsBtn = document.createElement('div');
+            commentsBtn.className = 'kanban-item-comments-btn' + (commentCount > 0 ? ' has-comments' : '');
+            commentsBtn.innerHTML = '<i class="fa fa-comment-o"></i>' + (commentCount > 0 ? '<span>' + commentCount + '</span>' : '');
+            commentsBtn.setAttribute('title', commentCount + ' comments');
 
-            var commentsLabel = document.createElement('div');
-            commentsLabel.className = 'kanban-metric-label kanban-comments-label' + (commentCount > 0 ? ' has-comments' : '');
-            commentsLabel.innerHTML = '<i class="fa fa-comments"></i> ' + (commentCount > 0 ? commentCount + ' comments' : 'Add comment');
-
-            // Handle click to open sidebar
-            commentsLabel.addEventListener('click', function (e) {
+            commentsBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (typeof self.options.openComments === 'function') {
                     self.options.openComments(element.id);
                 }
             });
-
-            commentsRow.appendChild(commentsLabel);
-            metricsContainer.appendChild(commentsRow);
+            nodeItem.appendChild(commentsBtn);
 
             // Add project completion toggle (always show for quick marking)
             var completedRow = document.createElement('div');
