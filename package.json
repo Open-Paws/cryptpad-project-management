@@ -3,6 +3,9 @@
   "description": "a collaborative office suite that is end-to-end encrypted and open-source",
   "version": "2025.6.0",
   "license": "AGPL-3.0+",
+  "engines": {
+    "node": ">=18"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cryptpad/cryptpad.git"
@@ -13,7 +16,7 @@
   },
   "dependencies": {
     "@mcrowe/minibloom": "^0.2.0",
-    "@node-saml/node-saml": "^4.0.5",
+    "@node-saml/node-saml": "^5.1.0",
     "alertify.js": "1.0.11",
     "body-parser": "^1.20.2",
     "bootstrap": "^4.0.0",

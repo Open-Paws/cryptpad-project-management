@@ -133,7 +133,19 @@
                 console.log(typeof(cb));
             }
 
-            win.postMessage(JSON.stringify(req), '*');
+            // Determine target origin from iframe src or use first accepted origin
+            var targetOrigin = e.src;
+            if (targetOrigin) {
+                try {
+                    targetOrigin = new URL(targetOrigin).origin;
+                } catch (err) {
+                    // Fallback to first accepted origin if URL parsing fails
+                    targetOrigin = A[0];
+                }
+            } else {
+                targetOrigin = A[0];
+            }
+            win.postMessage(JSON.stringify(req), targetOrigin);
         };
 
         return frame;

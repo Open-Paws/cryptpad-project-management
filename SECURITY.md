@@ -24,3 +24,22 @@ We do also communicate about this topic on:
 
 Brefore reaching out about a potential vulnerability, ensure it falls within the scope of our project. Please read thoroughly our [whitepaper](https://blog.cryptpad.org/2023/02/02/Whitepaper/) describing our threat model and what we consider acceptable or not security-wise. If you are sure you found a real vulnerability, you can report it using the GitHub Security interface. You can also send us an email at security@cryptpad.org
 
+## Security Analysis
+
+For detailed information about security alerts, mitigation strategies, and architectural decisions, see [SECURITY_DECISIONS.md](./SECURITY_DECISIONS.md).
+
+### Regular Security Reviews
+
+This project undergoes regular security reviews including:
+- Dependabot vulnerability scanning
+- CodeQL static analysis
+- Manual code review of security-sensitive components
+
+### Known Issues and Mitigations
+
+See [SECURITY_DECISIONS.md](./SECURITY_DECISIONS.md) for:
+- Analysis of current security alerts
+- Explanation of false positives
+- Mitigation strategies for vendor library vulnerabilities
+- Architectural security features
+

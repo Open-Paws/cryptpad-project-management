@@ -1094,13 +1094,28 @@ define([
             return assignees.sort();
         };
 
-        var renderTasksList = function (tasksArray) {
-            // Skip re-render if this is a local change
-            if (isLocalTaskChange) {
+        var renderTasksList = function (tasksArray, forceRender) {
+            // Skip re-render if this is a local change AND we've already rendered
+            // But always render if forceRender is true (e.g., on modal open)
+            if (isLocalTaskChange && !forceRender && $tasksContainer.children().length > 0) {
+                if (DEBUG_KANBAN) {
+                    console.log('[renderTasksList] Skipping re-render (local change, already rendered)');
+                }
                 return;
             }
 
+            if (DEBUG_KANBAN) {
+                console.log('[renderTasksList] Rendering', tasksArray ? tasksArray.length : 0, 'tasks');
+                console.log('[renderTasksList] forceRender:', forceRender, 'isLocalTaskChange:', isLocalTaskChange);
+            }
+
             tasksArray = tasksArray || [];
+            if (!Array.isArray(tasksArray)) {
+                if (DEBUG_KANBAN) {
+                    console.warn('[renderTasksList] tasksArray is not an array, converting');
+                }
+                tasksArray = [];
+            }
 
             // Preserve scroll position
             var scrollTop = $tasksContainer.scrollTop();
@@ -1161,12 +1176,35 @@ define([
                     h('i.fa.fa-trash')
                 ]);
 
+                // Recurrence indicator/button
+                var hasRecurrence = task.recurrence && task.recurrence.type;
+                var recurrenceBtn = h('button.cp-kanban-task-recurrence-btn' + (hasRecurrence ? '.active' : ''), {
+                    title: hasRecurrence ? ('Recurring ' + task.recurrence.type) : 'Set recurrence'
+                }, [h('i.fa.fa-repeat')]);
+
+                // Dependencies indicator/button
+                var depCount = (task.dependencies || []).length;
+                var depsBtn = h('button.cp-kanban-task-deps-btn' + (depCount > 0 ? '.has-deps' : ''), {
+                    title: depCount > 0 ? (depCount + ' dependencies') : 'Set dependencies'
+                }, [
+                    h('i.fa.fa-link'),
+                    depCount > 0 ? h('span.cp-kanban-dep-count', String(depCount)) : null
+                ].filter(Boolean));
+
+                // Move task button
+                var moveBtn = h('button.cp-kanban-task-move-btn', {
+                    title: 'Move task to another project'
+                }, [h('i.fa.fa-arrows')]);
+
                 var taskRowClass = 'cp-kanban-task-row' + (task.done ? ' cp-kanban-task-done' : '');
                 var taskRow = h('div.' + taskRowClass.replace(/\s+/g, '.'), { 'data-task-index': index }, [
                     checkbox,
                     titleInput,
                     assigneeSelect,
                     dueDateInput,
+                    recurrenceBtn,
+                    depsBtn,
+                    moveBtn,
                     deleteBtn
                 ]);
 
@@ -1450,15 +1488,15 @@ define([
             getValue: function () {
                 return dataObject.tasks || [];
             },
-            setValue: function (tasksArray, preserveCursor) {
+            setValue: function (tasksArray, preserveCursor, forceRender) {
                 if (isBoard) { return; }
                 tasksArray = tasksArray || [];
                 // Ensure tasks is always an array
                 if (!Array.isArray(tasksArray)) { tasksArray = []; }
 
-                // If preserveCursor is true, skip re-render if data hasn't changed
+                // If preserveCursor is true and not forcing render, skip re-render if data hasn't changed
                 // This prevents losing focus/selection when user is editing
-                if (preserveCursor) {
+                if (preserveCursor && !forceRender) {
                     var currentTasks = dataObject.tasks || [];
                     if (JSON.stringify(currentTasks) === JSON.stringify(tasksArray)) {
                         return;
@@ -1466,7 +1504,10 @@ define([
                 }
 
                 dataObject.tasks = tasksArray;
-                renderTasksList(tasksArray);
+                renderTasksList(tasksArray, forceRender);
+            },
+            resetLocalChangeFlag: function () {
+                isLocalTaskChange = false;
             }
         };
 
@@ -1680,7 +1721,15 @@ define([
         editModal.conflict.setValue();
         PROPERTIES.forEach(function (type) {
             if (!editModal[type]) { return; }
-            editModal[type].setValue(item[type]);
+            // Force render tasks on modal open to prevent stale state
+            if (type === 'tasks') {
+                if (editModal.tasks.resetLocalChangeFlag) {
+                    editModal.tasks.resetLocalChangeFlag();
+                }
+                editModal[type].setValue(item[type], false, true); // forceRender = true
+            } else {
+                editModal[type].setValue(item[type]);
+            }
         });
 
         // Update status to show which board the item is on
@@ -2915,6 +2964,13 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
+
+                    // Show filter panel for tasks view
+                    $filterPanelContent.show();
+                } else if (viewMode === 'dashboard') {
+                    // ========== DASHBOARD VIEW ==========
+                    // Dashboard has its own analytics display, hide the filter panel
+                    $filterPanelContent.hide();
                 } else {
                     // ========== PIPELINE / TIMELINE VIEW ==========
                     // Show project sort options, hide task sort options
@@ -2926,6 +2982,9 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
+
+                    // Show filter panel for board/timeline views
+                    $filterPanelContent.show();
                 }
             };
 
@@ -3125,6 +3184,12 @@ define([
             var $timelineContainer = $(timelineContainer);
             $timelineContainer.hide();
             $('#cp-app-kanban-container').append(timelineContainer);
+
+            // Dashboard analytics view container
+            var dashboardContainer = h('div#cp-kanban-dashboard-container');
+            var $dashboardContainer = $(dashboardContainer);
+            $dashboardContainer.hide();
+            $('#cp-app-kanban-container').append(dashboardContainer);
 
             // Timeline state
             var timelineZoom = 'week'; // day, week, month, quarter
@@ -4354,6 +4419,7 @@ define([
                     $kanbanContent.show();
                     $myTasksContainer.hide();
                     $timelineContainer.hide();
+                    $dashboardContainer.hide();
                     // Apply filters first to ensure sort/filter state is current
                     applyFilters();
                     // Re-render board to apply any filter changes made in other views
@@ -4365,6 +4431,7 @@ define([
                     $kanbanContent.hide();
                     $myTasksContainer.show();
                     $timelineContainer.hide();
+                    $dashboardContainer.hide();
                     if (DEBUG_KANBAN) {
                         console.log('=== SWITCH TO MYTASKS === calling renderMyTasksView()');
                     }
@@ -4373,10 +4440,27 @@ define([
                     $kanbanContent.hide();
                     $myTasksContainer.hide();
                     $timelineContainer.show();
+                    $dashboardContainer.hide();
                     if (DEBUG_KANBAN) {
                         console.log('=== SWITCH TO TIMELINE === calling renderTimelineView()');
                     }
                     renderTimelineView();
+                } else if (currentViewMode === 'dashboard') {
+                    // Cleanup timeline event handlers when switching away
+                    $(document).off('.timeline-resize');
+                    $(document).off('.timeline-move');
+                    $kanbanContent.hide();
+                    $myTasksContainer.hide();
+                    $timelineContainer.hide();
+                    $dashboardContainer.show();
+                    if (DEBUG_KANBAN) {
+                        console.log('=== SWITCH TO DASHBOARD ===');
+                        console.log('Dashboard container visible:', $dashboardContainer.is(':visible'));
+                        console.log('Dashboard container display:', $dashboardContainer.css('display'));
+                        console.log('Dashboard container exists:', $dashboardContainer.length > 0);
+                        console.log('Calling renderDashboardView()');
+                    }
+                    renderDashboardView();
                 }
             };
 
@@ -4899,8 +4983,8 @@ define([
 
             var viewSwitcher = h('div.cp-kanban-view-switcher', [
                 boardViewBtn,
-                timelineViewBtn,
                 myTasksViewBtn,
+                timelineViewBtn,
                 dashboardViewBtn
             ]);
 
@@ -4908,12 +4992,15 @@ define([
                 $(boardViewBtn).removeClass('cp-kanban-viewmode-active');
                 $(myTasksViewBtn).removeClass('cp-kanban-viewmode-active');
                 $(timelineViewBtn).removeClass('cp-kanban-viewmode-active');
+                $(dashboardViewBtn).removeClass('cp-kanban-viewmode-active');
                 if (mode === 'board') {
                     $(boardViewBtn).addClass('cp-kanban-viewmode-active');
                 } else if (mode === 'mytasks') {
                     $(myTasksViewBtn).addClass('cp-kanban-viewmode-active');
                 } else if (mode === 'timeline') {
                     $(timelineViewBtn).addClass('cp-kanban-viewmode-active');
+                } else if (mode === 'dashboard') {
+                    $(dashboardViewBtn).addClass('cp-kanban-viewmode-active');
                 }
             };
 
@@ -4938,12 +5025,28 @@ define([
                 renderCurrentView();
             });
 
+            $(dashboardViewBtn).on('click', function () {
+                if (DEBUG_KANBAN) {
+                    console.log('[Dashboard Button] Clicked, currentViewMode:', currentViewMode);
+                }
+                if (currentViewMode === 'dashboard') { return; }
+                currentViewMode = 'dashboard';
+                setActiveViewBtn('dashboard');
+                applyFilters();
+                if (DEBUG_KANBAN) {
+                    console.log('[Dashboard Button] Calling renderCurrentView()');
+                }
+                renderCurrentView();
+            });
+
             // Re-render current view when remote changes occur (if in that view)
             onRemoteChange.reg(function () {
                 if (currentViewMode === 'mytasks') {
                     renderMyTasksView();
                 } else if (currentViewMode === 'timeline') {
                     renderTimelineView();
+                } else if (currentViewMode === 'dashboard') {
+                    renderDashboardView();
                 }
             });
 

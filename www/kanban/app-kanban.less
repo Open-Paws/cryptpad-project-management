@@ -118,6 +118,7 @@
     @kanban-text-muted: var(--kanban-text-muted);
     @kanban-shadow: var(--kanban-shadow);
     @kanban-shadow-hover: var(--kanban-shadow-hover);
+    @kanban-bg-alt: var(--kanban-surface-hover);
 
     display: flex;
     flex-flow: column;
@@ -3115,6 +3116,51 @@
                 background: @kanban-danger;
                 border-color: @kanban-danger;
                 color: white;
+            }
+
+            // Recurrence, Dependencies, and Move task buttons
+            .cp-kanban-task-recurrence-btn,
+            .cp-kanban-task-deps-btn,
+            .cp-kanban-task-move-btn {
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 30px;
+                min-width: 30px;
+                padding: 0 6px;
+                margin: 0;
+                border: 1px solid @kanban-border;
+                border-radius: 4px;
+                background: transparent;
+                color: @kanban-text-muted;
+                cursor: pointer;
+                transition: all 0.15s ease;
+                box-sizing: border-box;
+                vertical-align: middle;
+
+                i {
+                    font-size: 12px;
+                    line-height: 1;
+                }
+
+                &:hover {
+                    background: @kanban-bg-alt;
+                    border-color: @kanban-success;
+                    color: @kanban-success;
+                }
+
+                &.active, &.has-deps {
+                    background: @kanban-success;
+                    border-color: @kanban-success;
+                    color: white;
+                }
+            }
+
+            .cp-kanban-dep-count {
+                margin-left: 3px;
+                font-size: 10px;
+                font-weight: 600;
             }
         }
 

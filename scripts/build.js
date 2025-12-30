@@ -5,7 +5,6 @@
 var Fs = require("fs");
 var Fse = require("fs-extra");
 var Path = require("path");
-var OS = require("os");
 
 var config = require("../lib/load-config");
 
@@ -112,14 +111,20 @@ var appImagePath = a => {
 };
 
 var buildPath = Path.resolve('./customize');
-var tmpPath = Path.join(OS.tmpdir(), '/CRYPTPAD_TEMP_BUILD/');
+var tmpPath = Path.resolve('./tmp/build/');
 
 var write = function (content, dest) {
     console.log(`Creating ${dest}`);
-    
+
     var path = Path.join(tmpPath, dest);
     var dirPath = Path.dirname(path);
     Fse.mkdirpSync(dirPath);
+    // Set secure permissions on tmp directory (owner only: rwx------)
+    try {
+        Fs.chmodSync(tmpPath, 0o700);
+    } catch (err) {
+        console.warn('Could not set secure permissions on tmp directory:', err.message);
+    }
     Fs.writeFileSync(path, content);
     console.log();
 };

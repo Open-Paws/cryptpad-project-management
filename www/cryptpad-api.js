@@ -357,6 +357,9 @@
                     }
 
                     var onMsg = function (msg) {
+                        // Validate message source and origin before processing
+                        if (msg.source !== iframe.contentWindow) { return; }
+                        if (msg.origin !== parsed.origin) { return; }
                         var data = typeof(msg.data) === "string" ? JSON.parse(msg.data) : msg.data;
                         if (!data || data.q !== 'INTEGRATION_READY') { return; }
                         window.removeEventListener('message', onMsg);

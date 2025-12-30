@@ -36,6 +36,8 @@ define([
             var done = waitFor();
             var onMsg = function (msg) {
                 if (!msg || !msg.data) { return; }
+                // Validate origin to prevent messages from malicious origins
+                if (msg.origin !== ApiConfig.httpUnsafeOrigin) { return; }
                 var data;
                 try {
                     data = typeof(msg.data) === "object" ? msg.data : JSON.parse(msg.data);

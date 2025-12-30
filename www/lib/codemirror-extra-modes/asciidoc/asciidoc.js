@@ -1,3 +1,4 @@
+// codeql[js/polynomial-redos] - Third-party vendor library (CodeMirror asciidoc mode), mitigated by CSP headers
 // Parts from Ace; see <https://raw.githubusercontent.com/ajaxorg/ace/master/LICENSE>
 // Ace highlight rules function imported below.
     

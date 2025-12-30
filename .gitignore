@@ -4,6 +4,10 @@
 
 # ----> SOURCE CODE
 # ---> CryptPad
+
+# Build temporary files
+/tmp/
+
 datastore
 tasks
 www/components/*
