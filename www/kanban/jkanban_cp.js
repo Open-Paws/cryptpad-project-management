@@ -9,13 +9,13 @@ define([
     '/common/visible.js',
     '/components/dragula/dist/dragula.min.js',
 ], function ($, Messages, Util, Visible, Dragula) {
-        /**
-         * jKanban
-         * Vanilla Javascript plugin for manage kanban boards
-         *
-         * @site: http://www.riccardotartaglia.it/jkanban/
-         * @author: Riccardo Tartaglia
-         */
+    /**
+     * jKanban
+     * Vanilla Javascript plugin for manage kanban boards
+     *
+     * @site: http://www.riccardotartaglia.it/jkanban/
+     * @author: Riccardo Tartaglia
+     */
     return function () {
         var self = this;
         this.element = '';
@@ -43,29 +43,30 @@ define([
             // IMPORTANT: _boards must NEVER be used for reading or writing 'items' (tasks/cards).
             // All item operations must go through options.boards.items.
             _boards: {}, // The displayed kanban. We need to remember the old columns when we redraw
-            getAvatar: function () {},
-            openLink: function () {},
-            getTags: function () {},
+            getAvatar: function () { },
+            openLink: function () { },
+            getTags: function () { },
             getTextColor: function () { return '#000'; },
             cursors: {},
             tags: [],
             dragBoards: 'ontouchstart' in window ? false : true,
             addItemButton: false,
             readOnly: false,
-            dragEl: function (/*el, source*/) {},
-            dragendEl: function (/*el*/) {},
-            dropEl: function (/*el, target, source, sibling*/) {},
-            dragcancelEl: function (/*el, boardId*/) {},
-            dragBoard: function (/*el, source*/) {},
-            dragendBoard: function (/*el*/) {},
-            dropBoard: function (/*el, target, source, sibling*/) {},
-            click: function (/*el*/) {},
-            boardTitleclick: function (/*el, boardId*/) {},
-            addItemClick: function (/*el, boardId*/) {},
-            renderMd: function (/*md*/) {},
-            applyHtml: function (/*html, node*/) {},
-            refresh: function () {},
-            onChange: function () {}
+            dragEl: function (/*el, source*/) { },
+            dragendEl: function (/*el*/) { },
+            dropEl: function (/*el, target, source, sibling*/) { },
+            dragcancelEl: function (/*el, boardId*/) { },
+            dragBoard: function (/*el, source*/) { },
+            dragendBoard: function (/*el*/) { },
+            dropBoard: function (/*el, target, source, sibling*/) { },
+            click: function (/*el*/) { },
+            boardTitleclick: function (/*el, boardId*/) { },
+            addItemClick: function (/*el, boardId*/) { },
+            renderMd: function (/*md*/) { },
+            applyHtml: function (/*html, node*/) { },
+            openComments: function (/*id*/) { },
+            refresh: function () { },
+            onChange: function () { }
         };
 
         // Shared color palette - single source of truth for all board/dot colors
@@ -118,7 +119,7 @@ define([
         };
         var removeUnusedTags = function (boards) {
             var tags = self.options.getTags(boards);
-            var filter = self.options.tags || [];
+            var filter = self.options.tags || [];
             var toClean = [];
             filter.forEach(function (tag) {
                 if (tags.indexOf(tag) === -1) { toClean.push(tag); }
@@ -201,11 +202,11 @@ define([
                 }
             }
             nodeItem.addEventListener('click', function (e) {
-                handleAddItem(e,this);
+                handleAddItem(e, this);
             });
             nodeItem.addEventListener('keydown', function (e) {
                 if (e.keyCode === 13) {
-                    handleAddItem(e,this);
+                    handleAddItem(e, this);
                 }
             });
         }
@@ -252,10 +253,10 @@ define([
                         if (e.pageX > rect.left && e.pageX < rect.right) {
                             if (e.pageY < (rect.top + 20)) {
                                 distance *= -1;
-                                $aB.scrollTop(distance + $aB.scrollTop()) ;
+                                $aB.scrollTop(distance + $aB.scrollTop());
                                 moved = true;
                             } else if (e.pageY > (rect.bottom - 20)) {
-                                $aB.scrollTop(distance + $aB.scrollTop()) ;
+                                $aB.scrollTop(distance + $aB.scrollTop());
                                 moved = true;
                             }
                         }
@@ -263,10 +264,10 @@ define([
                     // Itme or board: horizontal scroll if needed
                     if (e.pageX < leftRegion) {
                         distance *= -1;
-                        $el.scrollLeft(distance + $el.scrollLeft()) ;
+                        $el.scrollLeft(distance + $el.scrollLeft());
                         moved = true;
                     } else if (e.pageX >= rightRegion) {
-                        $el.scrollLeft(distance + $el.scrollLeft()) ;
+                        $el.scrollLeft(distance + $el.scrollLeft());
                         moved = true;
                     }
                     if (!moved) { return; }
@@ -284,20 +285,20 @@ define([
 
                 //Init Drag Board
                 self.drakeBoard = self.dragula([self.container, self.trashContainer], {
-                        moves: function (el, source, handle) {
-                            if (self.options.readOnly) { return false; }
-                            if (!self.options.dragBoards) { return false; }
-                            return (handle.classList.contains('kanban-board-header') || handle.classList.contains('kanban-title-board'));
-                        },
-                        accepts: function (el, target, source, sibling) {
-                            if (self.options.readOnly) { return false; }
-                            if (sibling && sibling.getAttribute('id') === "kanban-addboard") { return false; }
-                            return target.classList.contains('kanban-container') ||
-                                   target.classList.contains('kanban-trash');
-                        },
-                        revertOnSpill: true,
-                        direction: 'horizontal',
-                    })
+                    moves: function (el, source, handle) {
+                        if (self.options.readOnly) { return false; }
+                        if (!self.options.dragBoards) { return false; }
+                        return (handle.classList.contains('kanban-board-header') || handle.classList.contains('kanban-title-board'));
+                    },
+                    accepts: function (el, target, source, sibling) {
+                        if (self.options.readOnly) { return false; }
+                        if (sibling && sibling.getAttribute('id') === "kanban-addboard") { return false; }
+                        return target.classList.contains('kanban-container') ||
+                            target.classList.contains('kanban-trash');
+                    },
+                    revertOnSpill: true,
+                    direction: 'horizontal',
+                })
                     .on('drag', function (el, source) {
                         el.classList.add('is-moving');
                         self.options.dragBoard(el, source);
@@ -357,7 +358,7 @@ define([
                             index2 = list.indexOf(id2);
                         }
                         // If we can't find the drop position, drop at the end
-                        if (typeof(index2) === "undefined" || index2 === -1) {
+                        if (typeof (index2) === "undefined" || index2 === -1) {
                             index2 = list.length;
                         }
 
@@ -377,7 +378,7 @@ define([
                     moves: function (el) {
                         if (self.options.readOnly) { return false; }
                         if (el.classList.contains('new-item')) { return false; }
-                        if (self.options.dragItems === false) {return false;}
+                        if (self.options.dragItems === false) { return false; }
                         return el.classList.contains('kanban-item');
                     },
                     accepts: function () {
@@ -386,7 +387,7 @@ define([
                     },
                     revertOnSpill: true
                 })
-                    .on('cancel', function() {
+                    .on('cancel', function () {
                         self.enableAllBoards();
                     })
                     .on('drag', function (el, source) {
@@ -435,7 +436,7 @@ define([
                         target.classList.add('kanban-trash-suggest');
 
                     })
-                    .on('drop', function(el, target, source, sibling) {
+                    .on('drop', function (el, target, source, sibling) {
                         self.enableAllBoards();
                         el.classList.remove('is-moving');
 
@@ -477,7 +478,7 @@ define([
 
         var findItem = function (eid) {
             var boards = self.options.boards;
-            var list = boards.list || [];
+            var list = boards.list || [];
             var res = [];
             list.forEach(function (id) {
                 var b = boards.data[id];
@@ -497,7 +498,7 @@ define([
             var boards = self.options.boards;
             var data = boards.data || {};
             var exists = Object.keys(data).some(function (id) {
-                return (data[id].item || []).indexOf(Number(eid)) !== -1;
+                return (data[id].item || []).indexOf(Number(eid)) !== -1;
             });
             return exists;
         };
@@ -560,7 +561,7 @@ define([
             board.item.splice(pos, 0, eid);
         };
 
-        this.enableAllBoards = function() {
+        this.enableAllBoards = function () {
             var allB = document.querySelectorAll('.kanban-board');
             if (allB.length > 0 && allB !== undefined) {
                 for (var i = 0; i < allB.length; i++) {
@@ -582,48 +583,48 @@ define([
             if (element.color) {
                 if (/color/.test(element.color)) {
                     // Palette color
-                    nodeItem.classList.add('cp-kanban-palette-'+element.color);
+                    nodeItem.classList.add('cp-kanban-palette-' + element.color);
                 } else {
                     // Hex color code
                     var textColor = self.options.getTextColor(element.color);
-                    nodeItem.setAttribute('style', 'background-color:#'+element.color+';color:'+textColor+';');
+                    nodeItem.setAttribute('style', 'background-color:#' + element.color + ';color:' + textColor + ';');
                 }
             }
             var nodeCursors = document.createElement('div');
             nodeCursors.classList.add('cp-kanban-cursors');
             Object.keys(self.options.cursors).forEach(function (id) {
                 var c = self.options.cursors[id];
-                if (Number(c.item) !== Number(element.id)) { return; }
+                if (Number(c.item) !== Number(element.id)) { return; }
                 var el = self.options.getAvatar(c);
                 nodeCursors.appendChild(el);
             });
             var nodeItemTextContainer = document.createElement('div');
             nodeItemTextContainer.classList.add('kanban-item-text-container');
             nodeItem.appendChild(nodeItemTextContainer);
-            var nodeItemText  = document.createElement('div');
+            var nodeItemText = document.createElement('div');
             nodeItemText.classList.add('kanban-item-text');
             nodeItemText.dataset.eid = element.id;
             nodeItemText.innerText = element.title;
             nodeItemTextContainer.appendChild(nodeItemText);
-            
+
             // Check if this card is filtered out
             var hide = false;
-            
+
             // Tags filter
             if (Array.isArray(self.options.tags) && self.options.tags.length) {
                 if (self.options.tagsAnd) {
                     hide = !Array.isArray(element.tags) ||
                         !self.options.tags.every(function (tag) {
-                          return element.tags.indexOf(tag) !== -1;
-                    });
+                            return element.tags.indexOf(tag) !== -1;
+                        });
                 } else {
                     hide = !Array.isArray(element.tags) ||
                         !element.tags.some(function (tag) {
-                          return self.options.tags.indexOf(tag) !== -1;
-                    });
+                            return self.options.tags.indexOf(tag) !== -1;
+                        });
                 }
             }
-            
+
             // Custom filter (for assignee, score, due date filters)
             if (!hide && self.options.customFilter && typeof self.options.customFilter === 'function') {
                 hide = !self.options.customFilter(element);
@@ -683,14 +684,14 @@ define([
                 });
                 nodeItem.appendChild(nodeTags);
             }
-            
+
             // Add metrics display container with vertical stacked rows
             var metricsContainer = document.createElement('div');
             metricsContainer.classList.add('kanban-metrics-container');
             metricsContainer.dataset.eid = element.id;
 
             // Helper function to get color class based on score (0-10)
-            var getScoreColorClass = function(score) {
+            var getScoreColorClass = function (score) {
                 if (score <= 3) return 'kanban-metric-red';
                 if (score <= 6) return 'kanban-metric-orange';
                 if (score <= 8) return 'kanban-metric-yellow-green';
@@ -698,7 +699,7 @@ define([
             };
 
             // Helper function to get color class based on percentage (0-100)
-            var getTaskColorClass = function(percent) {
+            var getTaskColorClass = function (percent) {
                 if (percent <= 33) return 'kanban-metric-red';
                 if (percent <= 66) return 'kanban-metric-orange';
                 if (percent < 100) return 'kanban-metric-yellow-green';
@@ -717,7 +718,7 @@ define([
                 ];
 
                 var total = 0;
-                scoringDimensions.forEach(function(dim) {
+                scoringDimensions.forEach(function (dim) {
                     var val = element.scoring[dim];
                     if (val !== undefined && val > 0) {
                         total += val;
@@ -754,7 +755,7 @@ define([
             // ROW 2: Tasks row with full-width progress bar
             if (Array.isArray(element.tasks) && element.tasks.length > 0) {
                 var totalTasks = element.tasks.length;
-                var doneTasks = element.tasks.filter(function(t) { return t.done; }).length;
+                var doneTasks = element.tasks.filter(function (t) { return t.done; }).length;
                 var taskPercent = Math.round((doneTasks / totalTasks) * 100);
 
                 var taskRow = document.createElement('div');
@@ -843,6 +844,28 @@ define([
                 }
             }
 
+            // ROW 4: Comments indicator
+            var commentCount = Array.isArray(element.comments) ? element.comments.length : 0;
+            var commentsRow = document.createElement('div');
+            commentsRow.className = 'kanban-metric-row kanban-comments-row';
+            commentsRow.setAttribute('title', commentCount + ' comments');
+
+            var commentsLabel = document.createElement('div');
+            commentsLabel.className = 'kanban-metric-label kanban-comments-label' + (commentCount > 0 ? ' has-comments' : '');
+            commentsLabel.innerHTML = '<i class="fa fa-comments"></i> ' + (commentCount > 0 ? commentCount + ' comments' : 'Add comment');
+
+            // Handle click to open sidebar
+            commentsLabel.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof self.options.openComments === 'function') {
+                    self.options.openComments(element.id);
+                }
+            });
+
+            commentsRow.appendChild(commentsLabel);
+            metricsContainer.appendChild(commentsRow);
+
             // Add project completion toggle (always show for quick marking)
             var completedRow = document.createElement('div');
             completedRow.className = 'kanban-metric-row kanban-completed-row';
@@ -868,8 +891,8 @@ define([
             completedRow.appendChild(completedLabel);
 
             // Add change handler to update project.completed
-            (function(projectElement, checkbox, icon, text, row) {
-                checkbox.addEventListener('change', function(e) {
+            (function (projectElement, checkbox, icon, text, row) {
+                checkbox.addEventListener('change', function (e) {
                     e.stopPropagation();
 
                     projectElement.completed = this.checked;
@@ -888,11 +911,11 @@ define([
                     self.onChange();
                 });
 
-                checkbox.addEventListener('click', function(e) {
+                checkbox.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
 
-                completedLabel.addEventListener('click', function(e) {
+                completedLabel.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             })(element, completedCheckbox, completedIcon, completedText, completedRow);
@@ -915,7 +938,7 @@ define([
             // Add assignees if present
             if (element.assignee && element.assignee.trim()) {
                 var sanitizedAssignee = element.assignee.replace(/[<>"'&]/g, '');
-                var assignees = sanitizedAssignee.split(',').map(function(a) { return a.trim(); }).filter(function(a) { return a; });
+                var assignees = sanitizedAssignee.split(',').map(function (a) { return a.trim(); }).filter(function (a) { return a; });
                 if (assignees.length > 0) {
                     var assigneeRow = document.createElement('div');
                     assigneeRow.className = 'kanban-metric-row';
@@ -942,14 +965,14 @@ define([
                     currentUser = self.options.getCurrentUser();
                 }
 
-                var visibleTasks = element.tasks.filter(function(task) {
+                var visibleTasks = element.tasks.filter(function (task) {
                     // Show task if: not hidden, OR creator matches current user, OR no creator set (legacy)
                     if (!task.hidden) { return true; }
                     var taskCreator = (task.createdBy || '').toLowerCase();
                     return !taskCreator || taskCreator === currentUser;
                 });
 
-                visibleTasks.forEach(function(task, taskIndex) {
+                visibleTasks.forEach(function (task, taskIndex) {
                     var taskItem = document.createElement('div');
                     taskItem.className = 'kanban-card-task-item';
                     if (task.done) {
@@ -966,8 +989,8 @@ define([
                     checkbox.setAttribute('data-task-index', taskIndex);
 
                     // Add change handler to update task.done in the data model
-                    (function(taskRef, taskItem, projectElement) {
-                        checkbox.addEventListener('change', function(e) {
+                    (function (taskRef, taskItem, projectElement) {
+                        checkbox.addEventListener('change', function (e) {
                             e.stopPropagation(); // Prevent card click from firing
 
                             // Find the task in the project's tasks array by reference
@@ -998,7 +1021,7 @@ define([
                         });
 
                         // Prevent click from propagating to card
-                        checkbox.addEventListener('click', function(e) {
+                        checkbox.addEventListener('click', function (e) {
                             e.stopPropagation();
                         });
                     })(task, taskItem, element);
@@ -1227,7 +1250,7 @@ define([
             // Create header content wrapper
             var headerContent = document.createElement('div');
             headerContent.classList.add('kanban-header-content');
-            
+
             // Colored dot indicator (glowing ball)
             var dotIndicator = document.createElement('div');
             dotIndicator.classList.add('kanban-header-dot');
@@ -1313,7 +1336,7 @@ define([
             nodeCursors.classList.add('cp-kanban-cursors');
             Object.keys(self.options.cursors).forEach(function (id) {
                 var c = self.options.cursors[id];
-                if (Number(c.board) !== Number(board.id)) { return; }
+                if (Number(c.board) !== Number(board.id)) { return; }
                 var el = self.options.getAvatar(c);
                 nodeCursors.appendChild(el);
             });
@@ -1328,19 +1351,19 @@ define([
             // Sort items if custom sort function is provided
             var itemsToRender = (board.item || []).slice(); // Create a copy
             if (self.options.customSort && typeof self.options.customSort === 'function') {
-                var itemObjects = itemsToRender.map(function(itemkey) {
+                var itemObjects = itemsToRender.map(function (itemkey) {
                     return { key: itemkey, item: boards.items[itemkey] };
-                }).filter(function(obj) {
+                }).filter(function (obj) {
                     return obj.item; // Filter out missing items
                 });
-                
-                itemObjects.sort(function(a, b) {
+
+                itemObjects.sort(function (a, b) {
                     return self.options.customSort(a.item, b.item);
                 });
-                
-                itemsToRender = itemObjects.map(function(obj) { return obj.key; });
+
+                itemsToRender = itemObjects.map(function (obj) { return obj.key; });
             }
-            
+
             itemsToRender.forEach(function (itemkey) {
                 //create item
                 var itemKanban = boards.items[itemkey];
@@ -1409,7 +1432,7 @@ define([
             reorder();
         };
 
-        this.addBoards = function() {
+        this.addBoards = function () {
             // Sanity check: this function should only use _boards.data and _boards.list
             // for determining which boards to render. It must NOT read _boards.items.
             // Item data is always fetched from self.options.boards.items via getBoardNode().
@@ -1482,7 +1505,7 @@ define([
                 // Remove all boards
                 for (var i in list) {
                     var boardkey = list[i];
-                    scroll[boardkey] = $('.kanban-board[data-id="'+boardkey+'"] .kanban-drag').scrollTop();
+                    scroll[boardkey] = $('.kanban-board[data-id="' + boardkey + '"] .kanban-drag').scrollTop();
                     self.removeBoard(boardkey);
                 }
 
@@ -1492,7 +1515,7 @@ define([
                 // Preserve scroll
                 self.options._boards.list.forEach(function (id) {
                     if (!scroll[id]) { return; }
-                    var $boardDrag = $('.kanban-board[data-id="'+id+'"] .kanban-drag');
+                    var $boardDrag = $('.kanban-board[data-id="' + id + '"] .kanban-drag');
                     if (!$boardDrag.length) {
                         console.warn('[kanban setBoards] Scroll restoration: no DOM element found for board ID ' + id);
                         return;
