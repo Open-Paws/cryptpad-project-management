@@ -102,6 +102,10 @@ tags
 # Persistent undo
 [._]*.un~
 
+# ---> JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+
 # ---> VisualStudioCode
 .vscode/*
 

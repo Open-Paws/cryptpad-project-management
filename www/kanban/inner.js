@@ -357,7 +357,15 @@ define([
                                         var preview = h('div.cp-kanban-link-preview', {
                                             onclick: function (e) {
                                                 e.stopPropagation();
-                                                window.open(url, '_blank');
+                                                // Validate URL and open with security flags
+                                                try {
+                                                    var parsed = new URL(url);
+                                                    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+                                                        window.open(url, '_blank', 'noopener,noreferrer');
+                                                    }
+                                                } catch (err) {
+                                                    console.warn('Invalid URL:', url);
+                                                }
                                             }
                                         }, [
                                             h('div.preview-info', [
@@ -494,7 +502,7 @@ define([
             var user = metadataMgr.getUserData();
 
             var newComment = {
-                id: Util.createRandomInteger(),
+                id: Util.uid(),
                 author: user.curvePublic,
                 name: user.name,
                 text: text,
@@ -625,7 +633,7 @@ define([
     // Task helper function
     var createTask = function (title, assignee, createdBy) {
         return {
-            id: Util.createRandomInteger(),
+            id: Util.uid(),
             title: title || '',
             assignee: assignee || '',
             done: false,
@@ -683,7 +691,7 @@ define([
 
         // Create the next instance
         var nextTask = {
-            id: Util.createRandomInteger(),
+            id: Util.uid(),
             title: task.title,
             assignee: task.assignee || '',
             done: false,
@@ -1822,7 +1830,7 @@ define([
 
                         // Add task to target project
                         var targetTasks = (targetItem.tasks || []).slice();
-                        targetTasks.push(Object.assign({}, task, { id: Util.createRandomInteger() }));
+                        targetTasks.push(Object.assign({}, task, { id: Util.uid() }));
                         targetItem.tasks = targetTasks;
 
                         // Remove from current project
@@ -2695,9 +2703,9 @@ define([
                     }
                     onCursorUpdate.fire({});
                     if (!$input.val()) { return; }
-                    var id = Util.createRandomInteger();
+                    var id = Util.uid();
                     while (kanban.getItemJSON(id)) {
-                        id = Util.createRandomInteger();
+                        id = Util.uid();
                     }
                     var metadataMgr = framework._.cpNfInner.metadataMgr;
                     var currentUserName = metadataMgr.getUserData().name || '';
@@ -2778,9 +2786,9 @@ define([
             var boardExists = function (b) { return b.id === "board" + counter; };
             while (kanban.options.boards.some(boardExists)) { counter++; }
             */
-            var id = Util.createRandomInteger();
+            var id = Util.uid();
             while (kanban.getBoardJSON(id)) {
-                id = Util.createRandomInteger();
+                id = Util.uid();
             }
 
             kanban.addBoard({
