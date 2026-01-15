@@ -1,0 +1,25 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 68.183.87.193
+          username: root
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /opt/cryptpad
+            echo "[$(date)] Starting deployment from GitHub Actions..."
+            git pull origin main
+            docker compose build
+            docker compose up -d
+            echo "[$(date)] Deployment complete!"
