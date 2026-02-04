@@ -8,6 +8,8 @@ on:
   push:
     branches: [ staging ]
 
+permissions: {}
+
 jobs:
   trigger:
     runs-on: ubuntu-latest
