@@ -16,8 +16,17 @@ define([
             Extensions, Instance) {
     var Pages = {};
 
+    // Security: Use textContent for safe text, or sanitize HTML content
+    // This prevents XSS attacks from malicious HTML content
     Pages.setHTML = function (e, html) {
-        e.innerHTML = html;
+        if (!e) { return e; }
+        // For pages.js, we typically deal with localized messages which may contain HTML
+        // Use a simple sanitization approach for static content
+        var sanitized = html
+            .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+            .replace(/javascript:/gi, '')
+            .replace(/on\w+\s*=/gi, 'data-blocked=');
+        e.innerHTML = sanitized;
         return e;
     };
 

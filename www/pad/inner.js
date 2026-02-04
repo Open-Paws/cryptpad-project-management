@@ -959,7 +959,8 @@ define([
                         $iframe.on('scroll', onScroll);
                     });
                 });
-                a.innerHTML = title;
+                // Security: Use textContent instead of innerHTML to prevent XSS from heading text
+                a.textContent = title.replace(/<[^>]*>/g, '');
                 content.push(h('p.cp-pad-toc-'+level, a));
             });
             $toc.html('').append(content);

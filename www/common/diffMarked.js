@@ -14,12 +14,13 @@ define([
     '/customize/messages.js',
     '/lib/less.min.js',
     '/customize/pages.js',
+    '/lib/dompurify/purify.min.js',
 
     '/lib/highlight/highlight.pack.js',
     '/lib/diff-dom/diffDOM.js',
     '/components/tweetnacl/nacl-fast.min.js',
     'css!/lib/highlight/styles/'+ (window.CryptPad_theme === 'dark' ? 'dark.css' : 'github.css')
-],function ($, ApiConfig, Marked, Hash, Util, h, MT, MediaTag, Messages, Less, Pages) {
+],function ($, ApiConfig, Marked, Hash, Util, h, MT, MediaTag, Messages, Less, Pages, DOMPurify) {
     var DiffMd = {};
 
     var Highlight = window.hljs;
@@ -191,7 +192,8 @@ define([
                 href: '#',
                 'data-href': obj.id,
             });
-            a.innerHTML = obj.title;
+            // Security: Use textContent instead of innerHTML to prevent XSS from headings
+            a.textContent = obj.title.replace(/<[^>]*>/g, '');
             content.push(h('p.cp-md-toc-'+level, ['• ',  a]));
         });
         return h('div.cp-md-toc', content).outerHTML;
@@ -214,6 +216,26 @@ define([
             r = r.replace(/<div class="cp-md-toc"><\/div>/g, getTOC());
         }
         toc = [];
+
+        // Security: Always sanitize rendered HTML with DOMPurify to prevent XSS
+        // The deprecated Marked sanitize option is insufficient for security
+        if (DOMPurify && typeof DOMPurify.sanitize === 'function') {
+            r = DOMPurify.sanitize(r, {
+                ALLOWED_TAGS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul', 'ol', 'li',
+                    'blockquote', 'pre', 'code', 'em', 'strong', 'del', 'br', 'hr', 'table',
+                    'thead', 'tbody', 'tr', 'th', 'td', 'img', 'span', 'div', 'sup', 'sub',
+                    'media-tag', 'svg', 'path', 'circle', 'rect', 'line', 'polyline', 'polygon',
+                    'text', 'g', 'defs', 'marker', 'foreignObject', 'i', 'b', 'u', 's'],
+                ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel',
+                    'data-href', 'data-plugin', 'data-crypto-key', 'data-type', 'style',
+                    'width', 'height', 'viewBox', 'xmlns', 'd', 'fill', 'stroke', 'stroke-width',
+                    'transform', 'x', 'y', 'cx', 'cy', 'r', 'rx', 'ry', 'points', 'x1', 'y1',
+                    'x2', 'y2', 'marker-end', 'marker-start', 'font-size', 'text-anchor',
+                    'dominant-baseline', 'colspan', 'rowspan'],
+                ALLOW_DATA_ATTR: true,
+                ADD_ATTR: ['target', 'rel']
+            });
+        }
 
         return r;
     };

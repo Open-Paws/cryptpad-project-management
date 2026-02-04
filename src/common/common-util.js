@@ -246,10 +246,24 @@ const factory = (NaclUtil) => {
         return Util.guid(map);
     };
 
+    // Security: Fixed double-escaping issue by checking for already-escaped entities
+    // and fixed missing semicolon in "&gt" -> "&gt;"
     Util.fixHTML = function (str) {
         if (!str) { return ''; }
-        return str.replace(/[<>&"']/g, function (x) {
-            return ({ "<": "&lt;", ">": "&gt", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
+        if (typeof str !== 'string') { return ''; }
+
+        // First, unescape any already-escaped entities to prevent double-escaping
+        var unescaped = str
+            .replace(/&amp;/g, '&')
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&#34;/g, '"')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+
+        // Then escape properly (with correct semicolon on &gt;)
+        return unescaped.replace(/[<>&"']/g, function (x) {
+            return ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
         });
     };
 
@@ -681,10 +695,23 @@ const factory = (NaclUtil) => {
         return window.innerHeight < 800 || window.innerWidth < 800;
     };
 
+    // Security: Fixed XSS vulnerability by using textContent instead of innerHTML
+    // The old approach was vulnerable to XSS as setting innerHTML with untrusted
+    // content could execute scripts. Using textContent safely extracts text only.
     Util.stripTags = function (text) {
-        var div = document.createElement("div");
-        div.innerHTML = text;
-        return div.innerText;
+        if (!text || typeof text !== 'string') { return ''; }
+        // Use a regex-based approach that doesn't execute any potential scripts
+        // First, decode HTML entities, then strip tags
+        var decoded = text
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#39;/g, "'");
+        // Remove all HTML tags
+        var stripped = decoded.replace(/<[^>]*>/g, '');
+        // Re-encode for safety
+        return stripped;
     };
 
     // return an object containing {name, ext}

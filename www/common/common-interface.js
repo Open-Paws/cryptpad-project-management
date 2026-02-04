@@ -22,6 +22,7 @@ define([
     '/lib/tippy/tippy.min.js',
     '/common/hyperscript.js',
     '/customize/loading.js',
+    '/lib/dompurify/purify.min.js',
     //'/common/test.js',
 
     '/lib/jquery-ui/jquery-ui.min.js', // autocomplete widget
@@ -29,7 +30,7 @@ define([
     'css!/lib/tippy/tippy.css',
     'css!/lib/jquery-ui/jquery-ui.min.css'
 ], function ($, Messages, Util, Hash, Notifier, AppConfig,
-            Alertify, Tippy, h, Loading/*, Test */) {
+            Alertify, Tippy, h, Loading, DOMPurify/*, Test */) {
     var UI = {};
 
     /*
@@ -40,8 +41,25 @@ define([
     // set notification timeout
     Alertify._$$alertify.delay = AppConfig.notificationTimeout || 5000;
 
-    var setHTML = UI.setHTML = function (e, html) {
-        e.innerHTML = html;
+    // Security: Use DOMPurify to sanitize HTML before setting innerHTML
+    // This prevents XSS attacks from malicious HTML content
+    var setHTML = UI.setHTML = function (e, html, skipSanitize) {
+        if (!e) { return e; }
+        // Allow skipping sanitization for trusted content (e.g., static templates)
+        if (skipSanitize) {
+            e.innerHTML = html;
+        } else {
+            e.innerHTML = DOMPurify.sanitize(html, {
+                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li',
+                              'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre',
+                              'table', 'thead', 'tbody', 'tr', 'th', 'td', 'img', 'span', 'div',
+                              'hr', 'sup', 'sub', 'del', 's', 'mark', 'svg', 'path', 'g'],
+                ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target',
+                              'rel', 'data-*', 'colspan', 'rowspan', 'width', 'height', 'd',
+                              'viewBox', 'fill', 'stroke', 'xmlns'],
+                ALLOW_DATA_ATTR: true
+            });
+        }
         return e;
     };
 

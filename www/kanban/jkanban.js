@@ -458,7 +458,14 @@
                         nodeBody.onclick = function (e) {
                             e.preventDefault();
                         };
-                        nodeBody.innerHTML = html;
+                        // Security: Use applyHtml callback if available for safe HTML rendering
+                        // This allows the parent application to sanitize HTML before insertion
+                        if (typeof self.options.applyHtml === 'function') {
+                            self.options.applyHtml(html, nodeBody);
+                        } else {
+                            // Fallback: use textContent for safety if no sanitization available
+                            nodeBody.textContent = html.replace(/<[^>]*>/g, '');
+                        }
                         nodeItem.appendChild(nodeBody);
                     }
                     if (Array.isArray(element.tags)) {

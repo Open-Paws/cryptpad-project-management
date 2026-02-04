@@ -21,10 +21,11 @@ define([
     '/common/inner/invitation.js',
     '/common/visible.js',
     '/common/pad-types.js',
+    '/lib/dompurify/purify.min.js',
 
     'css!/customize/fonts/cptools/style.css',
 ], function ($, Config, Broadcast, Util, Hash, Language, UI, Constants, Feedback, h, Clipboard,
-             Messages, AppConfig, Pages, NThen, InviteInner, Visible, PadTypes) {
+             Messages, AppConfig, Pages, NThen, InviteInner, Visible, PadTypes, DOMPurify) {
     var UIElements = {};
     var urlArgs = Config.requireConf.urlArgs;
 
@@ -1370,7 +1371,17 @@ define([
     };
 
     var setHTML = UIElements.setHTML = function (e, html) {
-        e.innerHTML = html;
+        // Security: Sanitize HTML content with DOMPurify to prevent XSS
+        e.innerHTML = DOMPurify.sanitize(html, {
+            ALLOWED_TAGS: ['a', 'b', 'br', 'code', 'div', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                'hr', 'i', 'img', 'li', 'ol', 'p', 'pre', 'small', 'span', 'strong', 'sub', 'sup',
+                'table', 'tbody', 'td', 'th', 'thead', 'tr', 'u', 'ul', 'blockquote', 'label', 'input', 'button'],
+            ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'target', 'rel', 'style',
+                'data-localization', 'data-localization-title', 'type', 'name', 'value', 'checked',
+                'disabled', 'for', 'tabindex', 'aria-label', 'role'],
+            ALLOW_DATA_ATTR: true,
+            ADD_ATTR: ['target']
+        });
         return e;
     };
 
