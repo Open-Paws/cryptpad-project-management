@@ -17,6 +17,9 @@ define([
         console.warn('INIT');
         var p = window.parent;
         var txid = getTxid();
+        // Security: Store the parent origin once validated for subsequent messages
+        // Initial READY message uses '*' as we don't know the parent origin yet
+        var parentOrigin = null;
         p.postMessage({ q: 'INTEGRATION_READY', txid: txid }, '*');
 
         var makeChan = function () {
@@ -24,10 +27,18 @@ define([
             var commands = {};
 
             var _sendCb = function (txid, args) {
-                p.postMessage({ ack: txid, args: args}, '*');
+                // Security: Use validated parent origin instead of '*' when available
+                var targetOrigin = parentOrigin || '*';
+                p.postMessage({ ack: txid, args: args}, targetOrigin);
             };
             var onMsg = function (ev) {
                 if (ev.source !== p) { return; }
+                // Security: Store the validated origin from the first message
+                if (!parentOrigin) {
+                    parentOrigin = ev.origin;
+                }
+                // Security: Reject messages from different origins after initial handshake
+                if (ev.origin !== parentOrigin) { return; }
                 var data = ev.data;
 
                 // On ack
@@ -56,10 +67,12 @@ define([
             var send = function (q, data, cb) {
                 var txid = getTxid();
                 if (cb) { handlers[txid] = cb; }
+                // Security: Use validated parent origin instead of '*' when available
+                var targetOrigin = parentOrigin || '*';
                 p.postMessage({ msg: {
                     q: q,
                     data: data,
-                }, txid: txid}, '*');
+                }, txid: txid}, targetOrigin);
                 setTimeout(function () {
                     delete handlers[txid];
                 }, 60000);

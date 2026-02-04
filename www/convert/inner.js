@@ -84,7 +84,8 @@ define([
             if (msg.source !== iframe) { return; }
             msgEv.fire(msg);
         });
-        var postMsg = function (data) { iframe.postMessage(data, '*'); };
+        // Security: Only post messages to the safe origin, not '*'
+        var postMsg = function (data) { iframe.postMessage(data, ApiConfig.httpSafeOrigin); };
         Channel.create(msgEv, postMsg, function (chan) {
             var send = ooChannel.send = function (obj) { chan.event('CMD', obj); };
 

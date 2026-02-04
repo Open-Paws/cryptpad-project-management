@@ -58,7 +58,8 @@ define([
                 return;
             }
 
-            drawioFrame.contentWindow.postMessage(JSON.stringify(msg), '*');
+            // Security: Only post messages to the safe origin, not '*'
+            drawioFrame.contentWindow.postMessage(JSON.stringify(msg), ApiConfig.httpSafeOrigin);
         };
 
         var onDrawioInit = function() {
