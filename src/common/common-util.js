@@ -224,9 +224,21 @@ const factory = (NaclUtil) => {
         });
     };
 
+    // Security: Keys that could lead to prototype pollution if used in object traversal
+    var DANGEROUS_KEYS = ['__proto__', 'constructor', 'prototype'];
+
+    var isDangerousKey = function (key) {
+        return DANGEROUS_KEYS.indexOf(key) !== -1;
+    };
+
     Util.find = function (map, path) {
         var l = path.length;
         for (var i = 0; i < l; i++) {
+            // Security: Block prototype pollution via path traversal
+            if (isDangerousKey(path[i])) {
+                console.warn('Blocked dangerous key in path traversal:', path[i]);
+                return;
+            }
             if (typeof(map[path[i]]) === 'undefined') { return; }
             map = map[path[i]];
         }
@@ -246,10 +258,11 @@ const factory = (NaclUtil) => {
         return Util.guid(map);
     };
 
+    // Security: Fixed missing semicolon in "&gt" -> "&gt;"
     Util.fixHTML = function (str) {
         if (!str) { return ''; }
         return str.replace(/[<>&"']/g, function (x) {
-            return ({ "<": "&lt;", ">": "&gt", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
+            return ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
         });
     };
 
@@ -637,6 +650,12 @@ const factory = (NaclUtil) => {
             return void console.log("Extend doesn't accept circular objects");
         }
         for (var k in b) {
+            // Security: Skip prototype-polluting keys and use hasOwnProperty
+            if (!Object.prototype.hasOwnProperty.call(b, k)) { continue; }
+            if (isDangerousKey(k)) {
+                console.warn('Blocked dangerous key in extend:', k);
+                continue;
+            }
             if (Util.isObject(b[k])) {
                 a[k] = Util.isObject(a[k]) ? a[k] : {};
                 Util.extend(a[k], b[k]);

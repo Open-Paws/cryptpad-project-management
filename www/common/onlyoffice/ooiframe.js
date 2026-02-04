@@ -58,6 +58,8 @@ define([
             // loading screen setup.
             var done = waitFor();
             var onMsg = function (msg) {
+                // Security: Validate message origin to prevent cross-origin attacks
+                if (msg.origin !== ApiConfig.httpSafeOrigin) { return; }
                 var data = typeof(msg.data) === "object" ? msg.data : JSON.parse(msg.data);
                 if (data.q !== 'READY') { return; }
                 window.removeEventListener('message', onMsg);
@@ -78,7 +80,8 @@ define([
                 var msgEv = Utils.Util.mkEvent();
                 var iframe = $('#sbox-oo-iframe')[0].contentWindow;
                 var postMsg = function (data) {
-                    iframe.postMessage(data, '*');
+                    // Security: Specify target origin instead of '*' to prevent data leakage
+                    iframe.postMessage(data, ApiConfig.httpSafeOrigin);
                 };
                 var w = waitFor();
                 var whenReady = function (msg) {

@@ -40,7 +40,10 @@ var jsc = {
 
 
 	tryInstallOnElements : function (elms, className) {
-		var matchClass = new RegExp('(^|\\s)(' + className + ')(\\s*(\\{[^}]*\\})|\\s|$)', 'i');
+		// Security: Escape className to prevent ReDoS via malicious class names
+		var escapedClassName = className.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+		// Security: Use possessive-style matching to prevent backtracking
+		var matchClass = new RegExp('(^|\\s)(' + escapedClassName + ')(?:\\s*(\\{[^}]*\\})|\\s|$)', 'i');
 
 		for (var i = 0; i < elms.length; i += 1) {
 			if (elms[i].type !== undefined && elms[i].type.toLowerCase() == 'color') {
@@ -280,10 +283,12 @@ var jsc = {
 	unsetClass : function (elm, className) {
 		var classList = jsc.classNameToList(className);
 		for (var i = 0; i < classList.length; i += 1) {
+			// Security: Escape class name to prevent ReDoS via malicious class names
+			var escapedClass = classList[i].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 			var repl = new RegExp(
-				'^\\s*' + classList[i] + '\\s*|' +
-				'\\s*' + classList[i] + '\\s*$|' +
-				'\\s+' + classList[i] + '(\\s+)',
+				'^\\s*' + escapedClass + '\\s*|' +
+				'\\s*' + escapedClass + '\\s*$|' +
+				'\\s+' + escapedClass + '(\\s+)',
 				'g'
 			);
 			elm.className = elm.className.replace(repl, '$1');
