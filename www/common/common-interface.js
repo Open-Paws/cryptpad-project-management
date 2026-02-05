@@ -23,6 +23,7 @@ define([
     '/common/hyperscript.js',
     '/customize/loading.js',
     '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
     //'/common/test.js',
 
     '/lib/jquery-ui/jquery-ui.min.js', // autocomplete widget
@@ -30,7 +31,7 @@ define([
     'css!/lib/tippy/tippy.css',
     'css!/lib/jquery-ui/jquery-ui.min.css'
 ], function ($, Messages, Util, Hash, Notifier, AppConfig,
-            Alertify, Tippy, h, Loading, DOMPurify/*, Test */) {
+            Alertify, Tippy, h, Loading, DOMPurify, Security/*, Test */) {
     var UI = {};
 
     /*
@@ -49,16 +50,7 @@ define([
         if (skipSanitize) {
             e.innerHTML = html;
         } else {
-            e.innerHTML = DOMPurify.sanitize(html, {
-                ALLOWED_TAGS: ['a', 'b', 'i', 'u', 'em', 'strong', 'p', 'br', 'ul', 'ol', 'li',
-                              'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre',
-                              'table', 'thead', 'tbody', 'tr', 'th', 'td', 'img', 'span', 'div',
-                              'hr', 'sup', 'sub', 'del', 's', 'mark', 'svg', 'path', 'g'],
-                ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target',
-                              'rel', 'data-*', 'colspan', 'rowspan', 'width', 'height', 'd',
-                              'viewBox', 'fill', 'stroke', 'xmlns'],
-                ALLOW_DATA_ATTR: true
-            });
+            e.innerHTML = DOMPurify.sanitize(html, Security.DOMPurifyConfig.ui);
         }
         return e;
     };

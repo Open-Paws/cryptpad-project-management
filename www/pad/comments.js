@@ -11,8 +11,9 @@ define([
     '/common/common-interface.js',
     '/common/common-ui-elements.js',
     '/customize/messages.js',
-    '/lib/dompurify/purify.min.js'
-], function($, Sortify, Util, Hash, h, UI, UIElements, Messages, DOMPurify) {
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js'
+], function($, Sortify, Util, Hash, h, UI, UIElements, Messages, DOMPurify, Security) {
     var Comments = {};
 
     /*
@@ -258,10 +259,7 @@ define([
         // Add a space to make sure we won't end with a mention and a bad cursor
         if (editContent) {
             // Security: Sanitize content before setting innerHTML to prevent XSS
-            textarea.innerHTML = DOMPurify.sanitize(editContent + " ", {
-                ALLOWED_TAGS: ['span', 'br'],
-                ALLOWED_ATTR: ['class', 'data-name', 'data-avatar', 'data-profile', 'contenteditable']
-            });
+            textarea.innerHTML = DOMPurify.sanitize(editContent + " ", Security.DOMPurifyConfig.commentsEdit);
             deleteButton = h('button.btn.btn-danger', {
                 tabindex: 1
             }, [
@@ -401,10 +399,7 @@ define([
                 // Build sanitized html with mentions
                 var m = h('div.cp-comment-content');
                 // Security: Sanitize comment content before setting innerHTML to prevent XSS
-                m.innerHTML = DOMPurify.sanitize(msg.m, {
-                    ALLOWED_TAGS: ['span', 'br'],
-                    ALLOWED_ATTR: ['class', 'data-name', 'data-avatar', 'data-profile']
-                });
+                m.innerHTML = DOMPurify.sanitize(msg.m, Security.DOMPurifyConfig.comments);
                 var $m = $(m);
                 $m.find('> *:not(span.cp-mentions)').remove();
                 $m.find('span.cp-mentions').each(function(i, el) {

@@ -959,8 +959,10 @@ define([
                         $iframe.on('scroll', onScroll);
                     });
                 });
-                // Security: Use textContent instead of innerHTML to prevent XSS from heading text
-                a.textContent = title.replace(/<[^>]*>/g, '');
+                // Security: Use DOMParser to safely strip HTML tags from heading text.
+                // The regex /<[^>]*>/g is incomplete (data loss with angle brackets in text).
+                var titleDoc = new DOMParser().parseFromString(title, 'text/html');
+                a.textContent = titleDoc.body.textContent || '';
                 content.push(h('p.cp-pad-toc-'+level, a));
             });
             $toc.html('').append(content);
