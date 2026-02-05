@@ -191,7 +191,10 @@ define([
                 href: '#',
                 'data-href': obj.id,
             });
-            a.innerHTML = obj.title;
+            // Security: Use DOMParser to safely strip tags instead of regex
+            // Regex like /<[^>]*>/g causes data loss for content with < or > characters
+            var tmp = new DOMParser().parseFromString(obj.title || '', 'text/html');
+            a.textContent = tmp.body.textContent || '';
             content.push(h('p.cp-md-toc-'+level, ['• ',  a]));
         });
         return h('div.cp-md-toc', content).outerHTML;

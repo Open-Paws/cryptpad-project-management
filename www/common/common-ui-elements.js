@@ -21,10 +21,12 @@ define([
     '/common/inner/invitation.js',
     '/common/visible.js',
     '/common/pad-types.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
 
     'css!/customize/fonts/cptools/style.css',
 ], function ($, Config, Broadcast, Util, Hash, Language, UI, Constants, Feedback, h, Clipboard,
-             Messages, AppConfig, Pages, NThen, InviteInner, Visible, PadTypes) {
+             Messages, AppConfig, Pages, NThen, InviteInner, Visible, PadTypes, DOMPurify, Security) {
     var UIElements = {};
     var urlArgs = Config.requireConf.urlArgs;
 
@@ -1369,8 +1371,10 @@ define([
         };
     };
 
+    // Security: Sanitize HTML content with DOMPurify to prevent XSS
     var setHTML = UIElements.setHTML = function (e, html) {
-        e.innerHTML = html;
+        if (!e) { return e; }
+        e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.uiElements);
         return e;
     };
 

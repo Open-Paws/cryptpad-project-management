@@ -11,13 +11,17 @@ define([
     'jquery',
     '/api/config',
     '/common/extensions.js',
+    '/lib/dompurify/purify.min.js',
     'optional!/api/instance',
 ], function (h, Language, Util, AppConfig, Msg, $, ApiConfig,
-            Extensions, Instance) {
+            Extensions, DOMPurify, Instance) {
     var Pages = {};
 
+    // Security: Use DOMPurify to sanitize HTML content before setting innerHTML
+    // This prevents XSS attacks from malicious HTML content
     Pages.setHTML = function (e, html) {
-        e.innerHTML = html;
+        if (!e) { return e; }
+        e.innerHTML = DOMPurify.sanitize(html || '');
         return e;
     };
 
