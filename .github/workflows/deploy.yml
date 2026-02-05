@@ -20,6 +20,7 @@ jobs:
           username: root
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
+            set -e
             cd /opt/cryptpad
             echo "[$(date)] Starting deployment from GitHub Actions..."
             git pull origin main
