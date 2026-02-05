@@ -6,23 +6,25 @@
 // The previous /.*/i regex allowed any origin, defeating the purpose of origin validation
 var ALLOWED_ORIGINS = [];
 
-// Initialize allowed origins from window.location if available
+// Initialize allowed origins from available context
 (function() {
     try {
         // Allow same-origin by default
         if (window.location && window.location.origin) {
             ALLOWED_ORIGINS.push(window.location.origin);
         }
-        // Allow parent origin if different and accessible
-        if (window.parent && window.parent !== window) {
+        // Use document.referrer to determine the parent's origin when cross-origin.
+        // Reading window.parent.location.origin throws SecurityError in cross-origin
+        // iframes, so we derive the parent origin from document.referrer instead.
+        if (document.referrer) {
             try {
-                var parentOrigin = window.parent.location.origin;
-                if (parentOrigin && ALLOWED_ORIGINS.indexOf(parentOrigin) === -1) {
-                    ALLOWED_ORIGINS.push(parentOrigin);
+                var referrerOrigin = new URL(document.referrer).origin;
+                if (referrerOrigin && referrerOrigin !== 'null' &&
+                    ALLOWED_ORIGINS.indexOf(referrerOrigin) === -1) {
+                    ALLOWED_ORIGINS.push(referrerOrigin);
                 }
             } catch (e) {
-                // Cross-origin parent - cannot access origin directly
-                // Will be validated by the caller context
+                // Invalid referrer URL - ignore
             }
         }
     } catch (e) {
