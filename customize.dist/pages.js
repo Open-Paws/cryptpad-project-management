@@ -21,7 +21,7 @@ define([
     // This prevents XSS attacks from malicious HTML content
     Pages.setHTML = function (e, html) {
         if (!e) { return e; }
-        e.innerHTML = DOMPurify.sanitize(html);
+        e.innerHTML = DOMPurify.sanitize(html || '');
         return e;
     };
 

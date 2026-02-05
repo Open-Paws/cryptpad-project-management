@@ -1373,7 +1373,7 @@ define([
 
     var setHTML = UIElements.setHTML = function (e, html) {
         // Security: Sanitize HTML content with DOMPurify to prevent XSS
-        e.innerHTML = DOMPurify.sanitize(html, Security.DOMPurifyConfig.uiElements);
+        e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.uiElements);
         return e;
     };
 

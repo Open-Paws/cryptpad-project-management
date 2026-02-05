@@ -50,7 +50,7 @@ define([
         if (skipSanitize) {
             e.innerHTML = html;
         } else {
-            e.innerHTML = DOMPurify.sanitize(html, Security.DOMPurifyConfig.ui);
+            e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.ui);
         }
         return e;
     };

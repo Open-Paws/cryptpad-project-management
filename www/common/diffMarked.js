@@ -193,8 +193,9 @@ define([
                 href: '#',
                 'data-href': obj.id,
             });
-            // Security: Use textContent instead of innerHTML to prevent XSS from headings
-            a.textContent = obj.title.replace(/<[^>]*>/g, '');
+            // Security: Use DOMParser for safe tag stripping (regex causes data loss with < > in text)
+            var tmp = new DOMParser().parseFromString(obj.title || '', 'text/html');
+            a.textContent = tmp.body.textContent || '';
             content.push(h('p.cp-md-toc-'+level, ['• ',  a]));
         });
         return h('div.cp-md-toc', content).outerHTML;
