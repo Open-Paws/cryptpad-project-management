@@ -40,9 +40,7 @@ var jsc = {
 
 
 	tryInstallOnElements : function (elms, className) {
-		// Security: Escape className to prevent ReDoS via malicious class names
 		var escapedClassName = className.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-		// Security: Use possessive-style matching to prevent backtracking
 		var matchClass = new RegExp('(^|\\s)(' + escapedClassName + ')(?:\\s*(\\{[^}]*\\})|\\s|$)', 'i');
 
 		for (var i = 0; i < elms.length; i += 1) {
