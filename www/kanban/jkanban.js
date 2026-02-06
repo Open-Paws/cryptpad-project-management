@@ -463,8 +463,7 @@
                         if (typeof self.options.applyHtml === 'function') {
                             self.options.applyHtml(html, nodeBody);
                         } else {
-                            // Fallback: use textContent for safety if no sanitization available
-                            nodeBody.textContent = html.replace(/<[^>]*>/g, '');
+                            nodeBody.textContent = html;
                         }
                         nodeItem.appendChild(nodeBody);
                     }

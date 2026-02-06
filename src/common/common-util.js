@@ -246,10 +246,7 @@ const factory = (NaclUtil) => {
         return Util.guid(map);
     };
 
-    // Security: Escape HTML special characters to prevent XSS.
-    // Fixed missing semicolon in "&gt" -> "&gt;" from original code.
-    // Note: This function escapes raw characters only. Do not pass
-    // already-escaped strings through this function to avoid double-escaping.
+    // Escape HTML special characters to prevent XSS.
     Util.fixHTML = function (str) {
         if (!str) { return ''; }
         if (typeof str !== 'string') { return ''; }
@@ -686,10 +683,8 @@ const factory = (NaclUtil) => {
         return window.innerHeight < 800 || window.innerWidth < 800;
     };
 
-    // Security: Use a DOM-based approach to safely strip HTML tags.
-    // The regex approach /<[^>]*>/g causes data loss with non-HTML angle brackets
-    // (e.g., "Impact < 10 and Cost > 500" would lose content between brackets).
-    // Using a temporary element with textContent safely extracts text only.
+    // Strip HTML tags safely using DOMParser.
+    // Avoids data loss with non-HTML angle brackets (e.g., "Impact < 10").
     Util.stripTags = function (text) {
         if (!text || typeof text !== 'string') { return ''; }
         var doc = new DOMParser().parseFromString(text, 'text/html');

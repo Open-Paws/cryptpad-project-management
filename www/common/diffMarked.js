@@ -219,11 +219,7 @@ define([
         }
         toc = [];
 
-        // Security: Always sanitize rendered HTML with DOMPurify to prevent XSS
-        // The deprecated Marked sanitize option is insufficient for security
-        if (DOMPurify && typeof DOMPurify.sanitize === 'function') {
-            r = DOMPurify.sanitize(r, Security.DOMPurifyConfig.markdown);
-        }
+        r = DOMPurify.sanitize(r, Security.DOMPurifyConfig.markdown);
 
         return r;
     };

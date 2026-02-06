@@ -42,16 +42,9 @@ define([
     // set notification timeout
     Alertify._$$alertify.delay = AppConfig.notificationTimeout || 5000;
 
-    // Security: Use DOMPurify to sanitize HTML before setting innerHTML
-    // This prevents XSS attacks from malicious HTML content
-    var setHTML = UI.setHTML = function (e, html, skipSanitize) {
+    var setHTML = UI.setHTML = function (e, html) {
         if (!e) { return e; }
-        // Allow skipping sanitization for trusted content (e.g., static templates)
-        if (skipSanitize) {
-            e.innerHTML = html;
-        } else {
-            e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.ui);
-        }
+        e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.ui);
         return e;
     };
 
