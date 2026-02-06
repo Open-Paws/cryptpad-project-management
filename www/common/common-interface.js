@@ -22,6 +22,8 @@ define([
     '/lib/tippy/tippy.min.js',
     '/common/hyperscript.js',
     '/customize/loading.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
     //'/common/test.js',
 
     '/lib/jquery-ui/jquery-ui.min.js', // autocomplete widget
@@ -29,7 +31,7 @@ define([
     'css!/lib/tippy/tippy.css',
     'css!/lib/jquery-ui/jquery-ui.min.css'
 ], function ($, Messages, Util, Hash, Notifier, AppConfig,
-            Alertify, Tippy, h, Loading/*, Test */) {
+            Alertify, Tippy, h, Loading, DOMPurify, Security/*, Test */) {
     var UI = {};
 
     /*
@@ -41,7 +43,8 @@ define([
     Alertify._$$alertify.delay = AppConfig.notificationTimeout || 5000;
 
     var setHTML = UI.setHTML = function (e, html) {
-        e.innerHTML = html;
+        if (!e) { return e; }
+        e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.ui);
         return e;
     };
 

@@ -76,6 +76,8 @@ var afterLoaded = function (req) {
     window.cryptpadLanguage = req.lang;
     if (req.req) { require(req.req, ready); } else { ready(); }
     var onReply = function (msg) {
+        // Security: Validate message source to prevent cross-origin attacks
+        if (msg.source !== window.parent) { return; }
         var data = JSON.parse(msg.data);
         if (data.txid !== txid) { return; }
         clearInterval(intr);

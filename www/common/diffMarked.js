@@ -14,12 +14,14 @@ define([
     '/customize/messages.js',
     '/lib/less.min.js',
     '/customize/pages.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
 
     '/lib/highlight/highlight.pack.js',
     '/lib/diff-dom/diffDOM.js',
     '/components/tweetnacl/nacl-fast.min.js',
     'css!/lib/highlight/styles/'+ (window.CryptPad_theme === 'dark' ? 'dark.css' : 'github.css')
-],function ($, ApiConfig, Marked, Hash, Util, h, MT, MediaTag, Messages, Less, Pages) {
+],function ($, ApiConfig, Marked, Hash, Util, h, MT, MediaTag, Messages, Less, Pages, DOMPurify, Security) {
     var DiffMd = {};
 
     var Highlight = window.hljs;
@@ -191,7 +193,9 @@ define([
                 href: '#',
                 'data-href': obj.id,
             });
-            a.innerHTML = obj.title;
+            // Security: Use DOMParser for safe tag stripping (regex causes data loss with < > in text)
+            var tmp = new DOMParser().parseFromString(obj.title || '', 'text/html');
+            a.textContent = tmp.body.textContent || '';
             content.push(h('p.cp-md-toc-'+level, ['• ',  a]));
         });
         return h('div.cp-md-toc', content).outerHTML;
@@ -214,6 +218,8 @@ define([
             r = r.replace(/<div class="cp-md-toc"><\/div>/g, getTOC());
         }
         toc = [];
+
+        r = DOMPurify.sanitize(r, Security.DOMPurifyConfig.markdown);
 
         return r;
     };

@@ -151,7 +151,10 @@ define([
             self.addBoards();
             var addBoard = document.createElement('div');
             addBoard.id = 'kanban-addboard';
-            addBoard.innerHTML = '<i class="fa fa-plus"></i>';
+            // Security: Use DOM API instead of innerHTML for static icons
+            var plusIcon = document.createElement('i');
+            plusIcon.className = 'fa fa-plus';
+            addBoard.appendChild(plusIcon);
             boardContainer.appendChild(addBoard);
             var trash = self.trashContainer = document.createElement('div');
             trash.setAttribute('id', 'kanban-trash');
@@ -736,7 +739,11 @@ define([
 
                 var scoreLabel = document.createElement('div');
                 scoreLabel.className = 'kanban-metric-label';
-                scoreLabel.innerHTML = '<i class="fa fa-star"></i> Score: ' + finalScore + '/10';
+                // Security: Use DOM API instead of innerHTML
+                var starIcon = document.createElement('i');
+                starIcon.className = 'fa fa-star';
+                scoreLabel.appendChild(starIcon);
+                scoreLabel.appendChild(document.createTextNode(' Score: ' + finalScore + '/10'));
                 scoreRow.appendChild(scoreLabel);
 
                 var scoreBarBg = document.createElement('div');
@@ -764,7 +771,11 @@ define([
 
                 var taskLabel = document.createElement('div');
                 taskLabel.className = 'kanban-metric-label';
-                taskLabel.innerHTML = '<i class="fa fa-check-square-o"></i> Tasks: ' + doneTasks + '/' + totalTasks + ' complete';
+                // Security: Use DOM API instead of innerHTML
+                var taskIcon = document.createElement('i');
+                taskIcon.className = 'fa fa-check-square-o';
+                taskLabel.appendChild(taskIcon);
+                taskLabel.appendChild(document.createTextNode(' Tasks: ' + doneTasks + '/' + totalTasks + ' complete'));
                 taskRow.appendChild(taskLabel);
 
                 var taskBarBg = document.createElement('div');
@@ -837,7 +848,11 @@ define([
 
                     var dueDateLabel = document.createElement('div');
                     dueDateLabel.className = 'kanban-metric-label kanban-due-date-label ' + dueDateClass;
-                    dueDateLabel.innerHTML = '<i class="fa fa-calendar"></i> ' + relativeText;
+                    // Security: Use DOM API instead of innerHTML to prevent XSS
+                    var calendarIcon = document.createElement('i');
+                    calendarIcon.className = 'fa fa-calendar';
+                    dueDateLabel.appendChild(calendarIcon);
+                    dueDateLabel.appendChild(document.createTextNode(' ' + relativeText));
                     dueDateRow.appendChild(dueDateLabel);
 
                     metricsContainer.appendChild(dueDateRow);
@@ -848,7 +863,15 @@ define([
             var commentCount = Array.isArray(element.comments) ? element.comments.length : 0;
             var commentsBtn = document.createElement('div');
             commentsBtn.className = 'kanban-item-comments-btn' + (commentCount > 0 ? ' has-comments' : '');
-            commentsBtn.innerHTML = '<i class="fa fa-comment-o"></i>' + (commentCount > 0 ? '<span>' + commentCount + '</span>' : '');
+            // Security: Use DOM API instead of innerHTML to prevent XSS
+            var commentIcon = document.createElement('i');
+            commentIcon.className = 'fa fa-comment-o';
+            commentsBtn.appendChild(commentIcon);
+            if (commentCount > 0) {
+                var countSpan = document.createElement('span');
+                countSpan.textContent = commentCount;
+                commentsBtn.appendChild(countSpan);
+            }
             commentsBtn.setAttribute('title', commentCount + ' comments');
 
             commentsBtn.addEventListener('click', function (e) {
@@ -923,7 +946,11 @@ define([
                 depsRow.className = 'kanban-metric-row';
                 var depsBadge = document.createElement('div');
                 depsBadge.className = 'kanban-project-deps-badge';
-                depsBadge.innerHTML = '<i class="fa fa-link"></i> ' + projectDepCount + ' dependenc' + (projectDepCount === 1 ? 'y' : 'ies');
+                // Security: Use DOM API instead of innerHTML to prevent XSS
+                var depsLinkIcon = document.createElement('i');
+                depsLinkIcon.className = 'fa fa-link';
+                depsBadge.appendChild(depsLinkIcon);
+                depsBadge.appendChild(document.createTextNode(' ' + projectDepCount + ' dependenc' + (projectDepCount === 1 ? 'y' : 'ies')));
                 depsBadge.setAttribute('title', 'This project depends on ' + projectDepCount + ' other project(s)');
                 depsRow.appendChild(depsBadge);
                 metricsContainer.appendChild(depsRow);
@@ -940,7 +967,11 @@ define([
                     var assigneeLabel = document.createElement('div');
                     assigneeLabel.className = 'kanban-metric-label kanban-assignee-label';
                     assigneeLabel.setAttribute('title', sanitizedAssignee);
-                    assigneeLabel.innerHTML = '<i class="fa fa-user"></i> ' + assigneeText;
+                    // Security: Use DOM API instead of innerHTML to prevent XSS
+                    var userIcon = document.createElement('i');
+                    userIcon.className = 'fa fa-user';
+                    assigneeLabel.appendChild(userIcon);
+                    assigneeLabel.appendChild(document.createTextNode(' ' + assigneeText));
                     assigneeRow.appendChild(assigneeLabel);
                     metricsContainer.appendChild(assigneeRow);
                 }
@@ -1048,7 +1079,11 @@ define([
                     if (depCount > 0) {
                         var depsIcon = document.createElement('span');
                         depsIcon.className = 'cp-kanban-deps-badge';
-                        depsIcon.innerHTML = '<i class="fa fa-link"></i>' + depCount;
+                        // Security: Use DOM API instead of innerHTML to prevent XSS
+                        var taskLinkIcon = document.createElement('i');
+                        taskLinkIcon.className = 'fa fa-link';
+                        depsIcon.appendChild(taskLinkIcon);
+                        depsIcon.appendChild(document.createTextNode(depCount));
                         depsIcon.title = depCount + ' dependenc' + (depCount === 1 ? 'y' : 'ies');
                         taskItem.appendChild(depsIcon);
                     }
@@ -1379,7 +1414,11 @@ define([
             $(addProjectBtn).attr('tabindex', '0');
             $(addProjectBtn).attr('aria-label', Messages.addItem || 'Add project');
             $(addProjectBtn).attr('title', Messages.addItem || 'Add project');
-            addProjectBtn.innerHTML = '<i class="fa fa-plus"></i> Add Project';
+            // Security: Use DOM API instead of innerHTML to prevent XSS
+            var plusIcon = document.createElement('i');
+            plusIcon.className = 'fa fa-plus';
+            addProjectBtn.appendChild(plusIcon);
+            addProjectBtn.appendChild(document.createTextNode(' Add Project'));
             footerBoard.appendChild(addProjectBtn);
             __onAddItemClickHandler(addProjectBtn);
 

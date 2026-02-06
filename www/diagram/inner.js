@@ -58,7 +58,7 @@ define([
                 return;
             }
 
-            drawioFrame.contentWindow.postMessage(JSON.stringify(msg), '*');
+            drawioFrame.contentWindow.postMessage(JSON.stringify(msg), ApiConfig.httpSafeOrigin || window.location.origin);
         };
 
         var onDrawioInit = function() {

@@ -10,8 +10,10 @@ define([
     '/common/hyperscript.js',
     '/common/common-interface.js',
     '/common/common-ui-elements.js',
-    '/customize/messages.js'
-], function($, Sortify, Util, Hash, h, UI, UIElements, Messages) {
+    '/customize/messages.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js'
+], function($, Sortify, Util, Hash, h, UI, UIElements, Messages, DOMPurify, Security) {
     var Comments = {};
 
     /*
@@ -256,7 +258,8 @@ define([
         // Edit? start with the old content
         // Add a space to make sure we won't end with a mention and a bad cursor
         if (editContent) {
-            textarea.innerHTML = editContent + " ";
+            // Security: Sanitize content before setting innerHTML to prevent XSS
+            textarea.innerHTML = DOMPurify.sanitize(editContent + " ", Security.DOMPurifyConfig.commentsEdit);
             deleteButton = h('button.btn.btn-danger', {
                 tabindex: 1
             }, [
@@ -395,7 +398,8 @@ define([
 
                 // Build sanitized html with mentions
                 var m = h('div.cp-comment-content');
-                m.innerHTML = msg.m;
+                // Security: Sanitize comment content before setting innerHTML to prevent XSS
+                m.innerHTML = DOMPurify.sanitize(msg.m, Security.DOMPurifyConfig.comments);
                 var $m = $(m);
                 $m.find('> *:not(span.cp-mentions)').remove();
                 $m.find('span.cp-mentions').each(function(i, el) {

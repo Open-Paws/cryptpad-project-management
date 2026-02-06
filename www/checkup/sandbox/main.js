@@ -15,7 +15,8 @@ define([
     // Expected parent origin (main CryptPad domain)
     var expectedOrigin = ApiConfig.httpUnsafeOrigin;
     var postMessage = function (content) {
-        window.parent.postMessage(JSON.stringify(content), '*');
+        // Security: Only post messages to the expected parent origin, not '*'
+        window.parent.postMessage(JSON.stringify(content), expectedOrigin);
     };
     postMessage({ command: "READY", });
     var getHeaders = function (url, cb) {

@@ -119,13 +119,14 @@ var write = function (content, dest) {
     var path = Path.join(tmpPath, dest);
     var dirPath = Path.dirname(path);
     Fse.mkdirpSync(dirPath);
-    // Set secure permissions on tmp directory (owner only: rwx------)
+    // Security: Set secure permissions on tmp directory (owner only: rwx------)
     try {
         Fs.chmodSync(tmpPath, 0o700);
     } catch (err) {
         console.warn('Could not set secure permissions on tmp directory:', err.message);
     }
-    Fs.writeFileSync(path, content);
+    // Security: Write files with restricted permissions (owner read/write only)
+    Fs.writeFileSync(path, content, { mode: 0o600 });
     console.log();
 };
 

@@ -11,13 +11,16 @@ define([
     'jquery',
     '/api/config',
     '/common/extensions.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
     'optional!/api/instance',
 ], function (h, Language, Util, AppConfig, Msg, $, ApiConfig,
-            Extensions, Instance) {
+            Extensions, DOMPurify, Security, Instance) {
     var Pages = {};
 
     Pages.setHTML = function (e, html) {
-        e.innerHTML = html;
+        if (!e) { return e; }
+        e.innerHTML = DOMPurify.sanitize(html || '', Security.DOMPurifyConfig.ui);
         return e;
     };
 

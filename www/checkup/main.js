@@ -618,7 +618,8 @@ define([
             var txid = Util.uid();
             content.txid = txid;
             response.expect(txid, cb, 15000);
-            sandboxIframe.contentWindow.postMessage(JSON.stringify(content), '*');
+            // Security: Only post messages to the expected sandbox origin, not '*'
+            sandboxIframe.contentWindow.postMessage(JSON.stringify(content), trimmedSafe);
         } catch (err) {
             console.error(err);
         }

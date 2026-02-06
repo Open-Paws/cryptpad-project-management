@@ -216,15 +216,17 @@ define([
                 // sframe-boot.js. Then we can start the channel.
                 var msgEv = _Util.mkEvent();
                 var iframe = $('#sbox-iframe')[0].contentWindow;
+                var targetOrigin = ApiConfig.httpSafeOrigin || window.location.origin;
                 var postMsg = function (data) {
                     try {
-                        iframe.postMessage(data, ApiConfig.httpSafeOrigin || window.location.origin);
+                        iframe.postMessage(data, targetOrigin);
                     } catch (err) {
                         console.error(err, data);
                         if (data && data.error && data.error instanceof Error) {
                             data.error = _Util.serializeError(data.error);
                             try {
-                                iframe.postMessage(data, '*');
+                                // Security: Use the validated target origin, not '*'
+                                iframe.postMessage(data, targetOrigin);
                             } catch (err2) {
                                 console.error("impossible serialization");
                                 throw err2;
