@@ -79,7 +79,7 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.0",
-    "eslint": "^9.16.0",
+    "eslint": "^10.0.0",
     "eslint-plugin-compat": "^6.0.1",
     "less": "^4.4.2",
     "rollup": "^4.24.0",
