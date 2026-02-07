@@ -86,7 +86,7 @@
     "stylelint": "^16.9.0",
     "stylelint-config-standard-less": "^3.0.1",
     "tslib": "^2.7.0",
-    "typescript": "^5.6.2"
+    "typescript": "^5.9.3"
   },
   "overrides": {
     "minimist": "~1.2.3",
