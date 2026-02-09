@@ -224,9 +224,16 @@ const factory = (NaclUtil) => {
         });
     };
 
+    var DANGEROUS_KEYS = ['__proto__', 'constructor', 'prototype'];
+
+    var isDangerousKey = function (key) {
+        return DANGEROUS_KEYS.indexOf(key) !== -1;
+    };
+
     Util.find = function (map, path) {
         var l = path.length;
         for (var i = 0; i < l; i++) {
+            if (isDangerousKey(path[i])) { return; }
             if (typeof(map[path[i]]) === 'undefined') { return; }
             map = map[path[i]];
         }
@@ -246,10 +253,12 @@ const factory = (NaclUtil) => {
         return Util.guid(map);
     };
 
+    // Escape HTML special characters to prevent XSS.
     Util.fixHTML = function (str) {
         if (!str) { return ''; }
+        if (typeof str !== 'string') { return ''; }
         return str.replace(/[<>&"']/g, function (x) {
-            return ({ "<": "&lt;", ">": "&gt", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
+            return ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&#34;", "'": "&#39;" })[x];
         });
     };
 
@@ -637,6 +646,8 @@ const factory = (NaclUtil) => {
             return void console.log("Extend doesn't accept circular objects");
         }
         for (var k in b) {
+            if (!Object.prototype.hasOwnProperty.call(b, k)) { continue; }
+            if (isDangerousKey(k)) { continue; }
             if (Util.isObject(b[k])) {
                 a[k] = Util.isObject(a[k]) ? a[k] : {};
                 Util.extend(a[k], b[k]);
@@ -681,10 +692,12 @@ const factory = (NaclUtil) => {
         return window.innerHeight < 800 || window.innerWidth < 800;
     };
 
+    // Strip HTML tags safely using DOMParser.
+    // Avoids data loss with non-HTML angle brackets (e.g., "Impact < 10").
     Util.stripTags = function (text) {
-        var div = document.createElement("div");
-        div.innerHTML = text;
-        return div.innerText;
+        if (!text || typeof text !== 'string') { return ''; }
+        var doc = new DOMParser().parseFromString(text, 'text/html');
+        return doc.body.textContent || '';
     };
 
     // return an object containing {name, ext}

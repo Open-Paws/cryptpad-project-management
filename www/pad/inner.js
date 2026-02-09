@@ -959,7 +959,10 @@ define([
                         $iframe.on('scroll', onScroll);
                     });
                 });
-                a.innerHTML = title;
+                // Security: Use DOMParser to safely strip HTML tags from heading text.
+                // The regex /<[^>]*>/g is incomplete (data loss with angle brackets in text).
+                var titleDoc = new DOMParser().parseFromString(title, 'text/html');
+                a.textContent = titleDoc.body.textContent || '';
                 content.push(h('p.cp-pad-toc-'+level, a));
             });
             $toc.html('').append(content);

@@ -17,6 +17,10 @@ define([
         console.warn('INIT');
         var p = window.parent;
         var txid = getTxid();
+        // Initial READY uses '*' because we don't know the parent origin yet.
+        // TOCTOU note: the first received message sets parentOrigin. An attacker
+        // would need to be window.parent (ev.source check at line 35 mitigates).
+        var parentOrigin = null;
         p.postMessage({ q: 'INTEGRATION_READY', txid: txid }, '*');
 
         var makeChan = function () {
@@ -24,10 +28,15 @@ define([
             var commands = {};
 
             var _sendCb = function (txid, args) {
-                p.postMessage({ ack: txid, args: args}, '*');
+                var targetOrigin = parentOrigin || '*';
+                p.postMessage({ ack: txid, args: args}, targetOrigin);
             };
             var onMsg = function (ev) {
                 if (ev.source !== p) { return; }
+                if (!parentOrigin) {
+                    parentOrigin = ev.origin;
+                }
+                if (ev.origin !== parentOrigin) { return; }
                 var data = ev.data;
 
                 // On ack
@@ -56,10 +65,11 @@ define([
             var send = function (q, data, cb) {
                 var txid = getTxid();
                 if (cb) { handlers[txid] = cb; }
+                var targetOrigin = parentOrigin || '*';
                 p.postMessage({ msg: {
                     q: q,
                     data: data,
-                }, txid: txid}, '*');
+                }, txid: txid}, targetOrigin);
                 setTimeout(function () {
                     delete handlers[txid];
                 }, 60000);
