@@ -23,6 +23,7 @@ jobs:
             set -e
             cd /opt/cryptpad
             echo "[$(date)] Starting deployment from GitHub Actions..."
+            git config --global --add safe.directory /opt/cryptpad
             git pull origin main
             docker compose build
             docker compose up -d
