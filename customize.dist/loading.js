@@ -13,21 +13,29 @@ define([
     var elem = document.createElement('div');
     elem.setAttribute('id', 'cp-loading');
 
-    elem.innerHTML = [
-        '<div class="cp-loading-logo">',
-            '<img class="cp-loading-cryptofist" src="/api/logo?' + urlArgs + '" alt="" aria-hidden="true">',
+    var logo = document.createElement('div');
+    logo.className = 'cp-loading-logo';
+    var img = document.createElement('img');
+    img.className = 'cp-loading-cryptofist';
+    img.setAttribute('src', '/api/logo?' + encodeURI(urlArgs));
+    img.setAttribute('alt', '');
+    img.setAttribute('aria-hidden', 'true');
+    logo.appendChild(img);
+    elem.appendChild(logo);
+
+    var container = document.createElement('div');
+    container.className = 'cp-loading-container';
+    container.innerHTML = [
+        '<div class="cp-loading-spinner-container">',
+            '<span class="cp-spinner"></span>',
         '</div>',
-        '<div class="cp-loading-container">',
-            '<div class="cp-loading-spinner-container">',
-                '<span class="cp-spinner"></span>',
-            '</div>',
-            '<div class="cp-loading-progress" aria-hidden="true" role="presentation">',
-                '<div class="cp-loading-progress-list"></div>',
-                '<div class="cp-loading-progress-container"></div>',
-            '</div>',
-            '<p id="cp-loading-message"></p>',
-        '</div>'
+        '<div class="cp-loading-progress" aria-hidden="true" role="presentation">',
+            '<div class="cp-loading-progress-list"></div>',
+            '<div class="cp-loading-progress-container"></div>',
+        '</div>',
+        '<p id="cp-loading-message"></p>',
     ].join('');
+    elem.appendChild(container);
     var built = false;
 
     var types = ['less', 'drive', 'migrate', 'sf', 'team', 'pad', 'end']; // Msg.loading_state_0, loading_state_1, loading_state_2, loading_state_3, loading_state_4, loading_state_5
