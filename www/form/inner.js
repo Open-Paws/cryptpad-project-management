@@ -918,7 +918,7 @@ define([
             if (totalMax.value) {
                 $total.find('[data-id]').removeClass('cp-poll-best');
                 totalMax.data.forEach(function (k) {
-                    $total.find('[data-id="'+ (k.replace(/"/g, '\\"')) + '"]').addClass('cp-poll-best');
+                    $total.find('[data-id]').filter(function() { return $(this).attr('data-id') === k; }).addClass('cp-poll-best');
                 });
             }
         };
