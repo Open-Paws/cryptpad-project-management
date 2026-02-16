@@ -3353,6 +3353,8 @@ define([
 
             // Function to update filter/sort visibility based on current view
             var updateFilterVisibilityForView = function (viewMode) {
+                // Restore filter toggle button (dashboard hides it)
+                $filterToggleBtn.show();
                 // Show all filter rows by default
                 $assigneeFilterDiv.show();
                 $statusFilterDiv.show();
@@ -3378,13 +3380,10 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
-
-                    // Show filter panel for tasks view
-                    $filterPanelContent.show();
                 } else if (viewMode === 'dashboard') {
                     // ========== DASHBOARD VIEW ==========
-                    // Dashboard has its own analytics display, hide the filter panel
-                    $filterPanelContent.hide();
+                    // Dashboard has its own analytics — hide the filter button entirely
+                    $filterToggleBtn.hide();
                 } else {
                     // ========== PIPELINE / TIMELINE VIEW ==========
                     // Show project sort options, hide task sort options
@@ -3396,10 +3395,10 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
-
-                    // Show filter panel for board/timeline views
-                    $filterPanelContent.show();
                 }
+                // NOTE: The filter panel's expanded/collapsed state is never
+                // changed here — that is controlled solely by the user's toggle
+                // button click, so switching tabs preserves their preference.
             };
 
             // Visibility filter event handlers
