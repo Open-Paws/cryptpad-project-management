@@ -58,3 +58,12 @@ Fse.rmSync(oldComponentsPath, { recursive: true, force: true });
     Fs.rmSync(destination, { recursive: true, force: true });
     Fs.cpSync(source, destination, { recursive: true });
 });
+
+// marked v17 UMD uses a named AMD define ("marked") which breaks RequireJS
+// path-based loading. Patch it to use anonymous define so it works like v4 did.
+var markedUmd = Path.join(componentsPath, "marked", "lib", "marked.umd.js");
+if (Fs.existsSync(markedUmd)) {
+    var content = Fs.readFileSync(markedUmd, 'utf8');
+    content = content.replace('define("marked",f)', 'define(f)');
+    Fs.writeFileSync(markedUmd, content, 'utf8');
+}
