@@ -45,8 +45,8 @@
         var frame = {};
         frame.id = uid();
 
-        var listeners = Object.create(null);
-        var timeouts = Object.create(null);
+        var listeners = new Map();
+        var timeouts = new Map();
 
         timeout = timeout || 5000;
 
@@ -96,14 +96,14 @@
                 return;
             }
 
-            if (Object.prototype.hasOwnProperty.call(timeouts, uid)) {
-                window.clearTimeout(timeouts[uid]);
-                delete timeouts[uid];
+            if (timeouts.has(uid)) {
+                window.clearTimeout(timeouts.get(uid));
+                timeouts.delete(uid);
             }
-            var listener = Object.prototype.hasOwnProperty.call(listeners, uid) && listeners[uid];
+            var listener = listeners.get(uid);
             if (typeof(listener) === 'function') {
                 listener(error, data, e);
-                delete listeners[uid];
+                listeners.delete(uid);
             }
         };
         window.addEventListener('message', _listener);
@@ -131,12 +131,12 @@
 
             if (typeof(cb) === 'function') {
                 //console.log("setting callback!");
-                listeners[id] = cb;
+                listeners.set(id, cb);
                 //console.log("setting timeout of %sms", timeout);
-                timeouts[id] = window.setTimeout(function () {
+                timeouts.set(id, window.setTimeout(function () {
                     // when the callback is executed it will clear this timeout
                     cb('[TimeoutError] request timed out after ' + timeout + 'ms');
-                }, timeout);
+                }, timeout));
             } else {
                 console.log(typeof(cb));
             }
