@@ -58,3 +58,16 @@ Fse.rmSync(oldComponentsPath, { recursive: true, force: true });
     Fs.rmSync(destination, { recursive: true, force: true });
     Fs.cpSync(source, destination, { recursive: true });
 });
+
+// marked UMD uses a named AMD define ("marked") which breaks RequireJS
+// path-based loading. Patch it to anonymous define to preserve legacy loading.
+var markedUmd = Path.join(componentsPath, "marked", "lib", "marked.umd.js");
+if (Fs.existsSync(markedUmd)) {
+    var content = Fs.readFileSync(markedUmd, 'utf8');
+    var amdNamedDefinePattern = /define\((['"])marked\1,\s*([A-Za-z_$][\w$]*)\)/;
+    var patched = content.replace(amdNamedDefinePattern, 'define($2)');
+    if (patched === content) {
+        throw new Error("Unable to patch marked UMD AMD define signature");
+    }
+    Fs.writeFileSync(markedUmd, patched, 'utf8');
+}

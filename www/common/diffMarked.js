@@ -5,7 +5,7 @@
 define([
     'jquery',
     '/api/config',
-    '/components/marked/marked.min.js',
+    '/components/marked/lib/marked.umd.js',
     '/common/common-hash.js',
     '/common/common-util.js',
     '/common/hyperscript.js',
@@ -21,13 +21,14 @@ define([
     '/lib/diff-dom/diffDOM.js',
     '/components/tweetnacl/nacl-fast.min.js',
     'css!/lib/highlight/styles/'+ (window.CryptPad_theme === 'dark' ? 'dark.css' : 'github.css')
-],function ($, ApiConfig, Marked, Hash, Util, h, MT, MediaTag, Messages, Less, Pages, DOMPurify, Security) {
+],function ($, ApiConfig, MarkedLib, Hash, Util, h, MT, MediaTag, Messages, Less, Pages, DOMPurify, Security) {
     var DiffMd = {};
 
     var Highlight = window.hljs;
     var DiffDOM = window.diffDOM;
-    var renderer = new Marked.Renderer();
-    var restrictedRenderer = new Marked.Renderer();
+    var MarkedClass = MarkedLib.Marked;
+    var normalMarked = new MarkedClass({gfm: true});
+    var restrictedMarked = new MarkedClass({gfm: true});
 
     var pluginLoaded = Util.mkEvent();
     DiffMd.onPluginLoaded = pluginLoaded.reg;
@@ -163,24 +164,16 @@ define([
         fixMarkmapClickables($el);
     };
 
-    var highlighter = function () {
-        return function(code, lang) {
-            if (lang) {
-                try {
-                    return Highlight.highlight(lang, code).value;
-                } catch (e) {
-                    return code;
-                }
+    var highlightCode = function (code, lang) {
+        if (lang && Highlight) {
+            try {
+                return Highlight.highlight(lang, code).value;
+            } catch (e) {
+                return Util.fixHTML(code);
             }
-            return code;
-        };
+        }
+        return Util.fixHTML(code);
     };
-
-    Marked.setOptions({
-        //sanitize: true, // Disable HTML
-        renderer: renderer,
-        highlight: highlighter(),
-    });
 
     var toc = [];
     var getTOC = function () {
@@ -202,16 +195,11 @@ define([
     };
 
     var noHeadingId = false;
+    var sanitizeFlagWarningShown = false;
     DiffMd.render = function (md, sanitize, restrictedMd, noId) {
-        Marked.setOptions({
-            renderer: restrictedMd ? restrictedRenderer : renderer,
-        });
         noHeadingId = noId;
-        var r = Marked.parse(md, {
-            sanitize: sanitize,
-            headerIds: !noId,
-            gfm: true,
-        });
+        var parser = restrictedMd ? restrictedMarked : normalMarked;
+        var r = parser.parse(md);
 
         // Add Table of Content
         if (!restrictedMd) {
@@ -219,6 +207,10 @@ define([
         }
         toc = [];
 
+        if (sanitize === false && !sanitizeFlagWarningShown) {
+            sanitizeFlagWarningShown = true;
+            console.warn('DiffMd.render sanitize=false is deprecated and ignored; output is always sanitized.');
+        }
         r = DOMPurify.sanitize(r, Security.DOMPurifyConfig.markdown);
 
         return r;
@@ -226,26 +218,24 @@ define([
 
     var mediaMap = {};
 
-    var defaultCode = renderer.code;
-
-    renderer.code = function (code, language) {
-        if (!code || typeof(code) !== 'string' || !code.trim()) { return defaultCode.apply(renderer, arguments); }
-        if (language === 'mermaid' && code.match(/^(flowchart|graph|pie|gantt|sequenceDiagram|classDiagram|gitGraph|stateDiagram|erDiagram|journey|requirementDiagram|GitGraph|mindmap|timeline|zenuml|quadrantChart|C4Context)/)) {
-            return '<pre class="mermaid" data-plugin="mermaid">'+Util.fixHTML(code)+'</pre>';
-        } else if (language === 'markmap') {
-            return '<pre class="markmap" data-plugin="markmap">'+Util.fixHTML(code)+'</pre>';
-        } else if (language === 'mathjax') {
-            return '<pre class="mathjax" data-plugin="mathjax">'+Util.fixHTML(code)+'</pre>';
-        } else {
-            return defaultCode.apply(renderer, arguments);
+    var codeRenderer = function ({text, lang}) {
+        if (!text || typeof(text) !== 'string' || !text.trim()) { return false; }
+        if (lang === 'mermaid' && text.match(/^(flowchart|graph|pie|gantt|sequenceDiagram|classDiagram|gitGraph|stateDiagram|erDiagram|journey|requirementDiagram|GitGraph|mindmap|timeline|zenuml|quadrantChart|C4Context)/)) {
+            return '<pre class="mermaid" data-plugin="mermaid">'+Util.fixHTML(text)+'</pre>';
+        } else if (lang === 'markmap') {
+            return '<pre class="markmap" data-plugin="markmap">'+Util.fixHTML(text)+'</pre>';
+        } else if (lang === 'mathjax') {
+            return '<pre class="mathjax" data-plugin="mathjax">'+Util.fixHTML(text)+'</pre>';
         }
+        var highlighted = highlightCode(text, lang);
+        var langClass = lang ? ' class="language-' + Util.fixHTML(lang) + '"' : '';
+        return '<pre><code' + langClass + '>' + highlighted + '\n</code></pre>\n';
     };
-    restrictedRenderer.code = renderer.code;
 
-    var _heading = renderer.heading;
-    renderer.heading = function (text, level) {
+    var normalHeading = function ({tokens, depth}) {
+        var text = this.parser.parseInline(tokens);
         if (noHeadingId) {
-            return _heading.apply(this, arguments);
+            return '<h' + depth + '>' + text + '</h' + depth + '>\n';
         }
         var i = 0;
         var safeText = text.toLowerCase().replace(/[^\w]+/g, '-');
@@ -259,49 +249,35 @@ define([
             id = getId();
         }
         toc.push({
-            level: level,
+            level: depth,
             id: id,
             title: Util.stripTags(text)
         });
-        return "<h" + level + " id=\"" + id + "\"><a href=\"#" + id + "\" class=\"anchor\"></a>" + text + "</h" + level + ">";
+        return "<h" + depth + " id=\"" + id + "\"><a href=\"#" + id + "\" class=\"anchor\"></a>" + text + "</h" + depth + ">";
     };
-    restrictedRenderer.heading = function (text) {
-        return text;
+    var restrictedHeading = function ({tokens}) {
+        return this.parser.parseInline(tokens);
     };
 
     // Tasks list
-    var checkedTaskItemPtn = /^\s*(<p>)?\[[xX]\](<\/p>)?\s*/;
-    var uncheckedTaskItemPtn = /^\s*(<p>)?\[ ?\](<\/p>)?\s*/;
-    var bogusCheckPtn = /<input checked="" disabled="" type="checkbox">/;
-    var bogusUncheckPtn = /<input disabled="" type="checkbox">/;
-    renderer.listitem = function (text) {
-        var isCheckedTaskItem = checkedTaskItemPtn.test(text);
-        var isUncheckedTaskItem = uncheckedTaskItemPtn.test(text);
-        var hasBogusCheckedInput = bogusCheckPtn.test(text);
-        var hasBogusUncheckedInput = bogusUncheckPtn.test(text);
-        var isCheckbox = true;
-        if (isCheckedTaskItem) {
-            text = text.replace(checkedTaskItemPtn,
-                '<i class="fa fa-check-square" aria-hidden="true"></i>') + '\n';
-        } else if (isUncheckedTaskItem) {
-            text = text.replace(uncheckedTaskItemPtn,
-                '<i class="fa fa-square-o" aria-hidden="true"></i>') + '\n';
-        } else if (hasBogusCheckedInput) {
-            text = text.replace(bogusCheckPtn,
-                '<i class="fa fa-check-square" aria-hidden="true"></i>') + '\n';
-        } else if (hasBogusUncheckedInput) {
-            text = text.replace(bogusUncheckPtn,
-                '<i class="fa fa-square-o" aria-hidden="true"></i>') + '\n';
-        } else {
-            isCheckbox = false;
+    var normalListitem = function (token) {
+        var text = this.parser.parse(token.tokens);
+        if (token.task) {
+            var icon = token.checked
+                ? '<i class="fa fa-check-square" aria-hidden="true"></i>'
+                : '<i class="fa fa-square-o" aria-hidden="true"></i>';
+            // Remove the default checkbox input that marked generates
+            text = text.replace(/<input checked="" disabled="" type="checkbox">/, '')
+                       .replace(/<input disabled="" type="checkbox">/, '');
+            return '<li class="todo-list-item">' + icon + ' ' + text + '</li>\n';
         }
-        var cls = (isCheckbox) ? ' class="todo-list-item"' : '';
-        return '<li'+ cls + '>' + text + '</li>\n';
+        return '<li>' + text + '</li>\n';
     };
-    restrictedRenderer.listitem = function (text) {
-        if (bogusCheckPtn.test(text)) {
-            text = text.replace(bogusCheckPtn, '');
-        }
+    var restrictedListitem = function (token) {
+        var text = this.parser.parse(token.tokens);
+        // Strip any checkbox inputs
+        text = text.replace(/<input checked="" disabled="" type="checkbox">/, '')
+                   .replace(/<input disabled="" type="checkbox">/, '');
         return '<li>' + text + '</li>\n';
     };
 
@@ -332,7 +308,7 @@ define([
         }
     };
 
-    renderer.image = function (href, title, text) {
+    var imageRenderer = function ({href, title, text}) {
         if (isLocalURL(href) && href.slice(0, 6) !== '/file/') {
             return h('img', {
                 src: href,
@@ -382,20 +358,41 @@ define([
 
         return warning.outerHTML;
     };
-    restrictedRenderer.image = renderer.image;
 
     var renderParagraph = function (p) {
         return /<media\-tag[\s\S]*>/i.test(p)? p + '\n': '<p>' + p + '</p>\n';
     };
-    renderer.paragraph = function (p) {
-        if (p === '[TOC]') {
+    var normalParagraph = function ({tokens, text}) {
+        if (text === '[TOC]') {
             return '<p><div class="cp-md-toc"></div></p>';
         }
+        var p = this.parser.parseInline(tokens);
         return renderParagraph(p);
     };
-    restrictedRenderer.paragraph = function (p) {
+    var restrictedParagraph = function ({tokens}) {
+        var p = this.parser.parseInline(tokens);
         return renderParagraph(p);
     };
+
+    // Wire up renderer overrides to each Marked instance
+    normalMarked.use({
+        renderer: {
+            code: codeRenderer,
+            heading: normalHeading,
+            listitem: normalListitem,
+            image: imageRenderer,
+            paragraph: normalParagraph,
+        }
+    });
+    restrictedMarked.use({
+        renderer: {
+            code: codeRenderer,
+            heading: restrictedHeading,
+            listitem: restrictedListitem,
+            image: imageRenderer,
+            paragraph: restrictedParagraph,
+        }
+    });
 
     // Note: iframe, video and audio are used in mediatags and are allowed in rich text pads.
     var forbiddenTags = [

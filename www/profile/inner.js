@@ -21,7 +21,9 @@ define([
     '/common/hyperscript.js',
     '/customize/messages.js',
     '/customize/application_config.js',
-    '/components/marked/marked.min.js',
+    '/components/marked/lib/marked.umd.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
 
     'css!/components/bootstrap/dist/css/bootstrap.min.css',
     'css!/components/components-font-awesome/css/font-awesome.min.css',
@@ -45,7 +47,9 @@ define([
     h,
     Messages,
     AppConfig,
-    Marked)
+    MarkedLib,
+    DOMPurify,
+    Security)
 {
     var APP = window.APP = {
         _onRefresh: []
@@ -56,40 +60,23 @@ define([
     });
 
     // Marked
-    var renderer = new Marked.Renderer();
-    Marked.setOptions({
-        renderer: renderer,
-        sanitize: true
-    });
-    // Tasks list
-    var checkedTaskItemPtn = /^\s*(<p>)?\[[xX]\](<\/p>)?\s*/;
-    var uncheckedTaskItemPtn = /^\s*(<p>)?\[ ?\](<\/p>)?\s*/;
-    var bogusCheckPtn = /<input checked="" disabled="" type="checkbox">/;
-    var bogusUncheckPtn = /<input disabled="" type="checkbox">/;
-    renderer.listitem = function (text) {
-        var isCheckedTaskItem = checkedTaskItemPtn.test(text);
-        var isUncheckedTaskItem = uncheckedTaskItemPtn.test(text);
-        var hasBogusCheckedInput = bogusCheckPtn.test(text);
-        var hasBogusUncheckedInput = bogusUncheckPtn.test(text);
-        var isCheckbox = true;
-        if (isCheckedTaskItem) {
-            text = text.replace(checkedTaskItemPtn,
-                '<i class="fa fa-check-square" aria-hidden="true"></i>') + '\n';
-        } else if (isUncheckedTaskItem) {
-            text = text.replace(uncheckedTaskItemPtn,
-                '<i class="fa fa-square-o" aria-hidden="true"></i>') + '\n';
-        } else if (hasBogusCheckedInput) {
-            text = text.replace(bogusCheckPtn,
-                '<i class="fa fa-check-square" aria-hidden="true"></i>') + '\n';
-        } else if (hasBogusUncheckedInput) {
-            text = text.replace(bogusUncheckPtn,
-                '<i class="fa fa-square-o" aria-hidden="true"></i>') + '\n';
-        } else {
-            isCheckbox = false;
+    var Marked = new MarkedLib.Marked({gfm: true});
+    Marked.use({
+        renderer: {
+            listitem: function (token) {
+                var text = this.parser.parse(token.tokens);
+                if (token.task) {
+                    var icon = token.checked
+                        ? '<i class="fa fa-check-square" aria-hidden="true"></i>'
+                        : '<i class="fa fa-square-o" aria-hidden="true"></i>';
+                    text = text.replace(/<input checked="" disabled="" type="checkbox">/, '')
+                               .replace(/<input disabled="" type="checkbox">/, '');
+                    return '<li class="todo-list-item">' + icon + ' ' + text + '</li>\n';
+                }
+                return '<li>' + text + '</li>\n';
+            }
         }
-        var cls = (isCheckbox) ? ' class="todo-list-item"' : '';
-        return '<li'+ cls + '>' + text + '</li>\n';
-    };
+    });
 
     var DISPLAYNAME_ID = "cp-app-profile-displayname";
     var LINK_ID = "cp-app-profile-link";
@@ -399,6 +386,7 @@ define([
     var refreshDescription = function (data) {
         var descriptionData = data.description || "";
         var val = Marked.parse(descriptionData);
+        val = DOMPurify.sanitize(val, Security.DOMPurifyConfig.markdown);
         APP.$description.html(val);
         APP.$description.off('click');
         APP.$description.click(function (e) {
