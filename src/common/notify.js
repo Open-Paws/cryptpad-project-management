@@ -25,6 +25,19 @@ const factory = (ApiConfig = {}) => {
     var DEFAULT_ALT_ICO = '/customize/favicon/alt-favicon' + suffix + '.ico?' + ApiConfig.requireConf.urlArgs;
 
     var document = window.document;
+    var sanitizeFaviconUrl = function (candidate, fallback) {
+        if (typeof(candidate) !== 'string') { return fallback; }
+        var trimmed = candidate.trim();
+        if (!trimmed) { return fallback; }
+        try {
+            var parsed = new URL(trimmed, window.location.origin);
+            var allowedProtocol = parsed.protocol === 'http:' || parsed.protocol === 'https:';
+            if (!allowedProtocol) { return fallback; }
+            return parsed.href;
+        } catch (err) {
+            return fallback;
+        }
+    };
 
     var isSupported = Module.isSupported = function () {
         return typeof(window.Notification) === 'function' && window.isSecureContext;
@@ -47,7 +60,8 @@ const factory = (ApiConfig = {}) => {
     var create = Module.create = function (msg, title, icon) {
         if (document && !icon) {
             var favicon = document.getElementById('favicon');
-            icon = favicon.getAttribute('data-main-favicon') || DEFAULT_ALT;
+            icon = favicon && favicon.getAttribute('data-main-favicon');
+            icon = sanitizeFaviconUrl(icon, DEFAULT_ALT);
         } else if (!icon) {
             icon = DEFAULT_ALT;
         }
@@ -137,13 +151,13 @@ const factory = (ApiConfig = {}) => {
         var altIco = DEFAULT_ALT_ICO;
 
         if (favicon) {
-            main = favicon.getAttribute('data-main-favicon') || DEFAULT_MAIN;
-            alt = favicon.getAttribute('data-alt-favicon') || DEFAULT_ALT;
+            main = sanitizeFaviconUrl(favicon.getAttribute('data-main-favicon'), DEFAULT_MAIN);
+            alt = sanitizeFaviconUrl(favicon.getAttribute('data-alt-favicon'), DEFAULT_ALT);
             favicon.setAttribute('href', main);
         }
         if (faviconIco) {
-            mainIco = faviconIco.getAttribute('data-main-favicon') || DEFAULT_MAIN_ICO;
-            altIco = faviconIco.getAttribute('data-alt-favicon') || DEFAULT_ALT_ICO;
+            mainIco = sanitizeFaviconUrl(faviconIco.getAttribute('data-main-favicon'), DEFAULT_MAIN_ICO);
+            altIco = sanitizeFaviconUrl(faviconIco.getAttribute('data-alt-favicon'), DEFAULT_ALT_ICO);
             faviconIco.setAttribute('href', mainIco);
         }
 
