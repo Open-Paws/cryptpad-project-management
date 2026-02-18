@@ -45,8 +45,8 @@
         var frame = {};
         frame.id = uid();
 
-        var listeners = {};
-        var timeouts = {};
+        var listeners = Object.create(null);
+        var timeouts = Object.create(null);
 
         timeout = timeout || 5000;
 
@@ -73,15 +73,21 @@
                 console.log("message from %s rejected!", e.origin);
                 return;
             }
-            var message = JSON.parse(e.data);
+            var message;
+            try {
+                message = JSON.parse(e.data);
+            } catch (err) {
+                return;
+            }
             var uid = message._uid;
             var error = message.error;
             var data = message.data;
 
-            if (!uid) {
+            if (!uid || (typeof(uid) !== 'string' && typeof(uid) !== 'number')) {
                 console.log("No uid!");
                 return;
             }
+            uid = String(uid);
 
             if (uid === 'change' && changeHandlers.length) {
                 changeHandlers.forEach(function (f) {
@@ -90,11 +96,13 @@
                 return;
             }
 
-            if (timeouts[uid]) {
+            if (Object.prototype.hasOwnProperty.call(timeouts, uid)) {
                 window.clearTimeout(timeouts[uid]);
+                delete timeouts[uid];
             }
-            if (listeners[uid]) {
-                listeners[uid](error, data, e);
+            var listener = Object.prototype.hasOwnProperty.call(listeners, uid) && listeners[uid];
+            if (typeof(listener) === 'function') {
+                listener(error, data, e);
                 delete listeners[uid];
             }
         };
