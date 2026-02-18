@@ -22,6 +22,8 @@ define([
     '/customize/messages.js',
     '/customize/application_config.js',
     '/components/marked/lib/marked.umd.js',
+    '/lib/dompurify/purify.min.js',
+    '/common/security-utils.js',
 
     'css!/components/bootstrap/dist/css/bootstrap.min.css',
     'css!/components/components-font-awesome/css/font-awesome.min.css',
@@ -45,7 +47,9 @@ define([
     h,
     Messages,
     AppConfig,
-    MarkedLib)
+    MarkedLib,
+    DOMPurify,
+    Security)
 {
     var APP = window.APP = {
         _onRefresh: []
@@ -382,6 +386,7 @@ define([
     var refreshDescription = function (data) {
         var descriptionData = data.description || "";
         var val = Marked.parse(descriptionData);
+        val = DOMPurify.sanitize(val, Security.DOMPurifyConfig.markdown);
         APP.$description.html(val);
         APP.$description.off('click');
         APP.$description.click(function (e) {
