@@ -79,13 +79,6 @@ define([
         { key: 'build_feasibility_score', label: 'Build Feasibility - Speed and ease of implementation' }
     ];
 
-    // Kanban item/board IDs must be numeric because the codebase uses Number()
-    // casts extensively for lookups. Util.uid() returns base-32 strings which
-    // break under Number() conversion (NaN). This helper produces numeric IDs.
-    var numericUid = function () {
-        return Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-    };
-
     var onRedraw = Util.mkEvent();
     var onCursorUpdate = Util.mkEvent();
     var remoteCursors = {};
@@ -2708,9 +2701,9 @@ define([
                     }
                     onCursorUpdate.fire({});
                     if (!$input.val()) { return; }
-                    var id = numericUid();
+                    var id = Util.uid();
                     while (kanban.getItemJSON(id)) {
-                        id = numericUid();
+                        id = Util.uid();
                     }
                     var metadataMgr = framework._.cpNfInner.metadataMgr;
                     var currentUserName = metadataMgr.getUserData().name || '';
@@ -2791,9 +2784,9 @@ define([
             var boardExists = function (b) { return b.id === "board" + counter; };
             while (kanban.options.boards.some(boardExists)) { counter++; }
             */
-            var id = numericUid();
+            var id = Util.uid();
             while (kanban.getBoardJSON(id)) {
-                id = numericUid();
+                id = Util.uid();
             }
 
             kanban.addBoard({
@@ -3353,8 +3346,6 @@ define([
 
             // Function to update filter/sort visibility based on current view
             var updateFilterVisibilityForView = function (viewMode) {
-                // Restore filter toggle button (dashboard hides it)
-                $filterToggleBtn.show();
                 // Show all filter rows by default
                 $assigneeFilterDiv.show();
                 $statusFilterDiv.show();
@@ -3380,10 +3371,13 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
+
+                    // Show filter panel for tasks view
+                    $filterPanelContent.show();
                 } else if (viewMode === 'dashboard') {
                     // ========== DASHBOARD VIEW ==========
-                    // Dashboard has its own analytics — hide the filter button entirely
-                    $filterToggleBtn.hide();
+                    // Dashboard has its own analytics display, hide the filter panel
+                    $filterPanelContent.hide();
                 } else {
                     // ========== PIPELINE / TIMELINE VIEW ==========
                     // Show project sort options, hide task sort options
@@ -3395,10 +3389,10 @@ define([
                         $sortSelect.val('');
                         currentFilters.sort = '';
                     }
+
+                    // Show filter panel for board/timeline views
+                    $filterPanelContent.show();
                 }
-                // NOTE: The filter panel's expanded/collapsed state is never
-                // changed here — that is controlled solely by the user's toggle
-                // button click, so switching tabs preserves their preference.
             };
 
             // Visibility filter event handlers
