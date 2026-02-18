@@ -195,6 +195,7 @@ define([
     };
 
     var noHeadingId = false;
+    var sanitizeFlagWarningShown = false;
     DiffMd.render = function (md, sanitize, restrictedMd, noId) {
         noHeadingId = noId;
         var parser = restrictedMd ? restrictedMarked : normalMarked;
@@ -206,6 +207,10 @@ define([
         }
         toc = [];
 
+        if (sanitize === false && !sanitizeFlagWarningShown) {
+            sanitizeFlagWarningShown = true;
+            console.warn('DiffMd.render sanitize=false is deprecated and ignored; output is always sanitized.');
+        }
         r = DOMPurify.sanitize(r, Security.DOMPurifyConfig.markdown);
 
         return r;
