@@ -31,7 +31,7 @@
     "components-font-awesome": "^4.6.3",
     "connect-gzip-static": "^4.2.1",
     "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "croppie": "^2.5.0",
     "dragula": "3.7.3",
     "drawio": "github:cryptpad/drawio-npm#npm-21.8.2+5",
