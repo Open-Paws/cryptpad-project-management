@@ -84,7 +84,7 @@
     "less": "^4.4.2",
     "rollup": "^4.24.0",
     "stylelint": "^16.9.0",
-    "stylelint-config-standard-less": "^3.0.1",
+    "stylelint-config-standard-less": "^4.0.1",
     "tslib": "^2.7.0",
     "typescript": "^5.9.3"
   },
