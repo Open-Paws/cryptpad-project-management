@@ -63,7 +63,7 @@
     "requirejs-plugins": "^1.0.2",
     "saferphore": "0.0.2",
     "scrypt-async": "1.2.0",
-    "sortablejs": "^1.6.0",
+    "sortablejs": "^1.15.7",
     "sortify": "^1.0.4",
     "stream-to-pull-stream": "^1.7.2",
     "thirty-two": "^1.0.2",
