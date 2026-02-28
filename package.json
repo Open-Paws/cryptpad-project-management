@@ -28,7 +28,7 @@
     "chainpad-server": "^5.2.4",
     "ckeditor": "npm:ckeditor4@^4.25.1",
     "codemirror": "^5.19.0",
-    "components-font-awesome": "^4.6.3",
+    "components-font-awesome": "^5.9.0",
     "connect-gzip-static": "^4.2.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
