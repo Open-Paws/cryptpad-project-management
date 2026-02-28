@@ -21,7 +21,7 @@
     "body-parser": "^1.20.2",
     "bootstrap": "^4.0.0",
     "bootstrap-tokenfield": "^0.12.0",
-    "chainpad": "^5.2.6",
+    "chainpad": "^5.3.1",
     "chainpad-crypto": "^0.3.0",
     "chainpad-listmap": "^1.2.0",
     "chainpad-netflux": "^1.3.0",
