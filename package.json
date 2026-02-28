@@ -41,7 +41,7 @@
     "get-folder-size": "^5.0.0",
     "html2canvas": "^1.4.0",
     "http-proxy-middleware": "^3.0.3",
-    "hyper-json": "~1.4.0",
+    "hyper-json": "~1.5.0",
     "jquery": "3.6.0",
     "json.sortify": "github:cryptpad/JSON.sortify",
     "jsonwebtoken": "^9.0.0",
