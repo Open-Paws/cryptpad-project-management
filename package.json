@@ -29,7 +29,7 @@
     "ckeditor": "npm:ckeditor4@^4.25.1",
     "codemirror": "^5.19.0",
     "components-font-awesome": "^4.6.3",
-    "connect-gzip-static": "^4.2.1",
+    "connect-gzip-static": "^5.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "croppie": "^2.5.0",
