@@ -26,5 +26,6 @@ jobs:
             git config --global --add safe.directory /opt/cryptpad
             git pull origin main
             docker compose build
+            docker compose down --remove-orphans || true
             docker compose up -d
             echo "[$(date)] Deployment complete!"
