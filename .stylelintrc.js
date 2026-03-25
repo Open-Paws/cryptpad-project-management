@@ -39,6 +39,15 @@ module.exports = {
     "at-rule-no-unknown": null, // FIXME
 
     "less/no-duplicate-variables": null,
-    "less/color-no-invalid-hex": null
+    "less/color-no-invalid-hex": null,
+
+    // stylelint 17 rules that produce false positives on LESS syntax
+    "at-rule-prelude-no-invalid": null,
+    "nesting-selector-no-missing-scoping-root": null,
+    "declaration-property-value-no-unknown": null,
+    "block-no-redundant-nested-style-rules": null,
+    "color-function-alias-notation": null,
+    "property-no-deprecated": null,
+    "declaration-property-value-keyword-no-deprecated": null
   }
 };
