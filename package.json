@@ -53,7 +53,7 @@
     "notp": "^2.0.3",
     "nthen": "0.1.8",
     "open-sans-fontface": "^1.4.0",
-    "openid-client": "^5.7.1",
+    "openid-client": "^6.8.2",
     "pako": "^2.1.0",
     "pg": "^8.20.0",
     "prompt-confirm": "^2.0.4",
