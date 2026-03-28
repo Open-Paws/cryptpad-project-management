@@ -2445,6 +2445,7 @@ define([
             editModal[type].setValue(board[type]);
         });
         UI.openCustomModal(editModal.modal, { wide: true });
+        if (editModal.updateExportVisibility) { editModal.updateExportVisibility(); }
     };
 
     addMoveElementButton = function (framework, kanban) {
