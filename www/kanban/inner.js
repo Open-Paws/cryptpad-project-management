@@ -1528,8 +1528,11 @@ define([
                     $(btn).addClass('active');
                     dataObject.tier = opt.value || undefined;
                     commit();
-                    // Update inherit hint
-                    if (!isBoardMode) { updateTierInheritHint(); }
+                    // Update inherit hint and export visibility
+                    if (!isBoardMode) {
+                        updateTierInheritHint();
+                        updateExportVisibility();
+                    }
                 });
                 btnGroup.appendChild(btn);
             });
