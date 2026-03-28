@@ -664,8 +664,31 @@ define([
             toggle: toggle
         };
     };
-    var PROPERTIES = ['title', 'body', 'tags', 'color', 'assignee', 'start_date', 'due_date', 'scoring', 'tasks', 'createdBy', 'dependencies', 'completed', 'comments'];
-    var BOARD_PROPERTIES = ['title', 'color'];
+    var PROPERTIES = ['title', 'body', 'tags', 'color', 'assignee', 'start_date', 'due_date', 'scoring', 'tasks', 'createdBy', 'dependencies', 'completed', 'comments', 'tier'];
+    var BOARD_PROPERTIES = ['title', 'color', 'tier'];
+
+    // Valid security tier values
+    var VALID_TIERS = ['T1', 'T2', 'T3'];
+
+    // Resolve effective tier for an item: explicit card tier > column tier > null
+    // Returns { tier: 'T1'|'T2'|'T3'|null, source: 'card'|'column'|'none' }
+    var getEffectiveTier = function (item, boardData) {
+        if (item.tier && VALID_TIERS.indexOf(item.tier) !== -1) {
+            return { tier: item.tier, source: 'card' };
+        }
+        var itemId = String(item.id);
+        var keys = Object.keys(boardData || {});
+        for (var i = 0; i < keys.length; i++) {
+            var board = boardData[keys[i]];
+            if (board && Array.isArray(board.item) && board.item.indexOf(itemId) !== -1) {
+                if (board.tier && VALID_TIERS.indexOf(board.tier) !== -1) {
+                    return { tier: board.tier, source: 'column' };
+                }
+                break;
+            }
+        }
+        return { tier: null, source: 'none' };
+    };
 
     // Task helper function
     var createTask = function (title, assignee, createdBy) {
