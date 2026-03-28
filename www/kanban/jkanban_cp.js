@@ -668,6 +668,41 @@ define([
             nodeItemText.innerText = element.title;
             nodeItemTextContainer.appendChild(nodeItemText);
 
+            // Security tier badge
+            var effectiveTier = null;
+            var tierSource = 'none';
+            var validTiers = ['T1', 'T2', 'T3'];
+            if (element.tier && validTiers.indexOf(element.tier) !== -1) {
+                effectiveTier = element.tier;
+                tierSource = 'card';
+            } else {
+                // Check column tier
+                var boardsData = (self.options.boards || {}).data || {};
+                var itemId = String(element.id);
+                var bKeys = Object.keys(boardsData);
+                for (var bi = 0; bi < bKeys.length; bi++) {
+                    var bd = boardsData[bKeys[bi]];
+                    if (bd && Array.isArray(bd.item) && bd.item.indexOf(itemId) !== -1) {
+                        if (bd.tier && validTiers.indexOf(bd.tier) !== -1) {
+                            effectiveTier = bd.tier;
+                            tierSource = 'column';
+                        }
+                        break;
+                    }
+                }
+            }
+            if (effectiveTier) {
+                var tierBadge = document.createElement('span');
+                tierBadge.className = 'op-tier-badge op-tier-' + effectiveTier.toLowerCase();
+                tierBadge.textContent = effectiveTier;
+                tierBadge.setAttribute('title', effectiveTier + (tierSource === 'column' ? ' (from column)' : ''));
+                nodeItemTextContainer.appendChild(tierBadge);
+                // Add subtle left border for T3 cards
+                if (effectiveTier === 'T3') {
+                    nodeItem.classList.add('op-tier-t3-card');
+                }
+            }
+
             // Check if this card is filtered out
             var hide = false;
 

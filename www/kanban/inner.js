@@ -840,7 +840,7 @@ define([
 
         var markdownEditorWrapper = h('div.cp-markdown-label-row');
 
-        var conflicts, conflictContainer, titleInput, tagsDiv, projectDepsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle, statusIndicator, statusText;
+        var conflicts, conflictContainer, titleInput, tagsDiv, projectDepsDiv, text, assigneeInput, startDateInput, dueDateInput, tasksContainer, completedToggle, statusIndicator, statusText, tierContainer;
         var scoringSliders = {};
 
         // Composite score display with progress bar (always visible)
@@ -954,6 +954,12 @@ define([
                             h('span.cp-kanban-status-dot'),
                             statusText = h('span.cp-kanban-status-text', '')
                         ])
+                    ]),
+
+                    // Security Tier
+                    h('div.cp-kanban-detail-row.cp-kanban-tier-row', [
+                        h('span.cp-kanban-detail-label', 'Security Tier'),
+                        tierContainer = h('div#cp-kanban-edit-tier.cp-kanban-tier-selector')
                     ]),
 
                     // Assignees (cards only)
@@ -1425,6 +1431,74 @@ define([
                 }
                 $completedSection.show();
                 $completedCheckbox.prop('checked', !!val);
+            }
+        };
+
+        // Security Tier selector
+        var $tierContainer = $(tierContainer);
+        var renderTierSelector = function (currentTier, isBoardMode) {
+            $tierContainer.empty();
+            var options = isBoardMode
+                ? [{ value: '', label: 'None' }, { value: 'T1', label: 'T1 \u2014 Public' }, { value: 'T2', label: 'T2 \u2014 Internal' }, { value: 'T3', label: 'T3 \u2014 Encrypted Only' }]
+                : [{ value: '', label: 'Inherit' }, { value: 'T1', label: 'T1 \u2014 Public' }, { value: 'T2', label: 'T2 \u2014 Internal' }, { value: 'T3', label: 'T3 \u2014 Encrypted Only' }];
+
+            var btnGroup = h('div.cp-kanban-tier-btn-group');
+            options.forEach(function (opt) {
+                var cls = 'cp-kanban-tier-btn';
+                if (opt.value) { cls += ' op-tier-' + opt.value.toLowerCase(); }
+                else { cls += ' op-tier-none'; }
+                if ((currentTier || '') === opt.value) { cls += ' active'; }
+                var btn = h('button.' + cls.split(' ').join('.'), {
+                    'data-tier': opt.value
+                }, opt.label);
+                $(btn).on('click', function () {
+                    $tierContainer.find('.cp-kanban-tier-btn').removeClass('active');
+                    $(btn).addClass('active');
+                    dataObject.tier = opt.value || undefined;
+                    commit();
+                    // Update inherit hint
+                    if (!isBoardMode) { updateTierInheritHint(); }
+                });
+                btnGroup.appendChild(btn);
+            });
+            $tierContainer.append(btnGroup);
+
+            // For cards, show what the inherited tier resolves to
+            if (!isBoardMode) {
+                var inheritHint = h('div.cp-kanban-tier-inherit-hint');
+                $tierContainer.append(inheritHint);
+                // Store reference for updates
+                $tierContainer.data('inheritHint', inheritHint);
+            }
+        };
+        var updateTierInheritHint = function () {
+            var $hint = $tierContainer.find('.cp-kanban-tier-inherit-hint');
+            if (!$hint.length || isBoard) { return; }
+            var activeTier = $tierContainer.find('.cp-kanban-tier-btn.active').attr('data-tier');
+            if (activeTier) {
+                $hint.text('').hide();
+            } else {
+                // Resolve inherited tier
+                var boards = kanban.options.boards || {};
+                var effective = getEffectiveTier(dataObject, boards.data || {});
+                if (effective.tier) {
+                    $hint.text('Inherits ' + effective.tier + ' from column').show();
+                } else {
+                    $hint.text('Unclassified').show();
+                }
+            }
+        };
+        var tier = {
+            getValue: function () {
+                return dataObject.tier || '';
+            },
+            setValue: function (val, preserveCursor) {
+                if (preserveCursor) {
+                    var current = dataObject.tier || '';
+                    if (current === (val || '')) { return; }
+                }
+                renderTierSelector(val || '', isBoard);
+                if (!isBoard) { updateTierInheritHint(); }
             }
         };
 
@@ -2227,7 +2301,8 @@ define([
             tasks: tasks,
             dependencies: dependencies,
             conflict: conflict,
-            status: status
+            status: status,
+            tier: tier
         };
     };
     var getItemEditModal = function (framework, kanban, eid) {
@@ -3082,6 +3157,17 @@ define([
                         h('span.cp-kanban-filter-score-value', '0')
                     ])
                 ]),
+                // Security Tier filter
+                h('div.cp-kanban-filter-row.cp-kanban-filter-tier', [
+                    h('label.cp-kanban-filter-label', 'Tier'),
+                    h('select.cp-kanban-filter-tier-select', [
+                        h('option', { value: '' }, 'All'),
+                        h('option', { value: 'T1' }, 'T1 \u2014 Public'),
+                        h('option', { value: 'T2' }, 'T2 \u2014 Internal'),
+                        h('option', { value: 'T3' }, 'T3 \u2014 Encrypted Only'),
+                        h('option', { value: 'none' }, 'Unclassified')
+                    ])
+                ]),
                 // Sort control
                 h('div.cp-kanban-filter-row.cp-kanban-filter-sort', [
                     h('label.cp-kanban-filter-label', 'Sort'),
@@ -3117,7 +3203,8 @@ define([
                 minScore: 0,
                 duePreset: '',
                 visibility: 'all',
-                status: ''
+                status: '',
+                tier: ''
             };
 
             // Shared helper: normalizes an assignee field and checks if it matches a filter value.
@@ -3233,6 +3320,17 @@ define([
                     return false;
                 }
 
+                // Security tier filter
+                if (filters.tier) {
+                    var boardData = (kanban.options.boards || {}).data || {};
+                    var effective = getEffectiveTier(item, boardData);
+                    if (filters.tier === 'none') {
+                        if (effective.tier !== null) { return false; }
+                    } else {
+                        if (effective.tier !== filters.tier) { return false; }
+                    }
+                }
+
                 return true;
             };
 
@@ -3273,6 +3371,20 @@ define([
                     return false;
                 }
 
+                // Security tier filter (tasks inherit parent project's tier)
+                if (filters.tier) {
+                    var boards = kanban.options.boards || {};
+                    var parentItem = (boards.items || {})[taskDescriptor.projectId];
+                    if (parentItem) {
+                        var effective = getEffectiveTier(parentItem, boards.data || {});
+                        if (filters.tier === 'none') {
+                            if (effective.tier !== null) { return false; }
+                        } else {
+                            if (effective.tier !== filters.tier) { return false; }
+                        }
+                    }
+                }
+
                 return true;
             };
 
@@ -3283,12 +3395,14 @@ define([
             var scoreMin = advancedFilters.querySelector('.cp-kanban-filter-score-min');
             var scoreValue = advancedFilters.querySelector('.cp-kanban-filter-score-value');
             var duePresetSelect = advancedFilters.querySelector('.cp-kanban-filter-due-select');
+            var tierSelect = advancedFilters.querySelector('.cp-kanban-filter-tier-select');
 
             // jQuery references for show/hide
             var $assigneeFilterDiv = $(advancedFilters).find('.cp-kanban-filter-assignee');
             var $statusFilterDiv = $(advancedFilters).find('.cp-kanban-filter-status');
             var $dueFilterDiv = $(advancedFilters).find('.cp-kanban-filter-due');
             var $scoreFilterDiv = $(advancedFilters).find('.cp-kanban-filter-score');
+            var $tierFilterDiv = $(advancedFilters).find('.cp-kanban-filter-tier');
             var $sortSelect = $(sortSelect);
             var $projectSortOptions = $sortSelect.find('.cp-sort-project-options');
             var $taskSortOptions = $sortSelect.find('.cp-sort-task-options');
@@ -3326,6 +3440,7 @@ define([
                 currentFilters.sort = sortSelect.value;
                 currentFilters.minScore = parseFloat(scoreMin.value);
                 currentFilters.duePreset = duePresetSelect.value;
+                currentFilters.tier = tierSelect.value;
 
                 // Get scoring dimension keys for filter helper
                 var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
@@ -3425,6 +3540,10 @@ define([
                 applyFilters();
                 closeFilterPanel();
             });
+            $(tierSelect).change(function () {
+                applyFilters();
+                closeFilterPanel();
+            });
 
             // Add "Clear All Filters" button
             var clearFiltersBtn = h('button.btn.btn-secondary.cp-kanban-clear-filters', {
@@ -3442,6 +3561,7 @@ define([
                 currentFilters.minScore = 0;
                 currentFilters.duePreset = '';
                 currentFilters.visibility = 'all';
+                currentFilters.tier = '';
 
                 // Update UI elements
                 assigneeSelect.value = '';
@@ -3450,6 +3570,7 @@ define([
                 scoreMin.value = 0;
                 scoreValue.textContent = '0';
                 duePresetSelect.value = '';
+                tierSelect.value = '';
 
                 // Re-apply filters (will render with defaults)
                 applyFilters();
@@ -3939,6 +4060,17 @@ define([
 
                     var projectLink = h('span.cp-mytasks-project', taskData.projectTitle);
 
+                    // Tier badge for parent project
+                    var tierBadgeEl = null;
+                    var boards = kanban.options.boards || {};
+                    var parentItem = (boards.items || {})[taskData.projectId];
+                    if (parentItem) {
+                        var effectiveTierInfo = getEffectiveTier(parentItem, boards.data || {});
+                        if (effectiveTierInfo.tier) {
+                            tierBadgeEl = h('span.op-tier-badge.op-tier-' + effectiveTierInfo.tier.toLowerCase(), effectiveTierInfo.tier);
+                        }
+                    }
+
                     // Task due date (task's own date, or project date as fallback)
                     var effectiveDueDate = taskData.effectiveDueDate;
                     var dueDateText = formatRelativeDueDate(effectiveDueDate);
@@ -3994,8 +4126,9 @@ define([
                         checkbox,
                         titleSpan,
                         titleInput,
-                        h('span.cp-mytasks-separator', ' — '),
+                        h('span.cp-mytasks-separator', ' \u2014 '),
                         projectLink,
+                        tierBadgeEl,
                         h('span.cp-mytasks-spacer'), // Flexible spacer to push due date right
                         dueDateSpan,
                         actionsContainer
@@ -4403,6 +4536,7 @@ define([
                         return;
                     }
 
+                    var itemEffectiveTier = getEffectiveTier(item, boards.data || {});
                     projects.push({
                         id: itemId,
                         title: item.title || 'Untitled',
@@ -4414,7 +4548,8 @@ define([
                         assignee: item.assignee || '',
                         tasks: item.tasks || [],
                         color: item.color || '',
-                        dependencies: item.dependencies || []
+                        dependencies: item.dependencies || [],
+                        effectiveTier: itemEffectiveTier.tier
                     });
                 });
 
@@ -4982,11 +5117,15 @@ define([
                     }, [projectBar]);
 
                     var taskCountText = project.tasks.length === 1 ? '1 task' : project.tasks.length + ' tasks';
+                    var timelineTierBadge = project.effectiveTier
+                        ? h('span.op-tier-badge.op-tier-' + project.effectiveTier.toLowerCase(), project.effectiveTier)
+                        : null;
                     var projectLabel = h('div.cp-timeline-row-label', {
                         title: project.title
                     }, [
                         h('span.cp-timeline-project-name', project.title),
-                        project.tasks.length > 0 ? h('span.cp-timeline-task-count', '· ' + taskCountText) : null
+                        timelineTierBadge,
+                        project.tasks.length > 0 ? h('span.cp-timeline-task-count', '\u00B7 ' + taskCountText) : null
                     ].filter(Boolean));
 
                     var projectRowEl = h('div.cp-timeline-row.cp-timeline-project-row', [
@@ -5786,7 +5925,7 @@ define([
             var updateFilterIndicator = function () {
                 var hasActiveFilters = false;
                 // Check advanced filters (tags removed)
-                if (currentFilters.assignee || currentFilters.status || currentFilters.minScore > 0 || currentFilters.duePreset) {
+                if (currentFilters.assignee || currentFilters.status || currentFilters.minScore > 0 || currentFilters.duePreset || currentFilters.tier) {
                     hasActiveFilters = true;
                 }
                 if (hasActiveFilters) {
