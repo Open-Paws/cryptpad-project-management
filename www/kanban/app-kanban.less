@@ -7125,3 +7125,246 @@
         background: transparent;
     }
 }
+
+// ============================================
+// Security Tier Badges (global — used in cards, modal, views)
+// ============================================
+.op-tier-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    line-height: 16px;
+    vertical-align: middle;
+    margin-left: 4px;
+    white-space: nowrap;
+
+    &.op-tier-t1 {
+        background-color: #22C55E;
+        color: #FFFFFF;
+    }
+    &.op-tier-t2 {
+        background-color: #F59E0B;
+        color: #1A1A1A;
+    }
+    &.op-tier-t3 {
+        background-color: #EF4444;
+        color: #FFFFFF;
+    }
+    &.op-tier-none {
+        background: transparent;
+        border: 1px solid #9CA3AF;
+        color: #9CA3AF;
+    }
+}
+
+// T3 card left border accent (Pipeline view)
+.op-tier-t3-card {
+    border-left: 3px solid #EF4444 !important;
+}
+
+// ============================================
+// Tier Selector in Edit Modal
+// ============================================
+.cp-kanban-tier-selector {
+    .cp-kanban-tier-btn-group {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+    }
+    .cp-kanban-tier-btn {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        border: 1px solid var(--kanban-border, rgba(0,0,0,0.06));
+        background: var(--kanban-surface, #fff);
+        color: var(--kanban-text-secondary, #6B7280);
+        cursor: pointer;
+        transition: all 0.15s;
+
+        &:hover {
+            border-color: var(--kanban-border-hover, rgba(0,0,0,0.12));
+        }
+        &.active.op-tier-t1 {
+            background-color: #22C55E;
+            color: #fff;
+            border-color: #22C55E;
+        }
+        &.active.op-tier-t2 {
+            background-color: #F59E0B;
+            color: #1A1A1A;
+            border-color: #F59E0B;
+        }
+        &.active.op-tier-t3 {
+            background-color: #EF4444;
+            color: #fff;
+            border-color: #EF4444;
+        }
+        &.active.op-tier-none {
+            background-color: var(--kanban-text-primary-fade-5, rgba(17,24,39,0.05));
+            color: var(--kanban-text-primary, #111827);
+            border-color: var(--kanban-text-muted, #9CA3AF);
+        }
+    }
+    .cp-kanban-tier-inherit-hint {
+        font-size: 11px;
+        color: var(--kanban-text-muted, #9CA3AF);
+        margin-top: 4px;
+        font-style: italic;
+    }
+}
+
+// ============================================
+// Export Actions in Edit Modal
+// ============================================
+.cp-kanban-export-row {
+    .cp-kanban-export-actions {
+        display: flex;
+        gap: 6px;
+
+        .btn {
+            font-size: 11px;
+            padding: 3px 8px;
+            i { margin-right: 2px; }
+        }
+    }
+    .cp-kanban-export-t3-note {
+        font-size: 11px;
+        color: var(--kanban-text-muted, #9CA3AF);
+        font-style: italic;
+        padding: 4px 0;
+    }
+}
+
+// ============================================
+// Toolbar Export Dropdown
+// ============================================
+.cp-kanban-export-dropdown {
+    position: relative;
+    display: inline-block;
+
+    .cp-kanban-export-toggle {
+        font-size: 13px;
+        cursor: pointer;
+        i { margin-right: 3px; }
+    }
+
+    .cp-kanban-export-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 100;
+        background: var(--kanban-surface, #fff);
+        border: 1px solid var(--kanban-border, rgba(0,0,0,0.06));
+        border-radius: 6px;
+        box-shadow: 0 4px 12px var(--kanban-shadow, rgba(0,0,0,0.08));
+        padding: 4px;
+        min-width: 140px;
+
+        .btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font-size: 12px;
+            padding: 6px 10px;
+            border: none;
+            background: transparent;
+            color: var(--kanban-text-primary, #111827);
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background: var(--kanban-surface-hover, #f9fafb);
+            }
+            i { margin-right: 4px; }
+        }
+    }
+
+    &.open .cp-kanban-export-menu {
+        display: block;
+    }
+}
+
+// ============================================
+// Dashboard Tier Breakdown
+// ============================================
+.cp-dashboard-tier-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+.cp-dashboard-tier-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--kanban-surface, #fff);
+    border: 1px solid var(--kanban-border, rgba(0,0,0,0.06));
+    border-radius: 8px;
+    flex: 1;
+    min-width: 140px;
+
+    .op-tier-badge {
+        font-size: 12px;
+        padding: 2px 8px;
+    }
+    .cp-dashboard-tier-label {
+        font-size: 13px;
+        color: var(--kanban-text-secondary, #6B7280);
+    }
+    .cp-dashboard-tier-count {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--kanban-text-primary, #111827);
+        margin-left: auto;
+    }
+}
+
+// ============================================
+// Dark Theme Overrides for Tier/Export
+// ============================================
+.cp-kanban-dark-theme {
+    .op-tier-badge {
+        &.op-tier-t1 { background-color: #16A34A; }
+        &.op-tier-t2 { background-color: #D97706; color: #fff; }
+        &.op-tier-t3 { background-color: #DC2626; }
+        &.op-tier-none { border-color: #6B7280; color: #6B7280; }
+    }
+    .op-tier-t3-card {
+        border-left-color: #DC2626 !important;
+    }
+    .cp-kanban-export-dropdown .cp-kanban-export-menu {
+        background: var(--kanban-surface, #1A1A1A);
+        border-color: var(--kanban-border, rgba(255,255,255,0.08));
+
+        .btn {
+            color: var(--kanban-text-primary, #E5E5E5);
+            &:hover { background: var(--kanban-surface-hover, #202020); }
+        }
+    }
+    .cp-dashboard-tier-item {
+        background: var(--kanban-surface, #1A1A1A);
+        border-color: var(--kanban-border, rgba(255,255,255,0.08));
+        .cp-dashboard-tier-count { color: var(--kanban-text-primary, #E5E5E5); }
+    }
+}
+
+// ============================================
+// Tier filter row in filter panel
+// ============================================
+.cp-kanban-filter-tier {
+    .cp-kanban-filter-tier-select {
+        width: 100%;
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: 1px solid var(--kanban-border, rgba(0,0,0,0.06));
+        background: var(--kanban-surface, #fff);
+        color: var(--kanban-text-primary, #111827);
+        font-size: 13px;
+    }
+}
