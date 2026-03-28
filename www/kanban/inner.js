@@ -5854,10 +5854,50 @@ define([
                     ])
                 ]);
 
+                // Security tier breakdown
+                var tierCounts = { T1: 0, T2: 0, T3: 0, unclassified: 0 };
+                Object.keys(items).forEach(function (id) {
+                    var item = items[id];
+                    var effective = getEffectiveTier(item, data);
+                    if (effective.tier === 'T1') { tierCounts.T1++; }
+                    else if (effective.tier === 'T2') { tierCounts.T2++; }
+                    else if (effective.tier === 'T3') { tierCounts.T3++; }
+                    else { tierCounts.unclassified++; }
+                });
+                var tierTotal = totalProjects || 1;
+                var tierSection = h('div.cp-dashboard-section', [
+                    h('h3.cp-dashboard-section-title', [
+                        h('i.fa.fa-shield'),
+                        ' Projects by Security Tier'
+                    ]),
+                    h('div.cp-dashboard-tier-grid', [
+                        h('div.cp-dashboard-tier-item', [
+                            h('span.op-tier-badge.op-tier-t1', 'T1'),
+                            h('span.cp-dashboard-tier-label', 'Public'),
+                            h('span.cp-dashboard-tier-count', tierCounts.T1 + ' (' + Math.round(tierCounts.T1 / tierTotal * 100) + '%)')
+                        ]),
+                        h('div.cp-dashboard-tier-item', [
+                            h('span.op-tier-badge.op-tier-t2', 'T2'),
+                            h('span.cp-dashboard-tier-label', 'Internal'),
+                            h('span.cp-dashboard-tier-count', tierCounts.T2 + ' (' + Math.round(tierCounts.T2 / tierTotal * 100) + '%)')
+                        ]),
+                        h('div.cp-dashboard-tier-item', [
+                            h('span.op-tier-badge.op-tier-t3', 'T3'),
+                            h('span.cp-dashboard-tier-label', 'Encrypted Only'),
+                            h('span.cp-dashboard-tier-count', tierCounts.T3 + ' (' + Math.round(tierCounts.T3 / tierTotal * 100) + '%)')
+                        ]),
+                        h('div.cp-dashboard-tier-item', [
+                            h('span.op-tier-badge.op-tier-none', '\u2014'),
+                            h('span.cp-dashboard-tier-label', 'Unclassified'),
+                            h('span.cp-dashboard-tier-count', tierCounts.unclassified + ' (' + Math.round(tierCounts.unclassified / tierTotal * 100) + '%)')
+                        ])
+                    ])
+                ]);
+
                 // Assemble dashboard - Priority order:
                 // Row 1: Upcoming Deadlines (most important) | Quick Stats
                 // Row 2: Workload by Assignee | Projects by Status
-                // Row 3: Impact Score Distribution (full width, least important)
+                // Row 3: Security Tier + Score Distribution (full width)
                 var dashboardContent = h('div.cp-dashboard', [
                     heroSection,
                     h('div.cp-dashboard-grid-2x2', [
@@ -5866,8 +5906,9 @@ define([
                         workloadSection,    // Bottom left
                         columnSection       // Bottom right (Projects by Status)
                     ].filter(Boolean)),
-                    // Full-width bottom section
+                    // Full-width bottom sections
                     h('div.cp-dashboard-full-width', [
+                        tierSection,
                         scoreSection
                     ].filter(Boolean))
                 ].filter(Boolean));
