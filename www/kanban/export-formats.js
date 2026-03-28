@@ -27,6 +27,14 @@ define([], function () {
     // Valid security tier values
     var VALID_TIERS = ['T1', 'T2', 'T3'];
 
+    // Check if a board's item array contains a given ID (handles numeric IDs)
+    var boardContainsItem = function (board, itemId) {
+        if (!board || !Array.isArray(board.item)) { return false; }
+        return board.item.some(function (boardItemId) {
+            return String(boardItemId) === itemId;
+        });
+    };
+
     // Resolve effective tier for an item
     var resolveEffectiveTier = function (item, boardData) {
         if (item.tier && VALID_TIERS.indexOf(item.tier) !== -1) {
@@ -36,7 +44,7 @@ define([], function () {
         var keys = Object.keys(boardData || {});
         for (var i = 0; i < keys.length; i++) {
             var board = boardData[keys[i]];
-            if (board && Array.isArray(board.item) && board.item.indexOf(itemId) !== -1) {
+            if (boardContainsItem(board, itemId)) {
                 if (board.tier && VALID_TIERS.indexOf(board.tier) !== -1) {
                     return { effective: board.tier, source: 'column', explicit: null };
                 }
@@ -52,11 +60,20 @@ define([], function () {
         var keys = Object.keys(boardData || {});
         for (var i = 0; i < keys.length; i++) {
             var board = boardData[keys[i]];
-            if (board && Array.isArray(board.item) && board.item.indexOf(itemId) !== -1) {
+            if (boardContainsItem(board, itemId)) {
                 return board.title || 'Unknown';
             }
         }
         return 'Unknown';
+    };
+
+    // Check if a referenced item is exportable (not hidden, not T3)
+    var isItemExportable = function (itemId, allItems, boardData) {
+        var item = allItems[itemId];
+        if (!item) { return false; }
+        if (item.hidden) { return false; }
+        var tier = resolveEffectiveTier(item, boardData);
+        return tier.effective !== 'T3';
     };
 
     // Build reverse dependency map: itemId -> [ids that depend on it]
@@ -110,18 +127,22 @@ define([], function () {
         var tier = resolveEffectiveTier(item, boardData);
         var column = findColumnForItem(item, boardData);
 
-        // Resolve dependency titles
-        var dependsOn = (item.dependencies || []).map(function (depId) {
+        // Resolve dependency titles (filter out hidden/T3 references)
+        var dependsOn = [];
+        var dependsOnIds = [];
+        (item.dependencies || []).forEach(function (depId) {
+            if (!isItemExportable(depId, allItems, boardData)) { return; }
+            dependsOnIds.push(String(depId));
             var dep = allItems[depId];
-            return dep ? dep.title : ('Unknown (' + depId + ')');
+            dependsOn.push(dep ? dep.title : ('Unknown (' + depId + ')'));
         });
-        var dependsOnIds = (item.dependencies || []).map(String);
 
-        // Reverse deps (what this card blocks)
-        var blocksIds = (reverseDeps[String(item.id)] || []);
-        var blocks = blocksIds.map(function (bid) {
+        // Reverse deps (filter out hidden/T3 references)
+        var blocks = [];
+        (reverseDeps[String(item.id)] || []).forEach(function (bid) {
+            if (!isItemExportable(bid, allItems, boardData)) { return; }
             var dep = allItems[bid];
-            return dep ? dep.title : ('Unknown (' + bid + ')');
+            blocks.push(dep ? dep.title : ('Unknown (' + bid + ')'));
         });
 
         // Scoring
@@ -142,9 +163,11 @@ define([], function () {
         if (Array.isArray(item.tasks)) {
             item.tasks.forEach(function (task) {
                 if (task.hidden || task.isRecurrenceInstance) { return; }
-                var taskDeps = (task.dependencies || []).map(function (tid) {
+                var taskDeps = [];
+                (task.dependencies || []).forEach(function (tid) {
                     var t = item.tasks.find(function (tt) { return tt.id === tid; });
-                    return t ? t.title : tid;
+                    if (t && (t.hidden || t.isRecurrenceInstance)) { return; }
+                    taskDeps.push(t ? t.title : tid);
                 });
                 var taskObj = {
                     title: task.title || '',
@@ -207,6 +230,10 @@ define([], function () {
     // --- JSON formatters ---
 
     module.formatCardJSON = function (item, context) {
+        // Guard: never export hidden or T3 items even via single-card API
+        if (item.hidden) { return null; }
+        var tier = resolveEffectiveTier(item, context.boardData || {});
+        if (tier.effective === 'T3') { return null; }
         context._reverseDeps = buildReverseDeps(context.allItems || {});
         var obj = formatCardObject(item, context);
         return JSON.stringify(obj, null, 2);
@@ -298,11 +325,13 @@ define([], function () {
                         parts.push('recurs ' + task.recurrence.type + (task.recurrence.interval > 1 ? ' every ' + task.recurrence.interval : ''));
                     }
                     if (Array.isArray(task.dependencies) && task.dependencies.length > 0) {
-                        var depNames = task.dependencies.map(function (tid) {
+                        var depNames = [];
+                        task.dependencies.forEach(function (tid) {
                             var t = item.tasks.find(function (tt) { return tt.id === tid; });
-                            return t ? t.title : tid;
+                            if (t && (t.hidden || t.isRecurrenceInstance)) { return; }
+                            depNames.push(t ? t.title : tid);
                         });
-                        parts.push('depends on: ' + depNames.join(', '));
+                        if (depNames.length > 0) { parts.push('depends on: ' + depNames.join(', ')); }
                     }
                     var suffix = parts.length > 0 ? ' (' + parts.join(', ') + ')' : '';
                     lines.push('- [' + (task.done ? 'x' : ' ') + '] ' + (task.title || 'Untitled') + suffix);
@@ -311,15 +340,18 @@ define([], function () {
             }
         }
 
-        // Dependencies
-        var dependsOn = (item.dependencies || []).map(function (depId) {
+        // Dependencies (filter out hidden/T3 references)
+        var dependsOn = [];
+        (item.dependencies || []).forEach(function (depId) {
+            if (!isItemExportable(depId, allItems, boardData)) { return; }
             var dep = allItems[depId];
-            return dep ? dep.title : depId;
+            dependsOn.push(dep ? dep.title : depId);
         });
-        var blocksIds = reverseDeps[String(item.id)] || [];
-        var blocks = blocksIds.map(function (bid) {
+        var blocks = [];
+        (reverseDeps[String(item.id)] || []).forEach(function (bid) {
+            if (!isItemExportable(bid, allItems, boardData)) { return; }
             var dep = allItems[bid];
-            return dep ? dep.title : bid;
+            blocks.push(dep ? dep.title : bid);
         });
         if (dependsOn.length > 0 || blocks.length > 0) {
             lines.push('## Dependencies');
@@ -353,6 +385,10 @@ define([], function () {
     };
 
     module.formatCardMarkdown = function (item, context) {
+        // Guard: never export hidden or T3 items even via single-card API
+        if (item.hidden) { return null; }
+        var tier = resolveEffectiveTier(item, context.boardData || {});
+        if (tier.effective === 'T3') { return null; }
         context._reverseDeps = buildReverseDeps(context.allItems || {});
         return formatCardMarkdownBody(item, context);
     };
@@ -408,16 +444,20 @@ define([], function () {
         if (af.tier) { filterParts.push('Tier: ' + af.tier); }
         lines.push('**Filters:** ' + (filterParts.length > 0 ? filterParts.join(', ') : 'None'));
 
-        // Filter out T3 parent projects
-        var excludedT3 = 0;
+        // Filter out T3 parent projects (count unique projects, not tasks)
+        var excludedT3Projects = {};
         var filtered = taskDescriptors.filter(function (td) {
             var parentItem = allItems[td.projectId];
             if (!parentItem) { return false; }
             if (parentItem.hidden) { return false; }
             var tier = resolveEffectiveTier(parentItem, boardData);
-            if (tier.effective === 'T3') { excludedT3++; return false; }
+            if (tier.effective === 'T3') {
+                excludedT3Projects[td.projectId] = true;
+                return false;
+            }
             return true;
         });
+        var excludedT3 = Object.keys(excludedT3Projects).length;
 
         lines.push('**Tasks:** ' + filtered.length);
         lines.push('');

@@ -668,28 +668,17 @@ define([
             nodeItemText.innerText = element.title;
             nodeItemTextContainer.appendChild(nodeItemText);
 
-            // Security tier badge
+            // Security tier badge (uses parentBoard passed from render context)
             var effectiveTier = null;
             var tierSource = 'none';
             var validTiers = ['T1', 'T2', 'T3'];
             if (element.tier && validTiers.indexOf(element.tier) !== -1) {
                 effectiveTier = element.tier;
                 tierSource = 'card';
-            } else {
-                // Check column tier
-                var boardsData = (self.options.boards || {}).data || {};
-                var itemId = String(element.id);
-                var bKeys = Object.keys(boardsData);
-                for (var bi = 0; bi < bKeys.length; bi++) {
-                    var bd = boardsData[bKeys[bi]];
-                    if (bd && Array.isArray(bd.item) && bd.item.indexOf(itemId) !== -1) {
-                        if (bd.tier && validTiers.indexOf(bd.tier) !== -1) {
-                            effectiveTier = bd.tier;
-                            tierSource = 'column';
-                        }
-                        break;
-                    }
-                }
+            } else if (element._parentBoard && element._parentBoard.tier &&
+                       validTiers.indexOf(element._parentBoard.tier) !== -1) {
+                effectiveTier = element._parentBoard.tier;
+                tierSource = 'column';
             }
             if (effectiveTier) {
                 var tierBadge = document.createElement('span');
@@ -1256,6 +1245,7 @@ define([
             self.options.boards.items = self.options.boards.items || {};
             self.options.boards.items[element.id] = element;
 
+            element._parentBoard = boardJSON;
             var board = self.element.querySelector('[data-id="' + boardID + '"] .kanban-drag');
             if (before) {
                 board.insertBefore(getElementNode(element), board.firstChild);
@@ -1438,6 +1428,7 @@ define([
                     if (idx > -1) { board.item.splice(idx, 1); }
                     return;
                 }
+                itemKanban._parentBoard = board;
                 var nodeItem = getElementNode(itemKanban);
                 contentBoard.appendChild(nodeItem);
             });

@@ -682,7 +682,9 @@ define([
         var keys = Object.keys(boardData || {});
         for (var i = 0; i < keys.length; i++) {
             var board = boardData[keys[i]];
-            if (board && Array.isArray(board.item) && board.item.indexOf(itemId) !== -1) {
+            if (board && Array.isArray(board.item) && board.item.some(function (bid) {
+                return String(bid) === itemId;
+            })) {
                 if (board.tier && VALID_TIERS.indexOf(board.tier) !== -1) {
                     return { tier: board.tier, source: 'column' };
                 }
@@ -1568,12 +1570,17 @@ define([
                 return dataObject.tier || '';
             },
             setValue: function (val, preserveCursor) {
+                var unchanged = false;
                 if (preserveCursor) {
                     var current = dataObject.tier || '';
-                    if (current === (val || '')) { return; }
+                    unchanged = current === (val || '');
                 }
-                renderTierSelector(val || '', isBoard);
-                if (!isBoard) { updateTierInheritHint(); }
+                if (!unchanged) { renderTierSelector(val || '', isBoard); }
+                // Always refresh inherit hint and export visibility (column tier may have changed remotely)
+                if (!isBoard) {
+                    updateTierInheritHint();
+                    updateExportVisibility();
+                }
             }
         };
 
@@ -6111,15 +6118,29 @@ define([
                 var items = boards.items || {};
                 var data = boards.data || {};
                 var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
+                var activeTags = kanban.options.tags || [];
+                var tagsAnd = kanban.options.tagsAnd;
                 var visible = [];
                 Object.keys(items).forEach(function (id) {
                     var item = items[id];
-                    // Only include items attached to a board
+                    var idStr = String(id);
+                    // Only include items attached to a board (handle numeric IDs)
                     var inBoard = Object.keys(data).some(function (bid) {
-                        return (data[bid].item || []).indexOf(String(id)) !== -1;
+                        return (data[bid].item || []).some(function (boardItemId) {
+                            return String(boardItemId) === idStr;
+                        });
                     });
                     if (!inBoard) { return; }
                     if (item.hidden) { return; }
+                    // Apply tag filter (same logic as jkanban_cp.js)
+                    if (activeTags.length > 0) {
+                        if (!Array.isArray(item.tags)) { return; }
+                        if (tagsAnd) {
+                            if (!activeTags.every(function (t) { return item.tags.indexOf(t) !== -1; })) { return; }
+                        } else {
+                            if (!item.tags.some(function (t) { return activeTags.indexOf(t) !== -1; })) { return; }
+                        }
+                    }
                     if (projectPassesFilters(item, currentFilters, scoringDimKeys)) {
                         visible.push(item);
                     }
@@ -6165,6 +6186,10 @@ define([
                     var displayTasks = allDocTasks.filter(function (td) {
                         return taskPassesFilters(td, currentFilters);
                     });
+                    if (displayTasks.length === 0) {
+                        UI.warn('No tasks match the current filters');
+                        return;
+                    }
                     var taskCtx = buildMultiExportContext('My Tasks');
                     if (format === 'json') {
                         // For JSON, export parent cards of visible tasks
@@ -6201,6 +6226,10 @@ define([
 
                 // Pipeline / Timeline
                 var items = getVisibleItems();
+                if (items.length === 0) {
+                    UI.warn('No projects match the current filters');
+                    return;
+                }
                 var ctx = buildMultiExportContext('Filtered board');
                 if (format === 'json') {
                     var jsonResult = ExportFormats.formatMultiJSON(items, ctx);
