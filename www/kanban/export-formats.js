@@ -85,18 +85,20 @@ define([], function () {
     };
 
     // Filter out T3 and hidden items from export data.
-    // Returns { filtered: [], excludedT3: number, excludedHidden: number }
+    // Returns { filtered: [], excludedT3: number, excludedHidden: number, unclassifiedCount: number }
     var filterForExport = function (items, context) {
         var filtered = [];
         var excludedT3 = 0;
         var excludedHidden = 0;
+        var unclassifiedCount = 0;
         items.forEach(function (item) {
             if (item.hidden) { excludedHidden++; return; }
             var tier = resolveEffectiveTier(item, context.boardData);
             if (tier.effective === 'T3') { excludedT3++; return; }
+            if (tier.effective === null) { unclassifiedCount++; }
             filtered.push(item);
         });
-        return { filtered: filtered, excludedT3: excludedT3, excludedHidden: excludedHidden };
+        return { filtered: filtered, excludedT3: excludedT3, excludedHidden: excludedHidden, unclassifiedCount: unclassifiedCount };
     };
 
     // Format a single card as a JSON-ready object
@@ -227,6 +229,7 @@ define([], function () {
             json: JSON.stringify(wrapper, null, 2),
             excludedT3: result.excludedT3,
             excludedHidden: result.excludedHidden,
+            unclassifiedCount: result.unclassifiedCount,
             exportedCount: cards.length
         };
     };
@@ -383,6 +386,7 @@ define([], function () {
             markdown: lines.join('\n'),
             excludedT3: result.excludedT3,
             excludedHidden: result.excludedHidden,
+            unclassifiedCount: result.unclassifiedCount,
             exportedCount: result.filtered.length
         };
     };
