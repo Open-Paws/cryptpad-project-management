@@ -22,6 +22,7 @@ define([
     'cm/lib/codemirror',
     '/kanban/jkanban_cp.js',
     '/kanban/export.js',
+    '/kanban/export-formats.js',
     '/common/TypingTests.js',
 
     'cm/mode/gfm/gfm',
@@ -56,6 +57,7 @@ define([
     CodeMirror,
     jKanban,
     Export,
+    ExportFormats,
     TypingTest) {
 
     var verbose = function (x) { console.log(x); };
