@@ -1014,6 +1014,22 @@ define([
                         h('div.cp-kanban-color-picker', [colors])
                     ]),
 
+                    // Export actions (cards only, hidden for T3)
+                    h('div.cp-kanban-detail-row.cp-kanban-export-row', [
+                        h('span.cp-kanban-detail-label', 'Export'),
+                        h('div.cp-kanban-export-actions', [
+                            h('button.btn.btn-secondary.cp-kanban-export-json-btn', {
+                                title: 'Copy card data as JSON'
+                            }, [h('i.fa.fa-code'), ' JSON']),
+                            h('button.btn.btn-secondary.cp-kanban-export-md-btn', {
+                                title: 'Copy card data as Markdown'
+                            }, [h('i.fa.fa-file-text-o'), ' Markdown'])
+                        ]),
+                        h('div.cp-kanban-export-t3-note', {
+                            style: 'display:none;'
+                        }, 'T3 projects cannot be exported from CryptPad.')
+                    ]),
+
                     // Hidden sections (completed toggle not shown in new UI)
                     h('div', { style: 'display: none;' }, [
                         completedToggle = h('input#cp-kanban-edit-completed', { type: 'checkbox' })
@@ -1048,6 +1064,60 @@ define([
                 $cc.show();
             }
         };
+
+        // Export actions
+        var $exportRow = $(content).find('.cp-kanban-export-row');
+        var $exportActions = $exportRow.find('.cp-kanban-export-actions');
+        var $exportT3Note = $exportRow.find('.cp-kanban-export-t3-note');
+        var copyToClipboard = function (text, label) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function () {
+                    UI.log('Copied as ' + label);
+                }).catch(function () {
+                    UI.warn('Copy failed \u2014 check browser permissions');
+                });
+            } else {
+                UI.warn('Clipboard API not available');
+            }
+        };
+        var buildExportContext = function () {
+            var boards = kanban.options.boards || {};
+            return {
+                boardData: boards.data || {},
+                allItems: boards.items || {},
+                listData: boards.list || [],
+                exportSource: 'card',
+                sourceLabel: 'Card: ' + (dataObject.title || 'Untitled'),
+                activeFilters: {},
+                viewMode: 'board'
+            };
+        };
+        var updateExportVisibility = function () {
+            if (isBoard) {
+                $exportRow.hide();
+                return;
+            }
+            var boards = kanban.options.boards || {};
+            var effective = getEffectiveTier(dataObject, boards.data || {});
+            if (effective.tier === 'T3') {
+                $exportActions.hide();
+                $exportT3Note.show();
+            } else {
+                $exportActions.show();
+                $exportT3Note.hide();
+            }
+            $exportRow.show();
+        };
+        $(content).find('.cp-kanban-export-json-btn').on('click', function () {
+            var ctx = buildExportContext();
+            var json = ExportFormats.formatCardJSON(dataObject, ctx);
+            copyToClipboard(json, 'JSON');
+        });
+        $(content).find('.cp-kanban-export-md-btn').on('click', function () {
+            var ctx = buildExportContext();
+            var md = ExportFormats.formatCardMarkdown(dataObject, ctx);
+            copyToClipboard(md, 'Markdown');
+        });
 
         // Title
         var $title = $(titleInput);
@@ -2304,7 +2374,8 @@ define([
             dependencies: dependencies,
             conflict: conflict,
             status: status,
-            tier: tier
+            tier: tier,
+            updateExportVisibility: updateExportVisibility
         };
     };
     var getItemEditModal = function (framework, kanban, eid) {
@@ -2348,6 +2419,7 @@ define([
 
         UI.openCustomModal(editModal.modal, { wide: true });
         editModal.body.refresh();
+        if (editModal.updateExportVisibility) { editModal.updateExportVisibility(); }
 
         // Attach add tag button handler after modal is opened
         setTimeout(function () {
@@ -5189,6 +5261,7 @@ define([
             var renderCurrentView = function () {
                 // Update filter panel visibility based on view
                 updateFilterVisibilityForView(currentViewMode);
+                if (typeof updateExportBtnForView === 'function') { updateExportBtnForView(); }
 
                 if (DEBUG_KANBAN) {
                     console.log('=== RENDER CURRENT VIEW === switching to:', currentViewMode);
@@ -5987,9 +6060,171 @@ define([
                 $(themeToggle).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
             }
 
+            // Toolbar export button
+            var getVisibleItems = function () {
+                var boards = kanban.options.boards || {};
+                var items = boards.items || {};
+                var data = boards.data || {};
+                var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
+                var visible = [];
+                Object.keys(items).forEach(function (id) {
+                    var item = items[id];
+                    // Only include items attached to a board
+                    var inBoard = Object.keys(data).some(function (bid) {
+                        return (data[bid].item || []).indexOf(String(id)) !== -1;
+                    });
+                    if (!inBoard) { return; }
+                    if (item.hidden) { return; }
+                    if (projectPassesFilters(item, currentFilters, scoringDimKeys)) {
+                        visible.push(item);
+                    }
+                });
+                return visible;
+            };
+            var buildMultiExportContext = function (source) {
+                var boards = kanban.options.boards || {};
+                return {
+                    boardData: boards.data || {},
+                    allItems: boards.items || {},
+                    listData: boards.list || [],
+                    exportSource: source || 'board',
+                    sourceLabel: source || 'Board',
+                    activeFilters: JSON.parse(JSON.stringify(currentFilters)),
+                    viewMode: currentViewMode
+                };
+            };
+            var toolbarCopyToClipboard = function (text, label) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () {
+                        UI.log('Copied as ' + label);
+                    }).catch(function () {
+                        UI.warn('Copy failed \u2014 check browser permissions');
+                    });
+                } else {
+                    UI.warn('Clipboard API not available');
+                }
+            };
+            var showExportWarnings = function (result) {
+                if (result.excludedT3 > 0) {
+                    UI.warn(result.excludedT3 + ' T3 project(s) excluded from export');
+                }
+                if (result.unclassifiedCount > 0) {
+                    UI.warn(result.unclassifiedCount + ' card(s) have no security tier assigned');
+                }
+            };
+            var doToolbarExport = function (format) {
+                if (currentViewMode === 'dashboard') { return; }
+
+                if (currentViewMode === 'mytasks') {
+                    var allDocTasks = getAllTasks();
+                    var displayTasks = allDocTasks.filter(function (td) {
+                        return taskPassesFilters(td, currentFilters);
+                    });
+                    var taskCtx = buildMultiExportContext('My Tasks');
+                    if (format === 'json') {
+                        // For JSON, export parent cards of visible tasks
+                        var seenProjects = {};
+                        var projectItems = [];
+                        var boards = kanban.options.boards || {};
+                        displayTasks.forEach(function (td) {
+                            if (!seenProjects[td.projectId]) {
+                                seenProjects[td.projectId] = true;
+                                var parentItem = (boards.items || {})[td.projectId];
+                                if (parentItem) { projectItems.push(parentItem); }
+                            }
+                        });
+                        var result = ExportFormats.formatMultiJSON(projectItems, taskCtx);
+                        if (result.exportedCount === 0) {
+                            UI.warn('All projects in this selection are T3 \u2014 nothing to export');
+                            return;
+                        }
+                        toolbarCopyToClipboard(result.json, 'JSON');
+                        showExportWarnings(result);
+                    } else {
+                        var mdResult = ExportFormats.formatTasksMarkdown(displayTasks, taskCtx);
+                        if (mdResult.exportedCount === 0) {
+                            UI.warn('All projects in this selection are T3 \u2014 nothing to export');
+                            return;
+                        }
+                        toolbarCopyToClipboard(mdResult.markdown, 'Markdown');
+                        if (mdResult.excludedT3 > 0) {
+                            UI.warn(mdResult.excludedT3 + ' T3 project(s) excluded from export');
+                        }
+                    }
+                    return;
+                }
+
+                // Pipeline / Timeline
+                var items = getVisibleItems();
+                var ctx = buildMultiExportContext('Filtered board');
+                if (format === 'json') {
+                    var jsonResult = ExportFormats.formatMultiJSON(items, ctx);
+                    if (jsonResult.exportedCount === 0) {
+                        UI.warn('All projects in this selection are T3 \u2014 nothing to export');
+                        return;
+                    }
+                    toolbarCopyToClipboard(jsonResult.json, 'JSON');
+                    showExportWarnings(jsonResult);
+                } else {
+                    var mdResult2 = ExportFormats.formatMultiMarkdown(items, ctx);
+                    if (mdResult2.exportedCount === 0) {
+                        UI.warn('All projects in this selection are T3 \u2014 nothing to export');
+                        return;
+                    }
+                    toolbarCopyToClipboard(mdResult2.markdown, 'Markdown');
+                    showExportWarnings(mdResult2);
+                }
+            };
+
+            var exportJsonBtn = h('button.btn.btn-secondary.cp-kanban-toolbar-export-json', {
+                title: 'Copy visible cards as JSON'
+            }, [h('i.fa.fa-code'), ' JSON']);
+            var exportMdBtn = h('button.btn.btn-secondary.cp-kanban-toolbar-export-md', {
+                title: 'Copy visible cards as Markdown'
+            }, [h('i.fa.fa-file-text-o'), ' MD']);
+            var exportDropdown = h('div.cp-kanban-export-dropdown', [
+                h('button.btn.btn-toolbar.cp-kanban-export-toggle', {
+                    title: 'Export visible cards to clipboard'
+                }, [
+                    h('i.fa.fa-clipboard'),
+                    h('span.cp-kanban-export-label', ' Export')
+                ]),
+                h('div.cp-kanban-export-menu', [
+                    exportJsonBtn,
+                    exportMdBtn
+                ])
+            ]);
+
+            $(exportDropdown).find('.cp-kanban-export-toggle').on('click', function () {
+                $(exportDropdown).toggleClass('open');
+            });
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.cp-kanban-export-dropdown').length) {
+                    $(exportDropdown).removeClass('open');
+                }
+            });
+            $(exportJsonBtn).on('click', function () {
+                $(exportDropdown).removeClass('open');
+                doToolbarExport('json');
+            });
+            $(exportMdBtn).on('click', function () {
+                $(exportDropdown).removeClass('open');
+                doToolbarExport('markdown');
+            });
+
+            // Update export button visibility when switching views
+            var updateExportBtnForView = function () {
+                if (currentViewMode === 'dashboard') {
+                    $(exportDropdown).hide();
+                } else {
+                    $(exportDropdown).show();
+                }
+            };
+
             var container = h('div#cp-kanban-controls', [
                 viewSwitcher,
                 filterPanel,
+                exportDropdown,
                 themeToggle,
                 h('div.cp-kanban-changeView.drag', [
                     toggleDragOff,
