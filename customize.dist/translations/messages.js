@@ -11,7 +11,7 @@
 */
 define(['/common/translations/messages.js'], function (Messages) {
     // Replace the existing keys in your copied file here:
-    // Messages.button_newpad = "New Rich Text Document";
+    Messages.main_title = "CryptPaws: Collaboration suite, encrypted and open-source";
 
     return Messages;
 });
