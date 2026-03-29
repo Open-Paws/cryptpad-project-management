@@ -5797,7 +5797,8 @@ define([
             // Theme toggle button
             var themeToggle = h('button.cp-kanban-theme-toggle', {
                 'title': 'Toggle light/dark theme',
-                'aria-label': 'Toggle theme'
+                'aria-label': 'Toggle theme',
+                'aria-pressed': 'false'
             }, [
                 h('i.fa.fa-moon-o', { 'aria-hidden': true })
             ]);
@@ -5808,10 +5809,12 @@ define([
                 if (isDark) {
                     $app.removeClass('cp-kanban-dark-theme');
                     localStorage.setItem('cp-kanban-theme', 'light');
+                    $(themeToggle).attr('aria-pressed', 'false');
                     $(themeToggle).find('i').removeClass('fa-sun-o').addClass('fa-moon-o');
                 } else {
                     $app.addClass('cp-kanban-dark-theme');
                     localStorage.setItem('cp-kanban-theme', 'dark');
+                    $(themeToggle).attr('aria-pressed', 'true');
                     $(themeToggle).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
                 }
             });
@@ -5820,6 +5823,7 @@ define([
             var savedTheme = localStorage.getItem('cp-kanban-theme');
             if (savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 $('.cp-app-kanban').addClass('cp-kanban-dark-theme');
+                $(themeToggle).attr('aria-pressed', 'true');
                 $(themeToggle).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
             }
 
