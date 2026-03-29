@@ -55,7 +55,7 @@ define([
     };
 
     Pages.accounts = {
-        donateURL: AppConfig.donateURL || "https://opencollective.com/cryptpad/",
+        donateURL: AppConfig.donateURL || "https://www.openpaws.ai/donate",
     };
 
     var languageSelector = function () {
@@ -154,7 +154,7 @@ define([
     Pages.infopageFooter = function () {
         var donateButton;
         if (!ApiConfig.removeDonateButton) {
-            donateButton = footLink('https://opencollective.com/cryptpad/contribute/', 'footer_donate', null, 'money'); // TODO migrate to forkawesome and use the OpenCollective icon
+            donateButton = footLink('https://www.openpaws.ai/donate', 'footer_donate', null, 'money');
         }
 
         return h('footer.cp-footer', [
@@ -173,7 +173,7 @@ define([
             ]),
             h('div.cp-footer-center', [
                 h('div.cp-logo-btns', [
-                    footLink('/', null, Msg.footer_website, 'link'),
+                    footLink('https://www.openpaws.ai', null, Msg.footer_website, 'link'),
                     donateButton,
                 ])
             ]),
@@ -239,8 +239,6 @@ define([
                     h('i.fa.fa-info-circle'),
                     pricingName
                 ]),
-                h('a.nav-item.nav-link', { href: '/features.html'},
-                    [h('i.fa.fa-book', {'aria-hidden':'true'}),Msg.docs_link]),
             ].concat(rightLinks)
         );
     };
