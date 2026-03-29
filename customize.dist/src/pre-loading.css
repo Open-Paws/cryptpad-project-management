@@ -51,6 +51,7 @@ html:not(.cp-app-noscroll) #placeholder.dark-theme {
 #placeholder .placeholder-logo-container img {
     max-width: 100%;
     max-height: 100%;
+    filter: invert(1);
 }
 #placeholder .placeholder-message-container {
     width: 700px;

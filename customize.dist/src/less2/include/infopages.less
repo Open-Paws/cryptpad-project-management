@@ -166,6 +166,13 @@ body.html {
             }
         }
     }
+    // Open Paws PNG logo is black-on-transparent — invert to white on the dark shell
+    .cp-logo-foot img,
+    .cp-back-home img,
+    .cp-home-hero .cp-title > img {
+        filter: invert(1);
+    }
+
     footer {
         background-color: @cp_static-footer;
         align-self: normal; // override align-items:center from parent in index.html
