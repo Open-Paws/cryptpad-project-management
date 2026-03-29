@@ -128,5 +128,74 @@
             margin-top: 3em;
         }
     }
+
+    // ── CryptPaws unique feature sections ────────────────────────────────────
+
+    .cp-features-tier-heading {
+        text-align: center;
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cp-unique-section, .cp-pm-section {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        h2 {
+            margin-bottom: 1rem;
+        }
+        .cp-unique-lead {
+            font-size: 1.1em;
+            margin-bottom: 2rem;
+            max-width: 780px;
+        }
+    }
+
+    .cp-feature-card-wrap {
+        margin-bottom: 1.5rem;
+    }
+
+    // Dark card design — op-page-shell sets .card bg to #141414, embrace it
+    .cp-unique-card {
+        border: 1px solid fade(@cryptpad_color_brand, 30%) !important;
+        border-radius: @infopages-radius-L;
+        height: 100%;
+        .card-body {
+            padding: 1.5rem;
+        }
+        .cp-unique-icon {
+            font-size: 1.8em;
+            color: @cryptpad_color_brand;
+            margin-bottom: 0.75rem;
+        }
+        h3 {
+            font-size: 1.1em;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            font-size: 0.9em;
+            margin: 0;
+            opacity: 0.85;
+        }
+    }
+
+    .cp-pm-section {
+        .cp-pm-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            li {
+                padding: 0.6rem 0;
+                border-bottom: 1px solid fade(@cp_static-fg, 15%);
+                font-size: 0.95em;
+                &:last-child {
+                    border-bottom: none;
+                }
+                strong {
+                    color: @cryptpad_color_brand;
+                }
+            }
+        }
+    }
 }
 

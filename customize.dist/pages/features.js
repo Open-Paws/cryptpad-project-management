@@ -45,32 +45,99 @@ define([
         var SPECIAL_GROUP_ITEMS = {};
         SPECIAL_GROUP_ITEMS.storage0 = function (f) {
             return groupItemTemplate(
-                Msg['features_f_' + f], // .features_f_storage0
-                Msg._getKey('features_f_' + f + '_note', [Config.inactiveTime]) // .features_f_storage0_note
+                Msg['features_f_' + f],
+                Msg._getKey('features_f_' + f + '_note', [Config.inactiveTime])
             );
         };
         SPECIAL_GROUP_ITEMS.file1 = function (f) {
             return groupItemTemplate(
-                Msg['features_f_' + f], // .features_f_file1
-                Msg._getKey('features_f_' + f + '_note', [Config.maxUploadSize / 1024 / 1024]) // .features_f_file1_note
+                Msg['features_f_' + f],
+                Msg._getKey('features_f_' + f + '_note', [Config.maxUploadSize / 1024 / 1024])
             );
         };
         SPECIAL_GROUP_ITEMS.storage1 = function (f) {
             return groupItemTemplate(
-                Msg._getKey('features_f_' + f, [UIElements.prettySize(Config.defaultStorageLimit)]), // .features_f_storage1
-                Msg['features_f_' + f + '_note'] // .features_f_storage1_note
+                Msg._getKey('features_f_' + f, [UIElements.prettySize(Config.defaultStorageLimit)]),
+                Msg['features_f_' + f + '_note']
             );
         };
         SPECIAL_GROUP_ITEMS.storage2 = function (f) {
             return groupItemTemplate(
-                Msg['features_f_' + f], // .features_f_storage2
-                Msg._getKey('features_f_' + f + '_note', [Config.premiumUploadSize / 1024 / 1024]) // .features_f_storage2_note
+                Msg['features_f_' + f],
+                Msg._getKey('features_f_' + f + '_note', [Config.premiumUploadSize / 1024 / 1024])
             );
         };
 
         var groupItem = function (key) {
             return (SPECIAL_GROUP_ITEMS[key] || defaultGroupItem)(key);
         };
+
+        // ── CryptPaws-specific feature sections ───────────────────────────────
+
+        var featureCard = function (icon, title, body) {
+            return h('div.col-12.col-md-6.col-lg-4.cp-feature-card-wrap', [
+                h('div.card.cp-unique-card', [
+                    h('div.card-body', [
+                        h('div.cp-unique-icon', [h('i.fa.' + icon)]),
+                        h('h3', title),
+                        h('p', body),
+                    ])
+                ])
+            ]);
+        };
+
+        var uniqueSection = h('div.row.cp-page-section.cp-unique-section', [
+            h('div.col-12', [
+                h('h2', 'Built for animal liberation'),
+                h('p.cp-unique-lead', [
+                    'CryptPaws is a fork of ',
+                    h('a', { href: 'https://cryptpad.org', target: '_blank', rel: 'noopener noreferrer' }, 'CryptPad'),
+                    ' purpose-built for the animal liberation movement. Every document is end-to-end encrypted in your browser — the server never sees your content, making it safe for sensitive investigation data, coalition planning, and activist communications.'
+                ]),
+            ]),
+            featureCard('fa-lock', 'Zero-knowledge encryption',
+                'All documents are encrypted before leaving your device. No one — not the server, not administrators, not law enforcement with a subpoena — can read your files without your key.'),
+            featureCard('fa-tasks', 'Campaign project management',
+                'A full project management suite built into the Kanban board: Timeline/Gantt view, task dependencies, recurring tasks, assignee tracking, start and due dates, and tags.'),
+            featureCard('fa-bar-chart', 'Impact scoring & analytics',
+                'A 10-dimension impact scoring system designed for advocacy work — measuring scale, longevity, coalition building, coverage across approaches, and feasibility. Surfaces your highest-leverage projects automatically.'),
+            featureCard('fa-tachometer', 'Live dashboard',
+                'See everything at a glance: tasks due today, overdue items, blocked tasks, workload by person, and score distribution across all your projects — updated in real time.'),
+            featureCard('fa-users', 'Coalition coordination',
+                'Real-time collaboration across organizations with fine-grained access controls. Share documents securely. No personal information required to get started.'),
+            featureCard('fa-code-fork', 'Open source & self-hostable',
+                'Fully open source. Any organization can run their own instance with complete data sovereignty — no dependency on corporate infrastructure or third-party services.'),
+        ]);
+
+        var pmSection = h('div.row.cp-page-section.cp-pm-section', [
+            h('div.col-12', [
+                h('h2', 'Project management suite'),
+                h('p.cp-unique-lead', 'The CryptPaws Kanban board goes far beyond sticky notes. It\'s a complete campaign coordination platform, encrypted end-to-end.'),
+            ]),
+            h('div.col-12', [
+                h('div.row', [
+                    h('div.col-12.col-md-6', [
+                        h('ul.cp-pm-list', [
+                            h('li', [h('strong', 'Four views: '), 'Board, Timeline/Gantt, My Tasks, and Analytics Dashboard']),
+                            h('li', [h('strong', 'Task dependencies: '), 'Block tasks on prerequisites; see what\'s blocked at a glance']),
+                            h('li', [h('strong', 'Recurring tasks: '), 'Daily, weekly, or monthly recurrence with automatic next-instance generation']),
+                            h('li', [h('strong', 'Assignee management: '), 'Assign tasks to team members; track workload and completion rates per person']),
+                            h('li', [h('strong', 'Start and due dates: '), 'Full scheduling with timeline visualization and overdue tracking']),
+                        ])
+                    ]),
+                    h('div.col-12.col-md-6', [
+                        h('ul.cp-pm-list', [
+                            h('li', [h('strong', '10-dimension impact scoring: '), 'Scale, magnitude, longevity, multiplication, foundation, future-readiness, accessibility, coalition building, coverage, feasibility']),
+                            h('li', [h('strong', 'Smart filters: '), 'Filter by assignee, status, due date, or score range across all views simultaneously']),
+                            h('li', [h('strong', 'Tags and color coding: '), 'Visual organization with project colors and flexible tagging']),
+                            h('li', [h('strong', 'Quick stats: '), 'Due today, this week, next 30 days, overdue, blocked, high-impact — always visible']),
+                        ])
+                    ]),
+                ])
+            ])
+        ]);
+
+        // ── Standard tier comparison ──────────────────────────────────────────
 
         var anonymousFeatures =
             h('div.col-12.col-sm-4.cp-anon-user',[
@@ -84,9 +151,9 @@ define([
                     ]),
                     h('ul.list-group.list-group-flush', [
                         'apps',
-                        'file0', // Msg.features_f_file0, .features_f_file0_note
-                        'core', // Msg.features_f_core, Msg.features_f_core_note
-                        'cryptdrive0', // Msg.features_f_cryptdrive0, .features_f_cryptdrive0_note
+                        'file0',
+                        'core',
+                        'cryptdrive0',
                         'storage0'
                     ].map(groupItem)),
                 ]),
@@ -103,12 +170,12 @@ define([
                         h('div.text-center', Msg.features_noData),
                     ]),
                     h('ul.list-group.list-group-flush', [
-                        'anon', // Msg.features_f_anon, .features_f_anon_note
-                        'social', // Msg.features_f_social, .features_f_social_note
+                        'anon',
+                        'social',
                         'file1',
-                        'cryptdrive1', // Msg.features_f_cryptdrive1, .features_f_cryptdrive1_note
-                        'devices', // Msg.features_f_devices, .features_f_devices_note
-                        'storage1' // Msg.features_f_storage1, .features_f_storage1_note
+                        'cryptdrive1',
+                        'devices',
+                        'storage1'
                     ].map(groupItem)),
                     h('div.card-body',[
                         h('div.cp-features-register#cp-features-register', [
@@ -126,13 +193,6 @@ define([
             registeredFeatures,
         ];
 
-        // Msg.features_premium
-        // Msg.features_pricing
-        // Msg.features_emailRequired
-        // Msg.features_f_subscribe, .features_f_subscribe_note
-        // Msg.features_f_reg, .features_f_reg_note
-        // Msg.features_f_support, .features_f_support_note
-        // Msg.features_f_supporter, .features_f_supporter_note
         Extensions.getExtensionsSync('EXTRA_PRICING').forEach(ext => {
             if (!ext.getContent) { return; }
             availableFeatures.push(ext.getContent(groupItem));
@@ -144,10 +204,12 @@ define([
                 h('div.row.cp-page-title',[
                     h('div.col-12.text-center', h('h1', Msg.features_title)),
                 ]),
+                uniqueSection,
+                pmSection,
+                h('h2.cp-features-tier-heading', 'Account tiers'),
                 h('div.row.cp-container.cp-features-web.justify-content-sm-center', availableFeatures),
             ]),
             Pages.infopageFooter()
         ]);
     };
 });
-
