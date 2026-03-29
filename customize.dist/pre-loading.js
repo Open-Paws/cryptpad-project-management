@@ -3,10 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 (function () {
-var logoPath = '/customize/CryptPad_logo.svg';
-if (location.pathname === '/' || location.pathname === '/index.html') {
-    logoPath = '/api/logo';
-}
+var logoPath = '/customize/openpaws-logo.png';
 
 var elem = document.createElement('div');
 elem.setAttribute('id', 'placeholder');

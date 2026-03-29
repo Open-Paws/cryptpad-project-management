@@ -13,7 +13,7 @@ define([
 ], function ($, Config, h, LocalStore, Messages) {
     var urlArgs = Config.requireConf.urlArgs;
     var img = h('img#cp-logo', {
-        src: '/customize/openpaws-logo-light.svg?' + urlArgs
+        src: '/customize/openpaws-logo.png?' + urlArgs
     });
 
     var is500 = Boolean(document.querySelector('#five-hundred'));

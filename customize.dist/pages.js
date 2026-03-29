@@ -162,7 +162,7 @@ define([
                 h('a', {href:"/", role: 'button'}, [
                     h('div.cp-logo-foot', [
                         h('img', {
-                            src: '/customize/openpaws-logo-light.svg',
+                            src: '/customize/openpaws-logo.png',
                             "aria-hidden": true,
                             alt: ''
                         }),
@@ -218,7 +218,7 @@ define([
         var homeLink = h('a.nav-item.nav-link.cp-back-home' /* .navbar-brand */, { href: '/index.html', role: 'button'}, [
             h('i.fa.fa-arrow-left'),
             h('img', {
-                src: '/customize/openpaws-logo-light.svg',
+                src: '/customize/openpaws-logo.png',
                 "aria-hidden": true,
                 alt: ''
             }),

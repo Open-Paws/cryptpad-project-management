@@ -185,7 +185,7 @@ define([
                     h('div.row.cp-home-hero', [
                         h('div.cp-title.col-lg-6', [
                             h('img', {
-                                src: '/api/logo?' + urlArgs,
+                                src: '/customize/openpaws-logo.png',
                                 'aria-hidden': 'true',
                                 alt: ''
                             }),

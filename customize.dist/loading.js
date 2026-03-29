@@ -17,7 +17,7 @@ define([
     logo.className = 'cp-loading-logo';
     var img = document.createElement('img');
     img.className = 'cp-loading-cryptofist';
-    img.setAttribute('src', '/api/logo?' + encodeURI(urlArgs));
+    img.setAttribute('src', '/customize/openpaws-logo.png');
     img.setAttribute('alt', '');
     img.setAttribute('aria-hidden', 'true');
     logo.appendChild(img);
