@@ -76,6 +76,9 @@ node_modules/
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
+# Playwright test screenshots
+screenshot-*.png
+
 # ----> EDITORS
 # ---> Editorconfig
 # Configuration file

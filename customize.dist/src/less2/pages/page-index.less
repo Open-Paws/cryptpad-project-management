@@ -8,15 +8,10 @@
 @import (reference) "../include/browser.less";
 @import (reference) "../include/colortheme-all.less";
 @import (reference) "../include/op-analog-archive.less";
-
 &.cp-page-index {
     .infopages_main();
 
-    // Open Paws Analog Archive — apply full brand shell on the home page
-    body.html& {
-        .op-page-shell();
-        .op-grain-overlay();
-    }
+    // Analog Archive brand shell applied globally via infopages.less body.html block.
 
     #cp-main {
         min-height: 100vh;
@@ -41,14 +36,14 @@
         }
     }
     body {
-        font-family: "Open Sans", Helvetica;
+        font-family: @colortheme_font;
         color: @cryptpad_text_col;
     }
 
     h1.cp-instance-title {
         text-align: center;
-        font-family: "IBM Plex Mono";
-        font-weight: 500;
+        font-family: @op-font-serif;
+        font-weight: 400;
         color: @cryptpad_color_brand;
         font-size: 2.8rem; // Not used
         word-wrap: break-word;
@@ -85,8 +80,8 @@
             margin-bottom: 1.5em;
         }
         h1 {
-            font-family: "IBM Plex Mono";
-            font-weight: 500;
+            font-family: @op-font-serif;
+            font-weight: 400;
             color: @cryptpad_color_brand;
             font-size: 3.7rem;
         }
