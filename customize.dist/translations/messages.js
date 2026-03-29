@@ -134,7 +134,7 @@ define(['/common/translations/messages.js'], function (Messages) {
     Messages.admin_supportInitHint = "You can configure a support mailbox in order to give users of your CryptPaws instance a way to contact you securely if they have an issue with their account.";
     Messages.admin_updateAvailableHint = "A new version of CryptPaws is available";
     Messages.admin_checkupHint = "CryptPaws includes a page which automatically diagnoses common configuration issues and suggests how to correct them if necessary.";
-    Messages.admin_removeDonateButtonHint = "CryptPaws's development is partially funded by public grants and donations. Advertizing our crowdfunding efforts on your instance help the developers to continue improving the platform for everybody, but you may disable these notices if you find them inappropriate.";
+    Messages.admin_removeDonateButtonHint = "CryptPaws's development is partially funded by public grants and donations. Advertising our crowdfunding efforts on your instance helps the developers to continue improving the platform for everybody, but you may disable these notices if you find them inappropriate.";
     Messages.admin_blockDailyCheckHint = "CryptPaws instances send a message to the developers' server when launched and once per day thereafter. This lets them keep track of how many servers are running which versions of the software. You can opt-out of this measurement below. The contents of this message can be found in the application server's log for your review.";
     Messages.admin_defaultlimitHint = "Maximum storage limit for CryptPaws Drives (users and teams) when no custom rule is applied";
     Messages.admin_infoNotice1 = "Use the following fields to describe your instance. This information is used on the instance front page. It is also sent as part of the server telemetry if you opt in to be included in the list of public CryptPaws instances.";
@@ -199,7 +199,7 @@ define(['/common/translations/messages.js'], function (Messages) {
     Messages.og_default = "CryptPaws: end-to-end encrypted collaboration suite";
 
     // MFA
-    Messages.mfa_recovery_hint = "If you loose access to your authenticator app you may be locked out of your CryptPaws account. This recovery code can be used to disable 2FA and let you back in.";
+    Messages.mfa_recovery_hint = "If you lose access to your authenticator app you may be locked out of your CryptPaws account. This recovery code can be used to disable 2FA and let you back in.";
 
     // Logo label
     Messages.label_logo = "CryptPaws logo";
@@ -210,7 +210,7 @@ define(['/common/translations/messages.js'], function (Messages) {
     Messages.ssoauth_form_hint_login = "Please enter your CryptPaws password";
 
     // Broadcast
-    Messages.broadcast_maintenance = "A maintenance is planned between <b>{0}</b> and <b>{1}</b>. CryptPaws may be unavailable at that time.";
+    Messages.broadcast_maintenance = "Maintenance is scheduled between <b>{0}</b> and <b>{1}</b>. CryptPaws may be unavailable at that time.";
 
     // Popup blocked
     Messages.errorPopupBlocked = "CryptPaws needs to be able to open new tabs to operate. Please allow popup windows in your browser's address bar. These windows will never be used to show you advertising.";

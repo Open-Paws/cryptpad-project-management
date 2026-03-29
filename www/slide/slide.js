@@ -83,8 +83,7 @@ define([
             var $empty = $('<img>', {
                 src: '/customize/openpaws-logo.png',
                 alt: '',
-                class: 'cp-app-code-preview-empty',
-                style: 'filter:invert(1)'
+                class: 'cp-app-code-preview-empty'
             });
             $content.html('').append($empty);
             $content.addClass('cp-app-slide-isempty');

@@ -31,6 +31,9 @@
         --code-border: rgba(255,255,255,0.08);
         --code-preview-bg: #0A0A0A;
         --code-preview-fg: #F3F0EB;
+
+        // Invert logo only in dark mode (PNG is black-on-transparent)
+        .cp-app-code-preview-empty { filter: invert(1); }
     }
 
     display: flex;

@@ -211,8 +211,7 @@ define([
         $('<img>', {
             src: '/customize/openpaws-logo.png',
             alt: '',
-            class: 'cp-app-code-preview-empty',
-            style: 'filter:invert(1)'
+            class: 'cp-app-code-preview-empty'
         }).appendTo($previewContainer);
 
         var $previewButton = framework._.sfCommon.createButton('preview', true);

@@ -24,6 +24,9 @@
         --slide-editor-bg: #141414;
         --slide-text: #F3F0EB;
         --slide-border: rgba(255,255,255,0.08);
+
+        // Invert logo only in dark mode (PNG is black-on-transparent)
+        .cp-app-code-preview-empty { filter: invert(1); }
     }
 
     .mediatag_base();
