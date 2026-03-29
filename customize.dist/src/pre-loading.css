@@ -29,7 +29,7 @@
     flex-flow: column;
     justify-content: center;
     align-items: center;
-    font: 20px 'Space Grotesk', 'Helvetica Neue', sans-serif !important;
+    font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
 }
 html:not(.cp-app-noscroll) #placeholder.dark-theme {
     background-color: #0A0A0A; /* Open Paws Deep Space */

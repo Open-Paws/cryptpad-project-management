@@ -12,10 +12,9 @@ SPDX-License-Identifier: AGPL-3.0-or-later
     <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="icon" type="image/png" href="/customize/main-favicon.png" id="favicon"/>
-    <!-- Open Paws brand typography: DM Serif Display / Space Grotesk / JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- down.html is shown during outages; it must not depend on external network resources.
+         Use a system font stack so the page renders without CDN connectivity. -->
+    <style>body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }</style>
 </head>
 <body class="html">
 

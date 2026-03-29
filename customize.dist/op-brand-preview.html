@@ -31,7 +31,11 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
             --op-border: rgba(255, 255, 255, 0.08);
         }
 
-        /* ── Film grain overlay — core brand signature ── */
+        /*
+         * Film grain overlay — intentionally duplicates .op-grain-overlay() from
+         * op-analog-archive.less. This file is standalone HTML with no LESS compilation,
+         * so the mixin cannot be referenced directly. Keep in sync with that mixin.
+         */
         body::after {
             content: '';
             position: fixed;
@@ -39,7 +43,7 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 999; /* decorative — below corner notifications (9999) and toolbar (10000) */
             opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23grain)'/%3E%3C/svg%3E");
             background-repeat: repeat;
@@ -440,7 +444,7 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
 <!-- Navbar -->
 <nav>
     <div class="nav-brand">
-        <img src="/customize/openpaws-logo-light.svg" alt="Open Paws" onerror="this.style.display='none'">
+        <img src="/customize/openpaws-logo-light.svg" alt="Open Paws" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2232%22 height=%2232%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2215%22 fill=%22%230D7377%22/%3E%3C/svg%3E'">
         <span>Open Paws<br><span style="color: var(--op-mid-grey); font-size: 0.7rem;">Project Management</span></span>
     </div>
     <ul class="nav-links">
@@ -571,7 +575,7 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
 <footer>
     <div class="footer-inner">
         <div class="footer-brand">
-            <img src="/customize/openpaws-logo-light.svg" alt="" style="height:28px; width:28px;" onerror="this.style.display='none'">
+            <img src="/customize/openpaws-logo-light.svg" alt="" style="height:28px; width:28px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2228%22 height=%2228%22 viewBox=%220 0 28 28%22%3E%3Ccircle cx=%2214%22 cy=%2214%22 r=%2213%22 fill=%22%230D7377%22/%3E%3C/svg%3E'">
             Open Paws Project Management
         </div>
         <ul class="footer-links">

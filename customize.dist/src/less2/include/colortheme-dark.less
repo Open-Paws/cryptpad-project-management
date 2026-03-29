@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+@import (reference) "./op-analog-archive.less";
+
 // Open Paws — Analog Archive brand: Space Grotesk body, DM Serif Display headings
 @colortheme_font: 'Space Grotesk', 'Helvetica Neue', sans-serif;
 @colortheme_app-font-size: 16px;
@@ -285,15 +287,15 @@
 @cp_help-fg: @cryptpad_text_col;
 @cp_help-link: @cryptpad_color_link;
 
-// Static pages — Open Paws Analog Archive: Deep Space background, Warm White text, Teal accent
-@cp_static-bg: #0A0A0A;
-@cp_static-fg: #F3F0EB;
-@cp_static-link: #1CADB4;
-@cp_static-title: #F3F0EB;
-@cp_static-footer: rgba(13, 115, 119, 0.15);
-@cp_static-footer-border: rgba(255, 255, 255, 0.08);
-@cp_static-topbar-fg: #F3F0EB;
-@cp_static-card-bg: #141414;
+// Static pages — Open Paws Analog Archive: tokens sourced from op-analog-archive.less
+@cp_static-bg: @op-deep-space;
+@cp_static-fg: @op-warm-white;
+@cp_static-link: @op-teal-mid;
+@cp_static-title: @op-warm-white;
+@cp_static-footer: fade(@op-teal, 15%);
+@cp_static-footer-border: @op-border;
+@cp_static-topbar-fg: @op-warm-white;
+@cp_static-card-bg: @op-card-bg;
 @cp_static-danger: @cryptpad_color_red_fade;
 @cp_static-img-invert-filter: hue-rotate(200grad) invert();
 
