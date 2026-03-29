@@ -196,7 +196,6 @@ define([
                                 termsLink,
                                 privacyLink,
                                 imprintLink,
-                                h('a', {href:"/contact.html"}, Msg.contact),
                                 statusLink,
                             ])
                         ]),
@@ -217,6 +216,31 @@ define([
                                 ]),
                                 extraButtons
                             ])
+                        ])
+                    ]),
+                ]),
+                h('div.container.cp-container.cp-home-value-props', [
+                    h('div.row', [
+                        h('div.col-12.col-md-4.cp-vp', [
+                            h('div.cp-vp-icon', [h('i.fa.fa-lock')]),
+                            h('h3', 'Zero-knowledge encrypted'),
+                            h('p', 'Every document is encrypted in your browser before it leaves your device. The server never sees your content — making it safe for investigation data, legal strategy, and activist communications.'),
+                        ]),
+                        h('div.col-12.col-md-4.cp-vp', [
+                            h('div.cp-vp-icon', [h('i.fa.fa-tasks')]),
+                            h('h3', 'Built for animal liberation'),
+                            h('p', 'Purpose-built for the movement: campaign planning, coalition coordination, and investigation management — all encrypted end-to-end with no personal information required to get started.'),
+                        ]),
+                        h('div.col-12.col-md-4.cp-vp', [
+                            h('div.cp-vp-icon', [h('i.fa.fa-bar-chart')]),
+                            h('h3', 'Advanced project management'),
+                            h('p', 'A full Kanban suite with Timeline/Gantt view, task dependencies, assignee tracking, and a 10-dimension impact scoring system — so you always know which campaigns move the needle most.'),
+                        ]),
+                    ]),
+                    h('div.cp-home-features-link', [
+                        h('a', {href: '/features.html'}, [
+                            'See all features',
+                            h('i.fa.fa-arrow-right'),
                         ])
                     ]),
                 ]),
