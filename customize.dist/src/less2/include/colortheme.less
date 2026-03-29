@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-@colortheme_font: 'Open Sans', 'Helvetica Neue', sans-serif;
+// Open Paws — Analog Archive brand: Space Grotesk body, DM Serif Display headings
+@colortheme_font: 'Space Grotesk', 'Helvetica Neue', sans-serif;
 @colortheme_app-font-size: 16px;
 @colortheme_app-font-size-small: 13px;
 @colortheme_app-font: @colortheme_app-font-size @colortheme_font;
 
-// Colors
-@cryptpad_color_brand: #0087FF;
+// Colors — Open Paws Cyber Teal (#0D7377) replaces CryptPad blue as the single accent
+@cryptpad_color_brand: #0D7377;
 @cryptpad_color_brand_300: lighten(@cryptpad_color_brand, 30%);
 @cryptpad_color_brand_fade: fade(@cryptpad_color_brand, 75%);
 @cryptpad_color_brand_fader: fade(@cryptpad_color_brand, 50%);
@@ -283,15 +284,15 @@
 @cp_help-fg: @cryptpad_text_col;
 @cp_help-link: @cryptpad_color_link;
 
-// Static pages
-@cp_static-bg: @cryptpad_color_grey_200;
+// Static pages — Open Paws light mode keeps near-white bg with teal accent
+@cp_static-bg: #F5F3EF;
 @cp_static-fg: @cryptpad_text_col;
 @cp_static-link: @cryptpad_color_brand;
 @cp_static-title: @cryptpad_color_brand;
-@cp_static-footer: fade(@cryptpad_color_brand_300, 30%);
-@cp_static-footer-border: @cryptpad_color_white;
+@cp_static-footer: fade(@cryptpad_color_brand, 12%);
+@cp_static-footer-border: @cryptpad_color_grey_300;
 @cp_static-topbar-fg: @cryptpad_color_brand;
-@cp_static-card-bg: @cryptpad_color_white;
+@cp_static-card-bg: #FDFCFA;
 @cp_static-danger: fade(@cryptpad_color_red, 30%);
 @cp_static-img-invert-filter: none;
 

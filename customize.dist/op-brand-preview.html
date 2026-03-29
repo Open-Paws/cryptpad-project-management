@@ -1,0 +1,592 @@
+<!--
+SPDX-FileCopyrightText: 2026 Open Paws and contributors
+SPDX-License-Identifier: AGPL-3.0-or-later
+
+Brand preview — Analog Archive Design System
+This page demonstrates all Open Paws branding elements applied to CryptPad's
+marketing page surfaces without requiring the full CryptPad JS bootstrap.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Paws Project Management — Brand Preview</title>
+
+    <!-- Open Paws brand typography: DM Serif Display / Space Grotesk / JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── Open Paws Analog Archive brand tokens ── */
+        :root {
+            --op-deep-space: #0A0A0A;
+            --op-warm-white: #F3F0EB;
+            --op-teal: #0D7377;
+            --op-teal-mid: #1CADB4;
+            --op-teal-glow: rgba(13, 115, 119, 0.40);
+            --op-mid-grey: #999999;
+            --op-card-bg: #141414;
+            --op-border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ── Film grain overlay — core brand signature ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23grain)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 256px 256px;
+            animation: op-grain 8s steps(10) infinite;
+        }
+
+        @keyframes op-grain {
+            0%, 100% { transform: translate(0, 0); }
+            10%       { transform: translate(-5%, -10%); }
+            20%       { transform: translate(-15%, 5%); }
+            30%       { transform: translate(7%, -25%); }
+            40%       { transform: translate(-5%, 25%); }
+            50%       { transform: translate(-15%, 10%); }
+            60%       { transform: translate(15%, 0%); }
+            70%       { transform: translate(0%, 15%); }
+            80%       { transform: translate(3%, 35%); }
+            90%       { transform: translate(-10%, 10%); }
+        }
+
+        /* ── Base ── */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--op-deep-space);
+            color: var(--op-warm-white);
+            font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(153,153,153,0.5) transparent;
+        }
+
+        ::selection {
+            background: var(--op-teal-glow);
+            color: var(--op-warm-white);
+        }
+
+        a { color: var(--op-teal-mid); text-decoration: none; }
+        a:hover { color: #35d0d8; }
+
+        h1, h2, h3 {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            color: var(--op-warm-white);
+        }
+
+        code, .mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+        }
+
+        /* ── Navbar ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 56px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--op-border);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--op-warm-white);
+        }
+
+        .nav-brand img {
+            height: 32px;
+            width: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.25rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--op-warm-white);
+            padding: 0.5rem 0.75rem;
+            border-radius: 2px;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover { color: var(--op-teal-mid); }
+
+        .nav-links .btn-register {
+            background: var(--op-teal);
+            color: var(--op-warm-white);
+            border-radius: 2px;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-links .btn-register:hover {
+            background: #0a5d61;
+            color: var(--op-warm-white);
+        }
+
+        /* ── Container ── */
+        .container {
+            max-width: 1200px;
+            padding: 0 2rem;
+            margin: 0 auto;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 5rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--op-border);
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--op-teal-mid);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            max-width: 16ch;
+        }
+
+        .hero-tagline {
+            font-size: 1.1rem;
+            color: var(--op-mid-grey);
+            max-width: 48ch;
+            margin-bottom: 2rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--op-teal);
+            color: var(--op-warm-white);
+            border-radius: 2px;
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: background 0.15s;
+        }
+
+        .btn-primary:hover {
+            background: #0a5d61;
+            color: var(--op-warm-white);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: transparent;
+            border: 1px solid var(--op-border);
+            color: var(--op-warm-white);
+            border-radius: 2px;
+            padding: 0.75rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: border-color 0.15s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--op-teal-mid);
+            color: var(--op-teal-mid);
+        }
+
+        /* ── Section ── */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-bottom: 1px solid var(--op-border);
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--op-mid-grey);
+            margin-bottom: 1rem;
+        }
+
+        section h2 {
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            margin-bottom: 2rem;
+        }
+
+        /* ── App grid ── */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .app-card {
+            background: var(--op-card-bg);
+            border: 1px solid var(--op-border);
+            border-radius: 2px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.15s;
+        }
+
+        .app-card:hover {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .app-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .app-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            color: var(--op-mid-grey);
+            text-transform: uppercase;
+        }
+
+        /* ── Color palette ── */
+        .palette {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .swatch {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .swatch-color {
+            width: 80px;
+            height: 80px;
+            border-radius: 2px;
+            border: 1px solid var(--op-border);
+        }
+
+        .swatch-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--op-mid-grey);
+            letter-spacing: 0.05em;
+        }
+
+        .swatch-hex {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--op-warm-white);
+        }
+
+        /* ── Feature cards ── */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: var(--op-card-bg);
+            border: 1px solid var(--op-border);
+            border-radius: 2px;
+            padding: 2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: var(--op-mid-grey);
+            line-height: 1.6;
+        }
+
+        .teal-accent {
+            color: var(--op-teal-mid);
+        }
+
+        /* ── Typography samples ── */
+        .type-samples {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .type-sample-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--op-mid-grey);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            background: rgba(13, 115, 119, 0.12);
+            border-top: 1px solid var(--op-border);
+            padding: 2rem;
+        }
+
+        footer .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        footer .footer-brand {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--op-warm-white);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        footer .footer-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--op-mid-grey);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        footer .footer-links a:hover { color: var(--op-warm-white); }
+
+        footer .footer-version {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--op-mid-grey);
+        }
+
+        .corner-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--op-mid-grey);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div class="nav-brand">
+        <img src="/customize/openpaws-logo-light.svg" alt="Open Paws" onerror="this.style.display='none'">
+        <span>Open Paws<br><span style="color: var(--op-mid-grey); font-size: 0.7rem;">Project Management</span></span>
+    </div>
+    <ul class="nav-links">
+        <li><a href="#">Features</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Login</a></li>
+        <li><a href="#" class="btn-register">Register</a></li>
+    </ul>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <p class="hero-label">[ Animal Advocacy Infrastructure ]</p>
+    <h1>Encrypted project management for animal liberation</h1>
+    <p class="hero-tagline">
+        End-to-end encrypted collaborative tools built for activists.
+        Your investigation data, campaign plans, and coalition communications stay private.
+    </p>
+    <div class="hero-actions">
+        <a href="#" class="btn-primary">Get Started</a>
+        <a href="#" class="btn-secondary">Learn more →</a>
+    </div>
+</div>
+
+<!-- Color palette section -->
+<section>
+    <p class="section-label">[ Brand System / Analog Archive ]</p>
+    <h2>Color Palette</h2>
+    <div class="palette">
+        <div class="swatch">
+            <div class="swatch-color" style="background: #0A0A0A;"></div>
+            <div class="swatch-name">Deep Space</div>
+            <div class="swatch-hex">#0A0A0A</div>
+        </div>
+        <div class="swatch">
+            <div class="swatch-color" style="background: #0D7377; border-color: rgba(255,255,255,0.15);"></div>
+            <div class="swatch-name">Cyber Teal</div>
+            <div class="swatch-hex">#0D7377</div>
+        </div>
+        <div class="swatch">
+            <div class="swatch-color" style="background: #1CADB4; border-color: rgba(255,255,255,0.15);"></div>
+            <div class="swatch-name">Teal Mid</div>
+            <div class="swatch-hex">#1CADB4</div>
+        </div>
+        <div class="swatch">
+            <div class="swatch-color" style="background: #F3F0EB; border-color: rgba(255,255,255,0.15);"></div>
+            <div class="swatch-name">Warm White</div>
+            <div class="swatch-hex">#F3F0EB</div>
+        </div>
+        <div class="swatch">
+            <div class="swatch-color" style="background: #141414; border-color: rgba(255,255,255,0.12);"></div>
+            <div class="swatch-name">Card Surface</div>
+            <div class="swatch-hex">#141414</div>
+        </div>
+        <div class="swatch">
+            <div class="swatch-color" style="background: #999999; border-color: rgba(255,255,255,0.15);"></div>
+            <div class="swatch-name">Mid Grey</div>
+            <div class="swatch-hex">#999999</div>
+        </div>
+    </div>
+</section>
+
+<!-- Typography section -->
+<section>
+    <p class="section-label">[ Typography / Three-Font System ]</p>
+    <h2>Type Hierarchy</h2>
+    <div class="type-samples">
+        <div>
+            <div class="type-sample-label">DM Serif Display — Headlines</div>
+            <div style="font-family:'DM Serif Display',serif; font-size: 3rem; line-height:1.05;">Encrypt everything.<br><em>Protect every activist.</em></div>
+        </div>
+        <div>
+            <div class="type-sample-label">Space Grotesk — Body text</div>
+            <div style="font-family:'Space Grotesk',sans-serif; font-size: 1rem; color: var(--op-mid-grey); max-width: 60ch;">
+                Open Paws builds AI infrastructure for the animal advocacy movement. Every tool is encrypted end-to-end, designed for activists facing legal risk from ag-gag statutes and corporate surveillance.
+            </div>
+        </div>
+        <div>
+            <div class="type-sample-label">JetBrains Mono — Labels, metadata, code</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size: 0.8rem; color: var(--op-teal-mid); letter-spacing:0.1em; text-transform:uppercase;">
+                [ ENCRYPTED ] [ OPEN SOURCE ] [ ANIMAL LIBERATION ] [ 2026 ]
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- App grid -->
+<section>
+    <p class="section-label">[ Collaborative Tools ]</p>
+    <h2>Encrypted workspaces</h2>
+    <div class="app-grid">
+        <div class="app-card"><span class="app-icon">📋</span><div class="app-name">Kanban</div></div>
+        <div class="app-card"><span class="app-icon">📝</span><div class="app-name">Rich Text</div></div>
+        <div class="app-card"><span class="app-icon">💻</span><div class="app-name">Code</div></div>
+        <div class="app-card"><span class="app-icon">📊</span><div class="app-name">Spreadsheet</div></div>
+        <div class="app-card"><span class="app-icon">🗂️</span><div class="app-name">Drive</div></div>
+        <div class="app-card"><span class="app-icon">📅</span><div class="app-name">Calendar</div></div>
+        <div class="app-card"><span class="app-icon">📋</span><div class="app-name">Forms</div></div>
+        <div class="app-card"><span class="app-icon" style="color:var(--op-teal-mid)">+</span><div class="app-name">More</div></div>
+    </div>
+</section>
+
+<!-- Feature cards -->
+<section>
+    <p class="section-label">[ Why Open Paws ]</p>
+    <h2>Built for activists, not corporations</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h3><span class="teal-accent">01</span> End-to-end encrypted</h3>
+            <p>The server never sees your data. Keys live in your URL fragment — never transmitted, never stored, never subpoena-able.</p>
+        </div>
+        <div class="feature-card">
+            <h3><span class="teal-accent">02</span> Investigation-safe</h3>
+            <p>Designed for ag-gag legal environments. Real deletion, no soft deletes. Device seizure protection built in.</p>
+        </div>
+        <div class="feature-card">
+            <h3><span class="teal-accent">03</span> Coalition-ready</h3>
+            <p>Granular sharing controls for multi-org coordination. Your data stays yours even when working across coalitions.</p>
+        </div>
+        <div class="feature-card">
+            <h3><span class="teal-accent">04</span> Self-hosted</h3>
+            <p>Run on your own infrastructure. Zero dependency on commercial cloud providers who may comply with industry warrants.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <img src="/customize/openpaws-logo-light.svg" alt="" style="height:28px; width:28px;" onerror="this.style.display='none'">
+            Open Paws Project Management
+        </div>
+        <ul class="footer-links">
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Source</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <div class="footer-version">v2025.6 — AGPL-3.0</div>
+    </div>
+    <div style="max-width:1200px; margin: 1rem auto 0; display:flex; justify-content:space-between; padding-top:1rem; border-top: 1px solid var(--op-border);">
+        <span class="corner-text">OPENPAWS.AI</span>
+        <span class="corner-text">2026</span>
+    </div>
+</footer>
+
+</body>
+</html>

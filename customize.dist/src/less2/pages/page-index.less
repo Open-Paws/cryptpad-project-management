@@ -7,9 +7,16 @@
 @import (reference) "../include/infopages.less";
 @import (reference) "../include/browser.less";
 @import (reference) "../include/colortheme-all.less";
+@import (reference) "../include/op-analog-archive.less";
 
 &.cp-page-index {
     .infopages_main();
+
+    // Open Paws Analog Archive — apply full brand shell on the home page
+    body.html& {
+        .op-page-shell();
+        .op-grain-overlay();
+    }
 
     #cp-main {
         min-height: 100vh;

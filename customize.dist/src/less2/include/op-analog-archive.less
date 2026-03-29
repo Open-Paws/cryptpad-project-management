@@ -1,0 +1,190 @@
+/*
+ * SPDX-FileCopyrightText: 2026 Open Paws and contributors
+ *
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ *
+ * Open Paws — Analog Archive Design System
+ * Cinematic print-editorial aesthetic inspired by 1970s sci-fi film posters.
+ * Core elements: Deep Space bg, Warm White text, Teal-only accent, film grain.
+ */
+
+// ── Brand tokens ─────────────────────────────────────────────────────────────
+@op-deep-space:    #0A0A0A;
+@op-warm-white:    #F3F0EB;
+@op-teal:          #0D7377;
+@op-teal-mid:      #1CADB4;
+@op-teal-glow:     rgba(13, 115, 119, 0.40);
+@op-mid-grey:      #999999;
+@op-card-bg:       #141414;
+@op-border:        rgba(255, 255, 255, 0.08);
+
+// ── Typography ────────────────────────────────────────────────────────────────
+@op-font-serif:    'DM Serif Display', Georgia, serif;
+@op-font-sans:     'Space Grotesk', 'Helvetica Neue', sans-serif;
+@op-font-mono:     'JetBrains Mono', monospace;
+
+// ── Film grain overlay (SVG feTurbulence — core brand signature) ──────────────
+// Injected via .op-grain-overlay mixin on body.html for marketing pages.
+// Opacity 4%, z-index 9999, pointer-events none — always on top, never removed.
+.op-grain-overlay () {
+    position: relative;
+    &::after {
+        content: '';
+        position: fixed;
+        inset: -50%;
+        width: 200%;
+        height: 200%;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23grain)'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 256px 256px;
+        animation: op-grain 8s steps(10) infinite;
+    }
+    @keyframes op-grain {
+        0%, 100% { transform: translate(0, 0); }
+        10%       { transform: translate(-5%, -10%); }
+        20%       { transform: translate(-15%, 5%); }
+        30%       { transform: translate(7%, -25%); }
+        40%       { transform: translate(-5%, 25%); }
+        50%       { transform: translate(-15%, 10%); }
+        60%       { transform: translate(15%, 0%); }
+        70%       { transform: translate(0%, 15%); }
+        80%       { transform: translate(3%, 35%); }
+        90%       { transform: translate(-10%, 10%); }
+    }
+}
+
+// ── Analog Archive page shell ─────────────────────────────────────────────────
+// Applied on body.html for all static/marketing pages.
+.op-page-shell () {
+    background-color: @op-deep-space;
+    color: @op-warm-white;
+    font-family: @op-font-sans;
+
+    // Scrollbar — thin, mid-grey thumb
+    scrollbar-width: thin;
+    scrollbar-color: rgba(153, 153, 153, 0.5) transparent;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb {
+        background: rgba(153, 153, 153, 0.5);
+        border-radius: 2px;
+    }
+
+    // Text selection — teal glow
+    ::selection {
+        background: @op-teal-glow;
+        color: @op-warm-white;
+    }
+
+    // Typography hierarchy — DM Serif Display for headings
+    h1, h2, h3 {
+        font-family: @op-font-serif;
+        font-weight: 400;
+        color: @op-warm-white;
+        letter-spacing: -0.02em;
+    }
+    h1 { font-size: 3.5rem; line-height: 1.05; }
+    h2 { font-size: 2.2rem; line-height: 1.1; }
+    h3 { font-size: 1.5rem; line-height: 1.2; }
+
+    // Monospace labels
+    code, pre, .cp-footer-version {
+        font-family: @op-font-mono;
+    }
+
+    // Links — teal mid
+    a { color: @op-teal-mid; }
+    a:visited { color: darken(@op-teal-mid, 5%); }
+    a:hover { color: lighten(@op-teal-mid, 10%); }
+
+    // Navbar — transparent over Deep Space
+    .navbar {
+        background: rgba(10, 10, 10, 0.95);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid @op-border;
+
+        .navbar-brand {
+            font-family: @op-font-mono;
+            color: @op-warm-white;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        a.nav-link {
+            color: @op-warm-white;
+            background: transparent;
+            font-family: @op-font-mono;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            &:hover { color: @op-teal-mid; background: transparent; }
+        }
+        .cp-register-btn {
+            background: @op-teal;
+            color: @op-warm-white;
+            border-radius: 2px;
+            &:hover { background: darken(@op-teal, 8%); }
+        }
+    }
+
+    // Footer — subtle teal tint over Deep Space
+    footer {
+        background: rgba(13, 115, 119, 0.12);
+        border-top: 1px solid @op-border;
+        font-family: @op-font-mono;
+        font-size: 0.8rem;
+        letter-spacing: 0.05em;
+        color: @op-mid-grey;
+
+        .cp-logo-foot {
+            .logo-font {
+                font-family: @op-font-mono;
+                color: @op-warm-white;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+        }
+        .cp-logo-btns a {
+            background: @op-teal;
+            color: @op-warm-white;
+            border-radius: 2px;
+            &:hover {
+                background: @op-card-bg;
+                color: @op-warm-white;
+            }
+        }
+    }
+
+    // Buttons — sharp corners, teal primary
+    button:not(.btn), .btn-primary, .cp-features-register-button {
+        border-radius: 2px;
+        font-family: @op-font-mono;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+
+    // Cards — dark surface with subtle border
+    .card, .cp-app-grid, .cp-extensions-popup {
+        background: @op-card-bg;
+        border: 1px solid @op-border;
+        border-radius: 2px;
+        box-shadow: none;
+    }
+
+    // Containers — left-aligned editorial layout (never centered)
+    .cp-container {
+        max-width: 1200px;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    // Focus ring — teal
+    a:focus-visible, button:focus-visible {
+        outline: 2px solid @op-teal-mid;
+        outline-offset: 2px;
+        border-radius: 0;
+    }
+}
