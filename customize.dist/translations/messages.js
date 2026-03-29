@@ -218,6 +218,9 @@ define(['/common/translations/messages.js'], function (Messages) {
     // Registration
     Messages.register_warning_note = "Due to the encrypted nature of CryptPaws, the service administrators will not be able to recover data in case you forget your username and/or password. Please save them in a safe place.";
 
+    // Homepage tagline
+    Messages.main_catch_phrase = "End-to-end encrypted tools<br>for the animal liberation movement";
+
     // Poll
     Messages.poll_descriptionHint = "Describe your poll, and use the \u2713 (publish) button when you're done.\nThe description can be written using markdown syntax and you can embed media elements from your CryptPaws Drive.\nAnyone with the link can change the description, but this is discouraged.";
 

@@ -76,19 +76,47 @@
         flex-grow: 1;
         max-width: unset;
         img {
-            max-width: 200px;
-            margin-bottom: 1.5em;
+            max-width: 120px;
+            margin-bottom: 0.75em;
         }
         h1 {
             font-family: @op-font-serif;
             font-weight: 400;
             color: @cryptpad_color_brand;
             font-size: 3.7rem;
+            margin-bottom: 0.25em;
         }
         .tag-line {
             text-align: center;
-            font-size: 1.4em;
+            font-size: 1.2em;
             max-width: 50ch;
+            margin-bottom: 1.25rem;
+        }
+        .cp-hero-values {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+            text-align: left;
+            li {
+                padding: 0.3rem 0;
+                font-size: 0.95em;
+                opacity: 0.9;
+                i {
+                    color: @cryptpad_color_brand;
+                    margin-right: 0.5em;
+                    width: 1em;
+                    text-align: center;
+                }
+            }
+        }
+        a.cp-hero-features-link {
+            font-size: 0.9em;
+            color: @cryptpad_color_brand;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+            align-self: flex-start;
+            &:hover { text-decoration: underline; }
+            i { margin-left: 0.3em; }
         }
         .cp-instance-location {
             margin-top: 20px;
@@ -272,43 +300,6 @@
                 &:hover, &:focus {
                     background-color:  contrast(@cp_buttons-primary-text, darken(@cp_buttons-primary, 10%), lighten(@cp_buttons-primary, 10%));
                 }
-            }
-        }
-    }
-
-    // ── Homepage value-prop section ───────────────────────────────────────
-    .cp-home-value-props {
-        padding-top: 0;
-        padding-bottom: 3rem;
-        .cp-vp {
-            text-align: center;
-            padding: 1.5rem 1rem;
-            .cp-vp-icon {
-                font-size: 2rem;
-                color: @cryptpad_color_brand;
-                margin-bottom: 0.75rem;
-            }
-            h3 {
-                font-size: 1.1em;
-                font-weight: 700;
-                margin-bottom: 0.5rem;
-            }
-            p {
-                font-size: 0.9em;
-                opacity: 0.8;
-                max-width: 30ch;
-                margin: 0 auto;
-            }
-        }
-        .cp-home-features-link {
-            text-align: center;
-            margin-top: 1.5rem;
-            a {
-                color: @cryptpad_color_brand;
-                font-size: 1em;
-                text-decoration: none;
-                &:hover { text-decoration: underline; }
-                i { margin-left: 0.4em; }
             }
         }
     }
