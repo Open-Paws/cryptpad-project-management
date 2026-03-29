@@ -40,7 +40,8 @@ define([
     };
 
     var mkDiagramDarkToggle = function (framework) {
-        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        var $btn = $('<button>').attr('title', 'Toggle theme').append($('<i>').addClass('fa fa-moon-o'));
+        var btn = $btn[0];
         $(btn).click(function () {
             var $app = $('body.cp-app-diagram');
             var dark = $app.hasClass('cp-diagram-dark-theme');
