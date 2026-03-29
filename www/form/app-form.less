@@ -25,6 +25,42 @@
     color: @cryptpad_text_col;
     background-color: @cp_app-bg;
 
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --form-bg: #F5F5F5;
+    --form-surface: #FFFFFF;
+    --form-text: #111827;
+    --form-border: rgba(0,0,0,0.1);
+
+    &.cp-form-dark-theme {
+        --form-bg: #0A0A0A;
+        --form-surface: #141414;
+        --form-text: #F3F0EB;
+        --form-border: rgba(255,255,255,0.08);
+
+        background-color: var(--form-bg);
+        color: var(--form-text);
+
+        #cp-app-form-editor {
+            background-color: var(--form-bg);
+            color: var(--form-text);
+        }
+        .cp-form-block {
+            background-color: var(--form-surface);
+            color: var(--form-text);
+            border-color: var(--form-border);
+        }
+        .cp-form-creator-container {
+            background-color: var(--form-bg);
+        }
+        input, textarea, select {
+            background-color: var(--form-surface);
+            color: var(--form-text);
+            border-color: var(--form-border);
+        }
+    }
+
     .alert {
         font-size: 1rem;
         &.alert-info {

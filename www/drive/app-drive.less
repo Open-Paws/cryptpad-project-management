@@ -11,5 +11,33 @@
     .framework_min_main();
 
     .drive_main();
+
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --drive-bg: #F5F5F5;
+    --drive-surface: #FFFFFF;
+    --drive-text: #111827;
+    --drive-border: rgba(0,0,0,0.1);
+    --drive-sidebar-bg: #EFEFEF;
+
+    // Dark theme overrides
+    &.cp-drive-dark-theme {
+        --drive-bg: #0A0A0A;
+        --drive-surface: #141414;
+        --drive-text: #F3F0EB;
+        --drive-border: rgba(255,255,255,0.08);
+        --drive-sidebar-bg: #0D0D0D;
+    }
+
+    #cp-app-drive-content-container {
+        background-color: var(--drive-bg);
+        color: var(--drive-text);
+    }
+
+    #cp-app-drive-tree {
+        background-color: var(--drive-sidebar-bg);
+        color: var(--drive-text);
+    }
 }
 

@@ -39,6 +39,23 @@ define([
         framework._.toolbar.$drawer.append($helpMenuButton);
     };
 
+    var mkDiagramDarkToggle = function (framework) {
+        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        $(btn).click(function () {
+            var $app = $('body.cp-app-diagram');
+            var dark = $app.hasClass('cp-diagram-dark-theme');
+            $app.toggleClass('cp-diagram-dark-theme', !dark);
+            localStorage.setItem('cp-diagram-theme', dark ? 'light' : 'dark');
+            $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
+        });
+        var saved = localStorage.getItem('cp-diagram-theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            $('body.cp-app-diagram').addClass('cp-diagram-dark-theme');
+            $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+        }
+        framework._.toolbar.$bottomL.append($(btn));
+    };
+
     // This is the main initialization loop
     var onFrameworkReady = function (framework) {
         var EMPTY_DRAWIO = "<mxfile type=\"embed\"><diagram id=\"bWoO5ACGZIaXrIiKNTKd\" name=\"Page-1\"><mxGraphModel dx=\"1259\" dy=\"718\" grid=\"1\" gridSize=\"10\" guides=\"1\" tooltips=\"1\" connect=\"1\" arrows=\"1\" fold=\"1\" page=\"1\" pageScale=\"1\" pageWidth=\"827\" pageHeight=\"1169\" math=\"0\" shadow=\"0\"><root><mxCell id=\"0\"/><mxCell id=\"1\" parent=\"0\"/></root></mxGraphModel></diagram></mxfile>";
@@ -51,6 +68,7 @@ define([
         var privateData = framework._.cpNfInner.metadataMgr.getPrivateData();
         if (!privateData.isEmbed) {
             mkHelpMenu(framework);
+            mkDiagramDarkToggle(framework);
         }
 
         var postMessageToDrawio = function(msg) {

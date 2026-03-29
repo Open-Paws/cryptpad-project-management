@@ -2225,6 +2225,24 @@ define([
         APP.toolbar.$rightside.hide();
         APP.history = common.makeUniversal('history');
 
+        var mkSettingsDarkToggle = function (toolbar) {
+            var $btn = $('<button title="Toggle theme"><i class="fa fa-moon-o"></i></button>');
+            $btn.click(function () {
+                var $app = $('.cp-app-settings');
+                var dark = $app.hasClass('cp-settings-dark-theme');
+                $app.toggleClass('cp-settings-dark-theme', !dark);
+                localStorage.setItem('cp-settings-theme', dark ? 'light' : 'dark');
+                $btn.find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
+            });
+            var saved = localStorage.getItem('cp-settings-theme');
+            if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                $('.cp-app-settings').addClass('cp-settings-dark-theme');
+                $btn.find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+            }
+            toolbar.$bottomL.append($btn);
+        };
+        mkSettingsDarkToggle(APP.toolbar);
+
         // EXTENSION_POINT:SETTINGS_CATEGORY
         common.getExtensionsSync('SETTINGS_CATEGORY').forEach(ext => {
             if (!ext || !ext.id || !ext.name || !ext.getContent) {

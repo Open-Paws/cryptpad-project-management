@@ -225,6 +225,24 @@ define([
             };
             var toolbar = Toolbar.create(configTb);
 
+            var mkDriveDarkToggle = function (tb) {
+                var $btn = $('<button title="Toggle theme"><i class="fa fa-moon-o"></i></button>');
+                $btn.click(function () {
+                    var $app = $('.cp-app-drive');
+                    var dark = $app.hasClass('cp-drive-dark-theme');
+                    $app.toggleClass('cp-drive-dark-theme', !dark);
+                    localStorage.setItem('cp-drive-theme', dark ? 'light' : 'dark');
+                    $btn.find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
+                });
+                var saved = localStorage.getItem('cp-drive-theme');
+                if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    $('.cp-app-drive').addClass('cp-drive-dark-theme');
+                    $btn.find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+                }
+                tb.$bottomL.append($btn);
+            };
+            mkDriveDarkToggle(toolbar);
+
             var helpMenu = common.createHelpMenu(['drive']);
             APP.help = helpMenu.menu;
             $('#cp-app-drive-content-container').prepend(helpMenu.menu);

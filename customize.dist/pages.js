@@ -147,7 +147,7 @@ define([
     Pages.privacyLink = footLink(customURLs.privacy, 'privacy');
     Pages.termsLink = footLink(customURLs.terms, 'terms');
     Pages.sourceLink = footLink(customURLs.source, 'footer_source');
-    Pages.docsLink = footLink('https://docs.cryptpad.org', 'docs_link');
+    Pages.docsLink = footLink('/features.html', 'docs_link');
     Pages.roadmapLink = footLink(customURLs.roadmap, 'footer_roadmap');
 
 
@@ -239,7 +239,7 @@ define([
                     h('i.fa.fa-info-circle'),
                     pricingName
                 ]),
-                h('a.nav-item.nav-link', { href: 'https://docs.cryptpad.org'},
+                h('a.nav-item.nav-link', { href: '/features.html'},
                     [h('i.fa.fa-book', {'aria-hidden':'true'}),Msg.docs_link]),
             ].concat(rightLinks)
         );

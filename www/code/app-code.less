@@ -13,11 +13,31 @@
         @bg-color: @colortheme_apps[code],
     );
 
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --code-bg: #F5F5F5;
+    --code-surface: #FFFFFF;
+    --code-text: #111827;
+    --code-border: rgba(0,0,0,0.1);
+    --code-preview-bg: #F5F5F5;
+    --code-preview-fg: #111827;
+
+    // Dark theme overrides (Analog Archive values)
+    &.cp-code-dark-theme {
+        --code-bg: #0A0A0A;
+        --code-surface: #141414;
+        --code-text: #F3F0EB;
+        --code-border: rgba(255,255,255,0.08);
+        --code-preview-bg: #0A0A0A;
+        --code-preview-fg: #F3F0EB;
+    }
+
     display: flex;
     flex-flow: column;
     max-height: 100%;
     min-height: auto;
-    background-color: @cp_preview-bg;
+    background-color: var(--code-bg, @cp_preview-bg);
 
     #cp-app-code-container {
         display: inline-flex;
@@ -66,7 +86,8 @@
         overflow: auto;
         display: inline-block;
         height: 100%;
-        border-left: 1px solid black;
+        border-left: 1px solid var(--code-border, black);
+        background-color: var(--code-preview-bg, @cp_preview-bg);
         box-sizing: border-box;
         //font-family: Calibri,Ubuntu,sans-serif;
         font: @colortheme_app-font;
@@ -105,8 +126,8 @@
     }
 
     #cp-app-code-preview-content {
-        background-color: @cp_preview-bg;
-        color: @cp_preview-fg;
+        background-color: var(--code-preview-bg, @cp_preview-bg);
+        color: var(--code-preview-fg, @cp_preview-fg);
         max-width: 70ch;
         margin: 1em auto;
 

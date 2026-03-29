@@ -10,11 +10,53 @@
 
 &.cp-app-slide {
 
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --slide-bg: #F5F5F5;
+    --slide-editor-bg: #FFFFFF;
+    --slide-text: #111827;
+    --slide-border: rgba(0,0,0,0.1);
+
+    // Dark theme overrides
+    &.cp-slide-dark-theme {
+        --slide-bg: #0A0A0A;
+        --slide-editor-bg: #141414;
+        --slide-text: #F3F0EB;
+        --slide-border: rgba(255,255,255,0.08);
+
+        #cp-app-slide-editor-container {
+            background-color: var(--slide-editor-bg);
+            color: var(--slide-text);
+        }
+        .CodeMirror {
+            background-color: var(--slide-editor-bg);
+            color: var(--slide-text);
+        }
+        #cp-app-slide-editor {
+            background-color: var(--slide-bg);
+            border-color: var(--slide-border);
+        }
+    }
+
     .mediatag_base();
 
     .framework_main(
         @bg-color: @colortheme_apps[slide]
     );
+
+    #cp-app-slide-editor-container {
+        background-color: var(--slide-editor-bg);
+        color: var(--slide-text);
+    }
+    .CodeMirror {
+        background-color: var(--slide-editor-bg);
+        color: var(--slide-text);
+    }
+    #cp-app-slide-editor {
+        background-color: var(--slide-bg);
+        border-color: var(--slide-border);
+    }
 
     @slide-default-bg: @cp_app-bg;
 

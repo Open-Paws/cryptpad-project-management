@@ -15,6 +15,22 @@ body.cp-app-diagram {
 
 // body
 &.cp-app-diagram {
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --diagram-bg: #F5F5F5;
+    --diagram-surface: #FFFFFF;
+    --diagram-text: #111827;
+    --diagram-border: rgba(0, 0, 0, 0.1);
+
+    // Dark theme overrides
+    &.cp-diagram-dark-theme {
+        --diagram-bg: #0A0A0A;
+        --diagram-surface: #141414;
+        --diagram-text: #F3F0EB;
+        --diagram-border: rgba(255, 255, 255, 0.08);
+    }
+
     display: flex;
     flex-flow: column;
     max-height: 100%;
@@ -28,6 +44,9 @@ body.cp-app-diagram {
         width: 100%;
         resize: horizontal;
         overflow: hidden;
+        background-color: var(--diagram-bg);
+        color: var(--diagram-text);
+        border-color: var(--diagram-border);
     }
     .cp-app-diagram-editor {
         flex: 1;
@@ -35,6 +54,7 @@ body.cp-app-diagram {
         flex-flow: row;
         height: 100%;
         overflow: hidden;
+        background-color: var(--diagram-bg);
     }
 
     @media (max-width: @browser_media-medium-screen) {

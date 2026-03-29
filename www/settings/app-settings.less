@@ -23,6 +23,33 @@
     flex-flow: column;
     font: @colortheme_app-font;
 
+    // Theme System - CSS Variables for Light/Dark Mode
+    // ============================================
+    // Default to light theme
+    --settings-bg: #F5F5F5;
+    --settings-surface: #FFFFFF;
+    --settings-text: #111827;
+    --settings-border: rgba(0,0,0,0.1);
+
+    // Dark theme overrides
+    &.cp-settings-dark-theme {
+        --settings-bg: #0A0A0A;
+        --settings-surface: #141414;
+        --settings-text: #F3F0EB;
+        --settings-border: rgba(255,255,255,0.08);
+    }
+
+    #cp-sidebarlayout-leftside {
+        background: var(--settings-bg);
+        color: var(--settings-text);
+        border-right: 1px solid var(--settings-border);
+    }
+
+    #cp-sidebarlayout-rightside {
+        background: var(--settings-surface);
+        color: var(--settings-text);
+    }
+
     .cp-sidebarlayout-element {
         max-width: 650px;
     }

@@ -3249,10 +3249,11 @@ define([
     var getLogo = function () {
         var logo = h('div.cp-form-view-logo', [
             h('img', {
-                src:'/customize/CryptPad_logo_grey.svg?'+ApiConfig.requireConf.urlArgs,
-                alt:'CryptPad_logo'
+                src:'/customize/openpaws-logo.png',
+                alt:'OpenPaws_logo',
+                style: 'filter:invert(1)'
             }),
-            h('span', 'CryptPad')
+            h('span', 'CryptPaws')
         ]);
         $(logo).click(function () {
             APP.framework._.sfCommon.gotoURL('/');
@@ -4710,6 +4711,23 @@ define([
         return temp;
     };
 
+    var mkFormDarkToggle = function (framework) {
+        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        $(btn).click(function () {
+            var $app = $('.cp-app-form');
+            var dark = $app.hasClass('cp-form-dark-theme');
+            $app.toggleClass('cp-form-dark-theme', !dark);
+            localStorage.setItem('cp-form-theme', dark ? 'light' : 'dark');
+            $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
+        });
+        var saved = localStorage.getItem('cp-form-theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            $('.cp-app-form').addClass('cp-form-dark-theme');
+            $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+        }
+        framework._.toolbar.$drawer.append($(btn));
+    };
+
     var andThen = function (framework) {
         framework.start();
         APP.framework = framework;
@@ -4740,6 +4758,8 @@ define([
         if (!APP.isEditor && !priv.form_auditorKey) {
             $(helpMenu.menu).hide();
         }
+
+        mkFormDarkToggle(framework);
 
         var offlineEl = h('div.alert.alert-danger.cp-burn-after-reading', Messages.disconnected);
         framework.onEditableChange(function (editable) {

@@ -143,6 +143,23 @@ define([
         framework._.toolbar.$drawer.append($helpMenuButton);
     };
 
+    var mkCodeDarkToggle = function (framework) {
+        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        $(btn).click(function () {
+            var $app = $('.cp-app-code');
+            var dark = $app.hasClass('cp-code-dark-theme');
+            $app.toggleClass('cp-code-dark-theme', !dark);
+            localStorage.setItem('cp-code-theme', dark ? 'light' : 'dark');
+            $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
+        });
+        var saved = localStorage.getItem('cp-code-theme');
+        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            $('.cp-app-code').addClass('cp-code-dark-theme');
+            $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
+        }
+        framework._.toolbar.$bottomL.append($(btn));
+    };
+
     var previews = {};
     previews['gfm'] = function (val, $div, common) {
         DiffMd.apply(DiffMd.render(val), $div, common);
@@ -190,9 +207,10 @@ define([
         var $codeMirror = $('.CodeMirror');
 
         $('<img>', {
-            src: '/customize/CryptPad_logo_grey.svg',
+            src: '/customize/openpaws-logo.png',
             alt: '',
-            class: 'cp-app-code-preview-empty'
+            class: 'cp-app-code-preview-empty',
+            style: 'filter:invert(1)'
         }).appendTo($previewContainer);
 
         var $previewButton = framework._.sfCommon.createButton('preview', true);
@@ -504,6 +522,7 @@ define([
         var markdownTb = mkMarkdownTb(editor, framework);
 
         mkThemeButton(framework);
+        mkCodeDarkToggle(framework);
 
         var markers = Markers.create({
             common: common,

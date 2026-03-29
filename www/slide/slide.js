@@ -81,9 +81,10 @@ define([
 
         if (c === '') {
             var $empty = $('<img>', {
-                src: '/customize/CryptPad_logo_grey.svg',
+                src: '/customize/openpaws-logo.png',
                 alt: '',
-                class: 'cp-app-code-preview-empty'
+                class: 'cp-app-code-preview-empty',
+                style: 'filter:invert(1)'
             });
             $content.html('').append($empty);
             $content.addClass('cp-app-slide-isempty');
