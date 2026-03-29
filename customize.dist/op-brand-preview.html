@@ -13,10 +13,8 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Open Paws Project Management — Brand Preview</title>
 
-    <!-- Open Paws brand typography: DM Serif Display / Space Grotesk / JetBrains Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Open Paws brand typography — self-hosted for privacy and offline reliability -->
+    <link rel="stylesheet" href="/customize/fonts/brand/brand-fonts.css">
 
     <style>
         /* ── Open Paws Analog Archive brand tokens ── */
@@ -49,6 +47,9 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
             background-repeat: repeat;
             background-size: 256px 256px;
             animation: op-grain 8s steps(10) infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            body::after { animation: none; }
         }
 
         @keyframes op-grain {
@@ -554,11 +555,11 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
     <div class="feature-grid">
         <div class="feature-card">
             <h3><span class="teal-accent">01</span> End-to-end encrypted</h3>
-            <p>The server never sees your data. Keys live in your URL fragment — never transmitted, never stored, never subpoena-able.</p>
+            <p>The server cannot read your data. Keys live in your URL fragment — not transmitted to the server, not stored server-side.</p>
         </div>
         <div class="feature-card">
             <h3><span class="teal-accent">02</span> Investigation-safe</h3>
-            <p>Designed for ag-gag legal environments. Real deletion, no soft deletes. Device seizure protection built in.</p>
+            <p>Designed for ag-gag legal environments. Real deletion, no soft deletes. Supports device seizure preparation workflows.</p>
         </div>
         <div class="feature-card">
             <h3><span class="teal-accent">03</span> Coalition-ready</h3>

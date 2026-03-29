@@ -21,7 +21,7 @@
 // ── Typography ────────────────────────────────────────────────────────────────
 @op-font-serif:    'DM Serif Display', Georgia, serif;
 @op-font-sans:     'Space Grotesk', 'Helvetica Neue', sans-serif;
-@op-font-mono:     'JetBrains Mono', monospace;
+@op-font-mono:     'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace;
 
 // ── Film grain keyframes (module-level — never duplicate) ────────────────────
 // Defined once here so calling .op-grain-overlay() multiple times is safe.
@@ -56,6 +56,9 @@
         background-repeat: repeat;
         background-size: 256px 256px;
         animation: op-grain 8s steps(10) infinite;
+        @media (prefers-reduced-motion: reduce) {
+            animation: none;
+        }
     }
 }
 
