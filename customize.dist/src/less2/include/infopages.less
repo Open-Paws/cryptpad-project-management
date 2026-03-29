@@ -42,9 +42,8 @@ body.html {
     @infopages_infobar-height: 64px;
     @infopages_padding: 32px;
 
-    // Basic setup for info pages, this should be used at the global level
-    background-color: @cp_static-bg;
-    color: @cp_static-fg;
+    // Base bg/fg/font set by .op-page-shell() above via @op-* tokens.
+    // Link styles below use @cp_static-link for multi-theme support.
     a {
         color: @cp_static-link;
         &:visited { color: darken(@cp_static-link, 5%); }
@@ -60,7 +59,6 @@ body.html {
     padding: 0;
     margin: 0;
     font-size: 16px;
-    font-family: @colortheme_font;
 
     #cp-main {
         display: flex;
@@ -76,7 +74,7 @@ body.html {
         padding-top: @infopages_padding;
         padding-bottom: @infopages_padding;
         min-height: 75vh;
-        max-width: 1200px;
+        // max-width and padding-left/right set by .op-page-shell() in op-analog-archive.less
         h1 {
             font-size: 3em;
             margin-bottom: 0.5em;
