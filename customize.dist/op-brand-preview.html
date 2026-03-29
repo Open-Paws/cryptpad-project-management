@@ -17,7 +17,12 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
     <link rel="stylesheet" href="/customize/fonts/brand/brand-fonts.css">
 
     <style>
-        /* ── Open Paws Analog Archive brand tokens ── */
+        /*
+         * ── Open Paws Analog Archive brand tokens ──
+         * These CSS custom properties mirror the LESS variables in
+         * customize.dist/src/less2/include/op-analog-archive.less.
+         * Keep both in sync when updating brand colors.
+         */
         :root {
             --op-deep-space: #0A0A0A;
             --op-warm-white: #F3F0EB;
@@ -449,10 +454,10 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
         <span>Open Paws<br><span style="color: var(--op-mid-grey); font-size: 0.7rem;">Project Management</span></span>
     </div>
     <ul class="nav-links">
-        <li><a href="#">Features</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Login</a></li>
-        <li><a href="#" class="btn-register">Register</a></li>
+        <li><a href="/features.html">Features</a></li>
+        <li><a href="https://www.openpaws.ai" target="_blank" rel="noopener noreferrer">About</a></li>
+        <li><a href="/login/">Login</a></li>
+        <li><a href="/register/" class="btn-register">Register</a></li>
     </ul>
 </nav>
 
@@ -465,8 +470,8 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
         Your investigation data, campaign plans, and coalition communications stay private.
     </p>
     <div class="hero-actions">
-        <a href="#" class="btn-primary">Get Started</a>
-        <a href="#" class="btn-secondary">Learn more →</a>
+        <a href="/register/" class="btn-primary">Get Started</a>
+        <a href="/features.html" class="btn-secondary">Learn more →</a>
     </div>
 </div>
 
@@ -580,10 +585,9 @@ marketing page surfaces without requiring the full CryptPad JS bootstrap.
             Open Paws Project Management
         </div>
         <ul class="footer-links">
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Privacy</a></li>
-            <li><a href="#">Source</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="/features.html">Features</a></li>
+            <li><a href="https://www.openpaws.ai" target="_blank" rel="noopener noreferrer">Project Website</a></li>
+            <li><a href="https://github.com/Open-Paws/cryptpad-project-management" target="_blank" rel="noopener noreferrer">Source</a></li>
         </ul>
         <div class="footer-version">v2026.3 — AGPL-3.0</div>
     </div>
