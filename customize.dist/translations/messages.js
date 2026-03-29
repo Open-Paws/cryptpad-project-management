@@ -221,6 +221,10 @@ define(['/common/translations/messages.js'], function (Messages) {
     // Homepage tagline
     Messages.main_catch_phrase = "End-to-end encrypted tools<br>for the animal liberation movement";
 
+    // Rename Kanban to Projects
+    Messages.type = Messages.type || {};
+    Messages.type.kanban = "Projects";
+
     // Poll
     Messages.poll_descriptionHint = "Describe your poll, and use the \u2713 (publish) button when you're done.\nThe description can be written using markdown syntax and you can embed media elements from your CryptPaws Drive.\nAnyone with the link can change the description, but this is discouraged.";
 
