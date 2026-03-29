@@ -144,17 +144,19 @@ define([
     };
 
     var mkCodeDarkToggle = function (framework) {
-        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        var btn = h('button', {'title': 'Toggle theme', 'aria-label': 'Toggle theme', 'aria-pressed': 'false'}, [h('i.fa.fa-moon-o')]);
         $(btn).click(function () {
             var $app = $('.cp-app-code');
             var dark = $app.hasClass('cp-code-dark-theme');
             $app.toggleClass('cp-code-dark-theme', !dark);
             localStorage.setItem('cp-code-theme', dark ? 'light' : 'dark');
+            $(btn).attr('aria-pressed', String(!dark));
             $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
         });
         var saved = localStorage.getItem('cp-code-theme');
-        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             $('.cp-app-code').addClass('cp-code-dark-theme');
+            $(btn).attr('aria-pressed', 'true');
             $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
         }
         framework._.toolbar.$bottomL.append($(btn));

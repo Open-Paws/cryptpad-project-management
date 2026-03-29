@@ -2226,17 +2226,19 @@ define([
         APP.history = common.makeUniversal('history');
 
         var mkSettingsDarkToggle = function (toolbar) {
-            var $btn = $('<button title="Toggle theme"><i class="fa fa-moon-o"></i></button>');
+            var $btn = $('<button title="Toggle theme" aria-label="Toggle theme" aria-pressed="false"><i class="fa fa-moon-o"></i></button>');
             $btn.click(function () {
                 var $app = $('.cp-app-settings');
                 var dark = $app.hasClass('cp-settings-dark-theme');
                 $app.toggleClass('cp-settings-dark-theme', !dark);
                 localStorage.setItem('cp-settings-theme', dark ? 'light' : 'dark');
+                $btn.attr('aria-pressed', String(!dark));
                 $btn.find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
             });
             var saved = localStorage.getItem('cp-settings-theme');
             if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 $('.cp-app-settings').addClass('cp-settings-dark-theme');
+                $btn.attr('aria-pressed', 'true');
                 $btn.find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
             }
             toolbar.$bottomL.append($btn);

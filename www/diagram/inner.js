@@ -40,18 +40,20 @@ define([
     };
 
     var mkDiagramDarkToggle = function (framework) {
-        var $btn = $('<button>').attr('title', 'Toggle theme').append($('<i>').addClass('fa fa-moon-o'));
+        var $btn = $('<button>').attr({'title': 'Toggle theme', 'aria-label': 'Toggle theme', 'aria-pressed': 'false'}).append($('<i>').addClass('fa fa-moon-o'));
         var btn = $btn[0];
         $(btn).click(function () {
             var $app = $('body.cp-app-diagram');
             var dark = $app.hasClass('cp-diagram-dark-theme');
             $app.toggleClass('cp-diagram-dark-theme', !dark);
             localStorage.setItem('cp-diagram-theme', dark ? 'light' : 'dark');
+            $(btn).attr('aria-pressed', String(!dark));
             $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
         });
         var saved = localStorage.getItem('cp-diagram-theme');
-        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             $('body.cp-app-diagram').addClass('cp-diagram-dark-theme');
+            $(btn).attr('aria-pressed', 'true');
             $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
         }
         framework._.toolbar.$bottomL.append($(btn));

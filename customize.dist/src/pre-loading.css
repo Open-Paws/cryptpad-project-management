@@ -31,13 +31,6 @@
     align-items: center;
     font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
 }
-html:not(.cp-app-noscroll) #placeholder.dark-theme {
-    background-color: #0A0A0A; /* Open Paws Deep Space */
-}
-#placeholder.dark-theme {
-    color: #F3F0EB; /* Open Paws Warm White */
-}
-
 #placeholder .placeholder-logo-container {
     height: 300px;
     width: 300px;

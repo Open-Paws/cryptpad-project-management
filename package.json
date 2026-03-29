@@ -1,4 +1,7 @@
 {
+  "_comments": {
+    "ckeditor": "Pinned to 4.22.0 — avoid LTS license enforcement introduced in ckeditor4@4.25.1+"
+  },
   "name": "cryptpad",
   "description": "a collaborative office suite that is end-to-end encrypted and open-source",
   "version": "2025.6.0",

@@ -218,6 +218,9 @@ define(['/common/translations/messages.js'], function (Messages) {
     // Registration
     Messages.register_warning_note = "Due to the encrypted nature of CryptPaws, the service administrators will not be able to recover data in case you forget your username and/or password. Please save them in a safe place.";
 
+    // Footer docs link — points to /features.html on this instance
+    Messages.docs_link = "Features";
+
     // Homepage tagline
     Messages.main_catch_phrase = "End-to-end encrypted tools<br>for the animal liberation movement";
 

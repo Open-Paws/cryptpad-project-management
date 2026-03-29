@@ -425,17 +425,19 @@ define([
     };
 
     var mkSlideDarkToggle = function (framework) {
-        var btn = h('button', {title: 'Toggle theme'}, [h('i.fa.fa-moon-o')]);
+        var btn = h('button', {'title': 'Toggle theme', 'aria-label': 'Toggle theme', 'aria-pressed': 'false'}, [h('i.fa.fa-moon-o')]);
         $(btn).click(function () {
             var $app = $('.cp-app-slide');
             var dark = $app.hasClass('cp-slide-dark-theme');
             $app.toggleClass('cp-slide-dark-theme', !dark);
             localStorage.setItem('cp-slide-theme', dark ? 'light' : 'dark');
+            $(btn).attr('aria-pressed', String(!dark));
             $(btn).find('i').toggleClass('fa-moon-o', dark).toggleClass('fa-sun-o', !dark);
         });
         var saved = localStorage.getItem('cp-slide-theme');
         if (saved === 'dark' || (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             $('.cp-app-slide').addClass('cp-slide-dark-theme');
+            $(btn).attr('aria-pressed', 'true');
             $(btn).find('i').removeClass('fa-moon-o').addClass('fa-sun-o');
         }
         framework._.toolbar.$bottomL.append($(btn));
