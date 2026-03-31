@@ -767,13 +767,14 @@
         }
     }
 
-    // Assignee section styling - 2 column grid
+    // Assignee section styling - stacked column layout
     .cp-kanban-assignee-compact {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2px 6px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        width: 100%;
 
-        label {
+        .cp-kanban-assignee-label {
             display: flex;
             align-items: center;
             gap: 4px;
@@ -7123,5 +7124,100 @@
 
     100% {
         background: transparent;
+    }
+}
+
+// Security Tier field
+.cp-kanban-security-tier-select {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 12px;
+    border: 1px solid @kanban-border;
+    border-radius: @variables_radius;
+    background: var(--kanban-surface, #fff);
+    color: @kanban-text-primary;
+    cursor: pointer;
+    outline: none;
+
+    &:focus {
+        border-color: @kanban-accent;
+    }
+
+    option[value="T3"] {
+        color: #c0392b;
+        font-weight: 600;
+    }
+}
+
+.cp-kanban-security-tier-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    &.tier-T1 {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #a5d6a7;
+    }
+
+    &.tier-T2 {
+        background: #fff3e0;
+        color: #e65100;
+        border: 1px solid #ffcc80;
+    }
+
+    &.tier-T3 {
+        background: #ffebee;
+        color: #b71c1c;
+        border: 1px solid #ef9a9a;
+    }
+}
+
+// Dark mode overrides for security tier
+.cp-kanban-dark-theme {
+    .cp-kanban-security-tier-select {
+        background: var(--kanban-surface-dark, #2d2d2d);
+        color: var(--kanban-text-primary-dark, #f0f0f0);
+        border-color: var(--kanban-border-dark, #444);
+    }
+
+    .cp-kanban-security-tier-badge {
+        &.tier-T1 {
+            background: #1b5e20;
+            color: #a5d6a7;
+            border-color: #2e7d32;
+        }
+
+        &.tier-T2 {
+            background: #bf360c;
+            color: #ffcc80;
+            border-color: #e64a19;
+        }
+
+        &.tier-T3 {
+            background: #7f0000;
+            color: #ef9a9a;
+            border-color: #b71c1c;
+        }
+    }
+}
+
+// Export toolbar buttons
+.cp-kanban-export-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .cp-kanban-export-btn {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        font-size: 12px;
+        white-space: nowrap;
     }
 }
