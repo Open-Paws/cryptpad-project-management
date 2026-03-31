@@ -2615,10 +2615,13 @@ define([
         var items = out.items || {};
         var data = out.data || {};
 
-        // Collect T3 item IDs and remove them
+        // Collect T3 item IDs and remove them.
+        // Normalize tier value to handle any case/whitespace variants in imported data.
         var t3Ids = {};
         Object.keys(items).forEach(function (id) {
-            if (items[id].security_tier === 'T3') {
+            var rawTier = items[id].security_tier;
+            var tier = typeof rawTier === 'string' ? rawTier.trim().toUpperCase() : '';
+            if (tier === 'T3') {
                 t3Ids[id] = true;
                 delete items[id];
             }
@@ -5932,17 +5935,21 @@ define([
                     visibleIds[id] = true;
                 });
 
-                // Build export structure preserving board order
+                // Build export structure preserving board order.
+                // Derive the items set from filtered board membership — do not walk raw.items
+                // directly, which would include orphaned cards not present in any board.
                 var exportData = { data: {}, items: {}, list: raw.list || [] };
+                var boardMemberIds = {};
                 Object.keys(data).forEach(function (boardId) {
                     var board = data[boardId];
                     var filteredItems = (board.item || []).filter(function (id) {
                         return visibleIds[String(id)];
                     });
                     exportData.data[boardId] = Object.assign({}, board, { item: filteredItems });
+                    filteredItems.forEach(function (id) { boardMemberIds[String(id)] = true; });
                 });
-                Object.keys(visibleIds).forEach(function (id) {
-                    exportData.items[id] = items[id];
+                Object.keys(boardMemberIds).forEach(function (id) {
+                    if (items[id]) { exportData.items[id] = items[id]; }
                 });
 
                 // Strip T3 items and their dependency references using the canonical redactor

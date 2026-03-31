@@ -10,8 +10,41 @@ define([
         ext: '.json'
     };
 
+    // Strip T3 confidential items before CryptDrive bulk export.
+    // This mirrors the redactT3Items logic in inner.js — kept inline since export.js
+    // has no imports. Normalizes tier strings to handle case/whitespace in imported data.
+    var redactT3 = function (content) {
+        var out = JSON.parse(JSON.stringify(content));
+        var items = out.items || {};
+        var data = out.data || {};
+        var t3Ids = {};
+        Object.keys(items).forEach(function (id) {
+            var rawTier = items[id].security_tier;
+            var tier = typeof rawTier === 'string' ? rawTier.trim().toUpperCase() : '';
+            if (tier === 'T3') {
+                t3Ids[id] = true;
+                delete items[id];
+            }
+        });
+        Object.keys(data).forEach(function (boardId) {
+            var board = data[boardId];
+            if (Array.isArray(board.item)) {
+                board.item = board.item.filter(function (id) { return !t3Ids[String(id)]; });
+            }
+        });
+        Object.keys(items).forEach(function (id) {
+            var item = items[id];
+            if (Array.isArray(item.dependencies)) {
+                item.dependencies = item.dependencies.filter(function (depId) {
+                    return !t3Ids[String(depId)];
+                });
+            }
+        });
+        return out;
+    };
+
     module.main = function (userDoc, cb) {
-        var content = userDoc.content;
+        var content = redactT3(userDoc.content);
         cb(new Blob([JSON.stringify(content, 0, 2)], {
             type: 'application/json',
         }));
