@@ -2606,6 +2606,47 @@ define([
     };
 
 
+    // Redact T3 items from a boards snapshot — pure function, operates on a deep copy.
+    // Strips T3 items from the items map, removes their IDs from board.item arrays,
+    // and removes T3 dependency references from surviving items.
+    // Defined at module scope so both initKanban and andThen2 can access it.
+    var redactT3Items = function (boards) {
+        var out = JSON.parse(JSON.stringify(boards)); // deep copy — never mutate live data
+        var items = out.items || {};
+        var data = out.data || {};
+
+        // Collect T3 item IDs and remove them
+        var t3Ids = {};
+        Object.keys(items).forEach(function (id) {
+            if (items[id].security_tier === 'T3') {
+                t3Ids[id] = true;
+                delete items[id];
+            }
+        });
+
+        // Remove T3 IDs from every board's item list
+        Object.keys(data).forEach(function (boardId) {
+            var board = data[boardId];
+            if (Array.isArray(board.item)) {
+                board.item = board.item.filter(function (id) {
+                    return !t3Ids[String(id)];
+                });
+            }
+        });
+
+        // Remove T3 dependency references from surviving items
+        Object.keys(items).forEach(function (id) {
+            var item = items[id];
+            if (Array.isArray(item.dependencies)) {
+                item.dependencies = item.dependencies.filter(function (depId) {
+                    return !t3Ids[String(depId)];
+                });
+            }
+        });
+
+        return out;
+    };
+
     var initKanban = function (framework, boards) {
         var migrated = false;
         if (!boards) {
@@ -6117,45 +6158,6 @@ define([
 
             return { content: parsed };
         });
-
-        // Redact T3 items from a boards snapshot — mutates a deep copy, never the live data.
-        // T3 items are stripped from both the items map and all board.item arrays.
-        var redactT3Items = function (boards) {
-            var out = JSON.parse(JSON.stringify(boards)); // deep copy — never mutate live data
-            var items = out.items || {};
-            var data = out.data || {};
-
-            // Collect T3 item IDs
-            var t3Ids = {};
-            Object.keys(items).forEach(function (id) {
-                if (items[id].security_tier === 'T3') {
-                    t3Ids[id] = true;
-                    delete items[id];
-                }
-            });
-
-            // Remove T3 IDs from every board's item list
-            Object.keys(data).forEach(function (boardId) {
-                var board = data[boardId];
-                if (Array.isArray(board.item)) {
-                    board.item = board.item.filter(function (id) {
-                        return !t3Ids[String(id)];
-                    });
-                }
-            });
-
-            // Remove T3 dependency references from surviving items
-            Object.keys(items).forEach(function (id) {
-                var item = items[id];
-                if (Array.isArray(item.dependencies)) {
-                    item.dependencies = item.dependencies.filter(function (depId) {
-                        return !t3Ids[String(depId)];
-                    });
-                }
-            });
-
-            return out;
-        };
 
         framework.setFileExporter('.json', function () {
             var content = kanban.getBoardsJSON();
