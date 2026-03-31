@@ -1523,6 +1523,7 @@ define([
         $securityTier.on('change', function () {
             var val = $securityTier.val();
             if (VALID_TIERS.indexOf(val) === -1) { val = ''; }
+            $securityTier.toggleClass('cp-kanban-tier-t3', val === 'T3');
             dataObject.security_tier = val;
             commit();
         });
@@ -1533,6 +1534,7 @@ define([
             setValue: function (val, preserveCursor) {
                 if (isBoard) { return; }
                 if (VALID_TIERS.indexOf(val) === -1) { val = ''; }
+                $securityTier.toggleClass('cp-kanban-tier-t3', val === 'T3');
                 if (preserveCursor && $securityTier.val() === (val || '')) { return; }
                 $securityTier.val(val || '');
             }
@@ -5863,18 +5865,29 @@ define([
             // --- Export helpers ---
 
             // Build a filtered boards snapshot applying current filters and stripping T3 items.
+            // T3 redaction (including dependency refs) is delegated to redactT3Items.
             var getExportableBoards = function () {
                 var raw = kanban.getBoardsJSON();
                 var scoringDimKeys = scoringDimensions.map(function (d) { return d.key; });
                 var items = raw.items || {};
                 var data = raw.data || {};
+                var activeTags = (kanban.options && kanban.options.tags) || [];
+                var tagsAnd = !!(kanban.options && kanban.options.tagsAnd);
 
-                // Determine which item IDs pass the current filter and are not T3
+                // Determine which item IDs pass the current filters
                 var visibleIds = {};
                 Object.keys(items).forEach(function (id) {
                     var item = items[id];
-                    if (item.security_tier === 'T3') { return; }
                     if (!projectPassesFilters(item, currentFilters, scoringDimKeys)) { return; }
+                    // Apply active tag filter (AND = must have all; OR = must have at least one)
+                    if (activeTags.length) {
+                        var itemTags = Array.isArray(item.tags) ? item.tags : [];
+                        if (tagsAnd) {
+                            if (!activeTags.every(function (t) { return itemTags.indexOf(t) !== -1; })) { return; }
+                        } else {
+                            if (!activeTags.some(function (t) { return itemTags.indexOf(t) !== -1; })) { return; }
+                        }
+                    }
                     visibleIds[id] = true;
                 });
 
@@ -5891,7 +5904,8 @@ define([
                     exportData.items[id] = items[id];
                 });
 
-                return exportData;
+                // Strip T3 items and their dependency references using the canonical redactor
+                return redactT3Items(exportData);
             };
 
             // Render a boards snapshot as Markdown.
@@ -6126,6 +6140,16 @@ define([
                 if (Array.isArray(board.item)) {
                     board.item = board.item.filter(function (id) {
                         return !t3Ids[String(id)];
+                    });
+                }
+            });
+
+            // Remove T3 dependency references from surviving items
+            Object.keys(items).forEach(function (id) {
+                var item = items[id];
+                if (Array.isArray(item.dependencies)) {
+                    item.dependencies = item.dependencies.filter(function (depId) {
+                        return !t3Ids[String(depId)];
                     });
                 }
             });

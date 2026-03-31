@@ -7143,7 +7143,16 @@
         border-color: #10b981;
     }
 
+    // Styles the open dropdown option
     option[value="T3"] {
+        color: #c0392b;
+        font-weight: 600;
+    }
+
+    // Applied via JS when T3 is selected — makes warning visible on the closed <select>
+    &.cp-kanban-tier-t3 {
+        border-color: #c0392b;
+        background: #fff5f5;
         color: #c0392b;
         font-weight: 600;
     }
@@ -7183,6 +7192,12 @@
         background: var(--kanban-surface, #2d2d2d);
         color: var(--kanban-text-primary, #f0f0f0);
         border-color: var(--kanban-border, #444);
+
+        &.cp-kanban-tier-t3 {
+            border-color: #e57373;
+            background: #3e1a1a;
+            color: #ef9a9a;
+        }
     }
 
     .cp-kanban-security-tier-badge {
