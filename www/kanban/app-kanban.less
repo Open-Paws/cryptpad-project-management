@@ -7127,20 +7127,20 @@
     }
 }
 
-// Security Tier field
+// Security Tier field — top-level rules use CSS vars / hex (LESS vars are scoped inside .cp-app-kanban)
 .cp-kanban-security-tier-select {
     width: 100%;
     padding: 5px 8px;
     font-size: 12px;
-    border: 1px solid @kanban-border;
-    border-radius: @variables_radius;
+    border: 1px solid var(--kanban-border, #E5E7EB);
+    border-radius: 6px;
     background: var(--kanban-surface, #fff);
-    color: @kanban-text-primary;
+    color: var(--kanban-text-primary, #111827);
     cursor: pointer;
     outline: none;
 
     &:focus {
-        border-color: @kanban-accent;
+        border-color: #10b981;
     }
 
     option[value="T3"] {
@@ -7180,9 +7180,9 @@
 // Dark mode overrides for security tier
 .cp-kanban-dark-theme {
     .cp-kanban-security-tier-select {
-        background: var(--kanban-surface-dark, #2d2d2d);
-        color: var(--kanban-text-primary-dark, #f0f0f0);
-        border-color: var(--kanban-border-dark, #444);
+        background: var(--kanban-surface, #2d2d2d);
+        color: var(--kanban-text-primary, #f0f0f0);
+        border-color: var(--kanban-border, #444);
     }
 
     .cp-kanban-security-tier-badge {

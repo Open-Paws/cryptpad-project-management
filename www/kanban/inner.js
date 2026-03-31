@@ -972,7 +972,7 @@ define([
                     // Security Tier Section (cards only)
                     h('div.cp-kanban-detail-row.cp-kanban-security-tier-row', [
                         h('span.cp-kanban-detail-label', 'Security Tier'),
-                        securityTierSelect = h('select#cp-kanban-edit-security-tier.cp-kanban-security-tier-select', [
+                        securityTierSelect = h('select#cp-kanban-edit-security-tier.cp-kanban-security-tier-select', { autocomplete: 'off' }, [
                             h('option', { value: '' }, '— None —'),
                             h('option', { value: 'T1' }, 'T1 — Public'),
                             h('option', { value: 'T2' }, 'T2 — Internal'),
