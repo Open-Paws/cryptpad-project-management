@@ -33,7 +33,7 @@ CryptPad uses **symmetric encryption** (NaCl secretbox) with keys derived from U
    - The `SEED_HERE` portion derives all cryptographic keys
    - URL fragments are **never sent to the server** by browsers
 
-2. **Key hierarchy** (from `www/components/chainpad-crypto/crypto.js`):
+2. **Key hierarchy** (from `lib/crypto.js`):
    ```
    seed (18 bytes base64)
      └── hash = Nacl.hash(seed + password?)
@@ -597,7 +597,7 @@ module.getHref = function (pad, cryptor) {
 The drive uses `chainpad-listmap` for realtime sync:
 
 ```javascript
-// From chainpad-listmap.js
+// Pattern from sframe-chainpad-netflux-inner.js / chainpad-listmap pattern
 // Creates a Proxy that automatically syncs changes
 var proxy = DeepProxy.create(initialState, function onChange() {
     // Any modification to proxy triggers sync
@@ -616,7 +616,7 @@ proxy.root["New Folder"] = {};  // Automatically encrypted and synced
 
 | File | Purpose |
 |------|---------|
-| `www/components/chainpad-crypto/crypto.js` | Core encryption: `encrypt()`, `decrypt()`, key derivation |
+| `lib/crypto.js` | Core encryption: signature verification, key derivation, plugin-backed NaCl operations |
 | `www/file/file-crypto.js` | File encryption with chunking for uploads |
 | `www/common/sframe-chainpad-netflux-outer.js` | Encrypts outgoing messages, decrypts incoming |
 | `www/common/sframe-common-outer.js` | Key initialization, creates encryptor from URL hash |
@@ -643,8 +643,7 @@ proxy.root["New Folder"] = {};  // Automatically encrypted and synced
 
 | File | Purpose |
 |------|---------|
-| `www/common/sframe-chainpad-netflux-inner.js` | ChainPad realtime sync coordination |
-| `www/components/chainpad-listmap/chainpad-listmap.js` | Proxy-based realtime object sync |
+| `www/common/sframe-chainpad-netflux-inner.js` | ChainPad realtime sync coordination (includes proxy-based listmap sync) |
 | `src/worker/modules/cursor.js` | Cursor/presence on ephemeral channels |
 
 ### Application Files
