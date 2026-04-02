@@ -1180,3 +1180,43 @@ Before submitting changes, verify:
 - [ChainPad documentation](https://github.com/xwiki-contrib/chainpad) - Realtime collaboration algorithm
 - `lib/metadata.js` - Metadata command reference
 - `src/common/common-hash.js` - Hash version and key derivation reference
+
+---
+
+## Organizational Context
+
+**Layer:** Ops | **Lever:** All (operational support) | **Integration:** Internal toolstack (encryption domain sovereign)
+
+CryptPad is the E2EE project management tool for Open Paws operations. It stores Tier 3 data (investigation planning, witness coordination, legal defense notes) and some Tier 2 data (internal strategy documents, coalition coordination).
+
+**Settled decisions affecting this repo:**
+- **2026-03-28: Internal toolstack integration principle** — CryptPad remains sovereign in its encryption domain. No server-side content extraction. No automated content push across encryption boundaries without human trigger. SSO requires `forceCpPassword: true` mandatory. No CryptPad content in Matrix bridges or bots.
+- **2026-03-28: Encryption domain sovereignty** — CryptPad (NaCl secretbox) and Matrix (Megolm) are structurally incompatible. All content crossing between them must happen at the application layer through deliberate human action. No proxy re-encryption bridges.
+- **2026-03-28: Matrix widget security** — CryptPad keys must never appear in Matrix widget state events (state events are NOT encrypted even in E2EE rooms). Required pattern: wrapper page with key stored in encrypted timeline event. Until wrapper pattern exists, use pinned messages containing CryptPad links.
+
+**Relevant strategy documents:**
+- `foundations/security.md` — three-tier security model
+- `closed-decisions.md` 2026-03-28 — encryption domain sovereignty, toolstack integration principle
+
+**Current status:** Active operational tool. DO NOT integrate with Matrix at the protocol level. DO NOT add server-side content extraction features. Any proposed integration must be reviewed against the 2026-03-28 decisions before implementation.
+
+## Development Standards
+
+### Quality Gates
+
+- **Desloppify:** `desloppify scan --path .` — minimum score ≥85
+- **Speciesist language:** `semgrep --config semgrep-no-animal-violence.yaml` on all code/docs edits
+- **Two-failure rule:** After two failed fixes on the same problem, stop and restart with a better approach
+- **Security review required** — Any change to encryption handling, key derivation, or access control MUST be reviewed before merging
+
+### Seven Concerns — Critical for This Repo
+
+All 7 concerns apply. Highlighted critical ones:
+
+- **Security** (critical) — This is a Tier 3 system. The encryption architecture in this CLAUDE.md is the authoritative guide. The Ten Commandments of CryptPad Development section above is inviolable.
+- **Privacy** (critical) — NaCl secretbox keys are in URL hash fragments. They must NEVER be logged, stored, or transmitted. Any feature that might expose keys (logging, analytics, widgets) requires explicit security review.
+- **Advocacy domain** — Project and document names should use movement terminology. No speciesist idioms in configuration or code comments.
+
+### Structured Coding Reference
+
+For tool-specific AI coding instructions (Claude Code rules, Cursor MDC, Copilot, Windsurf, etc.), copy the corresponding directory from `structured-coding-with-ai` into this project root.
