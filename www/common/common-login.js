@@ -295,8 +295,12 @@ define([
         uname = uname.toLowerCase();
 
         // validate inputs
-        if (!Cred.isValidUsername(uname)) { return void cb('INVAL_USER'); }
-        if (!Cred.isValidPassword(passwd) && !ssoAuth) { return void cb('INVAL_PASS'); }
+        // Registration uses surrogate-pair-rejecting validators (scrypt-async v2 encoding fix).
+        // Login uses the original validators to avoid locking out existing accounts.
+        var validateUser = isRegister? Cred.isValidUsernameForRegistration: Cred.isValidUsername;
+        var validatePass = isRegister? Cred.isValidPasswordForRegistration: Cred.isValidPassword;
+        if (!validateUser(uname)) { return void cb('INVAL_USER'); }
+        if (!validatePass(passwd) && !ssoAuth) { return void cb('INVAL_PASS'); }
         if (isRegister && !ssoAuth && !Cred.isLongEnoughPassword(passwd)) {
             return void cb('PASS_TOO_SHORT');
         }

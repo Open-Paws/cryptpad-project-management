@@ -42,6 +42,25 @@ var factory = function (AppConfig = {}, Scrypt) {
         return !!(passwd && isString(passwd));
     };
 
+    // scrypt-async v2 fixed a UTF-8 encoding bug: derived keys for strings that contain
+    // UTF-16 surrogate pairs (emoji, non-BMP characters) differ between v1 and v2.
+    // To prevent new accounts from being created with credentials sensitive to this
+    // encoding difference, reject surrogate pairs at registration time only.
+    // Login validation intentionally does NOT use this check so that existing accounts
+    // with such credentials are never locked out.
+    var SURROGATE_RE = /[\uD800-\uDFFF]/;
+    Cred.hasSurrogatePairs = function (str) {
+        return SURROGATE_RE.test(str);
+    };
+
+    Cred.isValidUsernameForRegistration = function (name) {
+        return Cred.isValidUsername(name) && !Cred.hasSurrogatePairs(name);
+    };
+
+    Cred.isValidPasswordForRegistration = function (passwd) {
+        return Cred.isValidPassword(passwd) && !Cred.hasSurrogatePairs(passwd);
+    };
+
     Cred.passwordsMatch = function (a, b) {
         return isString(a) && isString(b) && a === b;
     };
