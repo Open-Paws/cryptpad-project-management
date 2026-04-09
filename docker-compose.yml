@@ -19,8 +19,9 @@ services:
       - ./config/config.js:/cryptpad/config/config.js:ro
 
     ports:
-      - "127.0.0.1:3000:3000"
-      - "127.0.0.1:3003:3003"
+      - "127.0.0.1:3002:3000"
+      - "127.0.0.1:3001:3001"
+      - "127.0.0.1:3005:3003"
 
     ulimits:
       nofile:

@@ -71,3 +71,24 @@ if (Fs.existsSync(markedUmd)) {
     }
     Fs.writeFileSync(markedUmd, patched, 'utf8');
 }
+
+// tweetnacl exports to self.nacl (global) but does not call define().
+// RequireJS hangs waiting for define() — append an AMD shim.
+var naclMin = Path.join(componentsPath, "tweetnacl", "nacl-fast.min.js");
+if (Fs.existsSync(naclMin)) {
+    var naclContent = Fs.readFileSync(naclMin, 'utf8');
+    if (!naclContent.includes('define.amd')) {
+        naclContent += '\nif(typeof define==="function"&&define.amd){define(function(){return self.nacl;});}';
+        Fs.writeFileSync(naclMin, naclContent, 'utf8');
+    }
+}
+
+// scrypt-async exports global scrypt but does not call define().
+var scryptMin = Path.join(componentsPath, "scrypt-async", "scrypt-async.min.js");
+if (Fs.existsSync(scryptMin)) {
+    var scryptContent = Fs.readFileSync(scryptMin, 'utf8');
+    if (!scryptContent.includes('define.amd')) {
+        scryptContent += '\nif(typeof define==="function"&&define.amd){define(function(){return scrypt;});}';
+        Fs.writeFileSync(scryptMin, scryptContent, 'utf8');
+    }
+}
