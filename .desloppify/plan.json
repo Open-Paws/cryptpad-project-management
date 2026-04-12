@@ -1,0 +1,663 @@
+{
+  "version": 8,
+  "created": "2026-04-12T07:48:13+00:00",
+  "updated": "2026-04-12T08:04:21+00:00",
+  "queue_order": [],
+  "deferred": [],
+  "skipped": {},
+  "active_cluster": null,
+  "overrides": {
+    "security::src/worker/async-store.js::security::log_sensitive::src/worker/async-store.js::2033": {
+      "issue_id": "security::src/worker/async-store.js::security::log_sensitive::src/worker/async-store.js::2033",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/security-log_sensitive",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "security::src/worker/modules/team.js::security::log_sensitive::src/worker/modules/team.js::37": {
+      "issue_id": "security::src/worker/modules/team.js::security::log_sensitive::src/worker/modules/team.js::37",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/security-log_sensitive",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/async-store.js": {
+      "issue_id": "test_coverage::src/worker/async-store.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/team.js": {
+      "issue_id": "test_coverage::src/worker/modules/team.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/proxy-manager.js": {
+      "issue_id": "test_coverage::src/common/proxy-manager.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/support.js": {
+      "issue_id": "test_coverage::src/worker/modules/support.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/calendar.js": {
+      "issue_id": "test_coverage::src/worker/modules/calendar.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/messenger.js": {
+      "issue_id": "test_coverage::src/worker/modules/messenger.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/user-object.js": {
+      "issue_id": "test_coverage::src/common/user-object.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/mailbox-handlers.js": {
+      "issue_id": "test_coverage::src/worker/components/mailbox-handlers.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/user-object-setter.js": {
+      "issue_id": "test_coverage::src/common/user-object-setter.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/recurrence.js": {
+      "issue_id": "test_coverage::src/common/recurrence.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-util.js": {
+      "issue_id": "test_coverage::src/common/common-util.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-hash.js": {
+      "issue_id": "test_coverage::src/common/common-hash.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/mailbox.js": {
+      "issue_id": "test_coverage::src/worker/modules/mailbox.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/migrate-user-object.js": {
+      "issue_id": "test_coverage::src/worker/components/migrate-user-object.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/sharedfolder.js": {
+      "issue_id": "test_coverage::src/worker/components/sharedfolder.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/onlyoffice.js": {
+      "issue_id": "test_coverage::src/worker/modules/onlyoffice.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/cursor.js": {
+      "issue_id": "test_coverage::src/worker/modules/cursor.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/history.js": {
+      "issue_id": "test_coverage::src/worker/modules/history.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/outer/login-block.js": {
+      "issue_id": "test_coverage::src/common/outer/login-block.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/cryptget.js": {
+      "issue_id": "test_coverage::src/common/cryptget.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/events-channel.js": {
+      "issue_id": "test_coverage::src/common/events-channel.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/notify.js": {
+      "issue_id": "test_coverage::src/common/notify.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/cache-store.js": {
+      "issue_id": "test_coverage::src/common/cache-store.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/integration.js": {
+      "issue_id": "test_coverage::src/worker/modules/integration.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/modules/profile.js": {
+      "issue_id": "test_coverage::src/worker/modules/profile.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/messaging.js": {
+      "issue_id": "test_coverage::src/worker/components/messaging.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/outer/http-command.js": {
+      "issue_id": "test_coverage::src/common/outer/http-command.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/core/interface.js": {
+      "issue_id": "test_coverage::src/worker/core/interface.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/core/store-rpc.js": {
+      "issue_id": "test_coverage::src/worker/core/store-rpc.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/merge-drive.js": {
+      "issue_id": "test_coverage::src/worker/components/merge-drive.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_critical",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/roster.js": {
+      "issue_id": "test_coverage::src/worker/components/roster.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/rpc.js": {
+      "issue_id": "test_coverage::src/common/rpc.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/pinpad.js": {
+      "issue_id": "test_coverage::src/common/pinpad.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-credential.js": {
+      "issue_id": "test_coverage::src/common/common-credential.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-signing-keys.js": {
+      "issue_id": "test_coverage::src/common/common-signing-keys.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/components/invitation.js": {
+      "issue_id": "test_coverage::src/worker/components/invitation.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-feedback.js": {
+      "issue_id": "test_coverage::src/common/common-feedback.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/pad-types.js": {
+      "issue_id": "test_coverage::src/common/pad-types.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/core/sw-connector.js": {
+      "issue_id": "test_coverage::src/worker/core/sw-connector.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/core/async-connector.js": {
+      "issue_id": "test_coverage::src/worker/core/async-connector.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-constants.js": {
+      "issue_id": "test_coverage::src/common/common-constants.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/network-config.js": {
+      "issue_id": "test_coverage::src/common/network-config.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/worker/core/ww-connector.js": {
+      "issue_id": "test_coverage::src/worker/core/ww-connector.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/common-realtime.js": {
+      "issue_id": "test_coverage::src/common/common-realtime.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/messages.js": {
+      "issue_id": "test_coverage::src/messages.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "test_coverage::src/common/onlyoffice/current-version.js": {
+      "issue_id": "test_coverage::src/common/onlyoffice/current-version.js",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::abstraction_fitness": {
+      "issue_id": "subjective::abstraction_fitness",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_data_sovereignty": {
+      "issue_id": "subjective::advocacy_data_sovereignty",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_language_quality": {
+      "issue_id": "subjective::advocacy_language_quality",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_security_posture": {
+      "issue_id": "subjective::advocacy_security_posture",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_terminology_consistency": {
+      "issue_id": "subjective::advocacy_terminology_consistency",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_tool_integration": {
+      "issue_id": "subjective::advocacy_tool_integration",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::advocacy_ux_inclusivity": {
+      "issue_id": "subjective::advocacy_ux_inclusivity",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::ai_generated_debt": {
+      "issue_id": "subjective::ai_generated_debt",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::api_surface_coherence": {
+      "issue_id": "subjective::api_surface_coherence",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::authorization_consistency": {
+      "issue_id": "subjective::authorization_consistency",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::contract_coherence": {
+      "issue_id": "subjective::contract_coherence",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::convention_outlier": {
+      "issue_id": "subjective::convention_outlier",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::cross_module_architecture": {
+      "issue_id": "subjective::cross_module_architecture",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::dependency_health": {
+      "issue_id": "subjective::dependency_health",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::design_coherence": {
+      "issue_id": "subjective::design_coherence",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::error_consistency": {
+      "issue_id": "subjective::error_consistency",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::high_level_elegance": {
+      "issue_id": "subjective::high_level_elegance",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::incomplete_migration": {
+      "issue_id": "subjective::incomplete_migration",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::initialization_coupling": {
+      "issue_id": "subjective::initialization_coupling",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::logic_clarity": {
+      "issue_id": "subjective::logic_clarity",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::low_level_elegance": {
+      "issue_id": "subjective::low_level_elegance",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::mid_level_elegance": {
+      "issue_id": "subjective::mid_level_elegance",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::naming_quality": {
+      "issue_id": "subjective::naming_quality",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::package_organization": {
+      "issue_id": "subjective::package_organization",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::test_strategy": {
+      "issue_id": "subjective::test_strategy",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    },
+    "subjective::type_safety": {
+      "issue_id": "subjective::type_safety",
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "cluster": "auto/initial-review",
+      "updated_at": "2026-04-12T07:48:13+00:00"
+    }
+  },
+  "clusters": {
+    "auto/security-log_sensitive": {
+      "name": "auto/security-log_sensitive",
+      "description": "Fix 2 security issues",
+      "issue_ids": [
+        "security::src/worker/async-store.js::security::log_sensitive::src/worker/async-store.js::2033",
+        "security::src/worker/modules/team.js::security::log_sensitive::src/worker/modules/team.js::37"
+      ],
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "updated_at": "2026-04-12T07:48:13+00:00",
+      "auto": true,
+      "cluster_key": "detector::security::log_sensitive",
+      "action": "review and fix security issues",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "manual_fix",
+      "execution_policy": "planned_only"
+    },
+    "auto/test_coverage-untested_critical": {
+      "name": "auto/test_coverage-untested_critical",
+      "description": "Fix 30 test coverage issues",
+      "issue_ids": [
+        "test_coverage::src/worker/async-store.js",
+        "test_coverage::src/worker/modules/team.js",
+        "test_coverage::src/common/proxy-manager.js",
+        "test_coverage::src/worker/modules/support.js",
+        "test_coverage::src/worker/modules/calendar.js",
+        "test_coverage::src/worker/modules/messenger.js",
+        "test_coverage::src/common/user-object.js",
+        "test_coverage::src/worker/components/mailbox-handlers.js",
+        "test_coverage::src/common/user-object-setter.js",
+        "test_coverage::src/common/recurrence.js",
+        "test_coverage::src/common/common-util.js",
+        "test_coverage::src/common/common-hash.js",
+        "test_coverage::src/worker/modules/mailbox.js",
+        "test_coverage::src/worker/components/migrate-user-object.js",
+        "test_coverage::src/worker/components/sharedfolder.js",
+        "test_coverage::src/worker/modules/onlyoffice.js",
+        "test_coverage::src/worker/modules/cursor.js",
+        "test_coverage::src/worker/modules/history.js",
+        "test_coverage::src/common/outer/login-block.js",
+        "test_coverage::src/common/cryptget.js",
+        "test_coverage::src/common/events-channel.js",
+        "test_coverage::src/common/notify.js",
+        "test_coverage::src/common/cache-store.js",
+        "test_coverage::src/worker/modules/integration.js",
+        "test_coverage::src/worker/modules/profile.js",
+        "test_coverage::src/worker/components/messaging.js",
+        "test_coverage::src/common/outer/http-command.js",
+        "test_coverage::src/worker/core/interface.js",
+        "test_coverage::src/worker/core/store-rpc.js",
+        "test_coverage::src/worker/components/merge-drive.js"
+      ],
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "updated_at": "2026-04-12T07:48:13+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage::untested_critical",
+      "action": "review test coverage gaps",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/test_coverage-untested_module": {
+      "name": "auto/test_coverage-untested_module",
+      "description": "Fix 16 test coverage issues",
+      "issue_ids": [
+        "test_coverage::src/worker/components/roster.js",
+        "test_coverage::src/common/rpc.js",
+        "test_coverage::src/common/pinpad.js",
+        "test_coverage::src/common/common-credential.js",
+        "test_coverage::src/common/common-signing-keys.js",
+        "test_coverage::src/worker/components/invitation.js",
+        "test_coverage::src/common/common-feedback.js",
+        "test_coverage::src/common/pad-types.js",
+        "test_coverage::src/worker/core/sw-connector.js",
+        "test_coverage::src/worker/core/async-connector.js",
+        "test_coverage::src/common/common-constants.js",
+        "test_coverage::src/common/network-config.js",
+        "test_coverage::src/worker/core/ww-connector.js",
+        "test_coverage::src/common/common-realtime.js",
+        "test_coverage::src/messages.js",
+        "test_coverage::src/common/onlyoffice/current-version.js"
+      ],
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "updated_at": "2026-04-12T07:48:13+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage::untested_module",
+      "action": "review test coverage gaps",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/initial-review": {
+      "name": "auto/initial-review",
+      "description": "Initial review of 26 unscored subjective dimensions",
+      "issue_ids": [
+        "subjective::abstraction_fitness",
+        "subjective::advocacy_data_sovereignty",
+        "subjective::advocacy_language_quality",
+        "subjective::advocacy_security_posture",
+        "subjective::advocacy_terminology_consistency",
+        "subjective::advocacy_tool_integration",
+        "subjective::advocacy_ux_inclusivity",
+        "subjective::ai_generated_debt",
+        "subjective::api_surface_coherence",
+        "subjective::authorization_consistency",
+        "subjective::contract_coherence",
+        "subjective::convention_outlier",
+        "subjective::cross_module_architecture",
+        "subjective::dependency_health",
+        "subjective::design_coherence",
+        "subjective::error_consistency",
+        "subjective::high_level_elegance",
+        "subjective::incomplete_migration",
+        "subjective::initialization_coupling",
+        "subjective::logic_clarity",
+        "subjective::low_level_elegance",
+        "subjective::mid_level_elegance",
+        "subjective::naming_quality",
+        "subjective::package_organization",
+        "subjective::test_strategy",
+        "subjective::type_safety"
+      ],
+      "created_at": "2026-04-12T07:48:13+00:00",
+      "updated_at": "2026-04-12T07:48:13+00:00",
+      "auto": true,
+      "cluster_key": "subjective::unscored",
+      "action": "desloppify review --prepare --dimensions abstraction_fitness,advocacy_data_sovereignty,advocacy_language_quality,advocacy_security_posture,advocacy_terminology_consistency,advocacy_tool_integration,advocacy_ux_inclusivity,ai_generated_debt,api_surface_coherence,authorization_consistency,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,logic_clarity,low_level_elegance,mid_level_elegance,naming_quality,package_organization,test_strategy,type_safety",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "manual_fix",
+      "execution_policy": "planned_only"
+    }
+  },
+  "superseded": {},
+  "promoted_ids": [],
+  "plan_start_scores": {
+    "strict": 12.3,
+    "overall": 12.3,
+    "objective": 49.2,
+    "verified": 49.2
+  },
+  "refresh_state": {
+    "_subjective_migration_pruned": true,
+    "lifecycle_phase": "plan"
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-04-12T07:48:13+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-04-12T07:48:13+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-04-12T07:48:13+00:00",
+      "action": "sync_lifecycle_phase",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "phase": "review_initial"
+      }
+    },
+    {
+      "timestamp": "2026-04-12T07:48:13+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-04-12T08:04:21+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    }
+  ],
+  "epic_triage_meta": {},
+  "commit_log": [],
+  "uncommitted_issues": [],
+  "commit_tracking_branch": null,
+  "scan_count_at_plan_start": 1
+}

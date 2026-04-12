@@ -1,0 +1,5150 @@
+{
+  "version": 3,
+  "created": "2026-04-12T07:47:59+00:00",
+  "last_scan": "2026-04-12T08:05:37+00:00",
+  "scan_count": 3,
+  "overall_score": 12.3,
+  "objective_score": 49.2,
+  "strict_score": 12.3,
+  "verified_strict_score": 49.2,
+  "stats": {
+    "total": 141,
+    "auto_resolved": 0,
+    "deferred": 0,
+    "false_positive": 0,
+    "fixed": 0,
+    "open": 141,
+    "triaged_out": 0,
+    "wontfix": 0,
+    "by_tier": {
+      "2": {
+        "auto_resolved": 0,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 33,
+        "triaged_out": 0,
+        "wontfix": 0
+      },
+      "3": {
+        "auto_resolved": 0,
+        "deferred": 0,
+        "false_positive": 0,
+        "fixed": 0,
+        "open": 108,
+        "triaged_out": 0,
+        "wontfix": 0
+      }
+    }
+  },
+  "work_items": {
+    "structural::src/worker/async-store.js": {
+      "id": "structural::src/worker/async-store.js",
+      "detector": "structural",
+      "file": "src/worker/async-store.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (2996 LOC) / complexity score 9767",
+      "detail": {
+        "loc": 2996,
+        "complexity_score": 9767,
+        "complexity_signals": [
+          "3 TODOs",
+          "nesting depth 4",
+          "longest function 2953 LOC",
+          "cyclomatic complexity 580",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/team.js": {
+      "id": "structural::src/worker/modules/team.js",
+      "detector": "structural",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (2264 LOC) / complexity score 7379",
+      "detail": {
+        "loc": 2264,
+        "complexity_score": 7379,
+        "complexity_signals": [
+          "2 TODOs",
+          "nesting depth 4",
+          "longest function 2235 LOC",
+          "cyclomatic complexity 464",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/proxy-manager.js": {
+      "id": "structural::src/common/proxy-manager.js",
+      "detector": "structural",
+      "file": "src/common/proxy-manager.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1865 LOC) / complexity score 5845",
+      "detail": {
+        "loc": 1865,
+        "complexity_score": 5845,
+        "complexity_signals": [
+          "3 TODOs",
+          "nesting depth 6",
+          "longest function 1833 LOC",
+          "cyclomatic complexity 296",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/support.js": {
+      "id": "structural::src/worker/modules/support.js",
+      "detector": "structural",
+      "file": "src/worker/modules/support.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1434 LOC) / complexity score 4495",
+      "detail": {
+        "loc": 1434,
+        "complexity_score": 4495,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 1417 LOC",
+          "cyclomatic complexity 253",
+          "callback depth 7"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/calendar.js": {
+      "id": "structural::src/worker/modules/calendar.js",
+      "detector": "structural",
+      "file": "src/worker/modules/calendar.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1222 LOC) / complexity score 3969",
+      "detail": {
+        "loc": 1222,
+        "complexity_score": 3969,
+        "complexity_signals": [
+          "1 TODOs",
+          "nesting depth 5",
+          "longest function 1204 LOC",
+          "cyclomatic complexity 308",
+          "callback depth 6"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/messenger.js": {
+      "id": "structural::src/worker/modules/messenger.js",
+      "detector": "structural",
+      "file": "src/worker/modules/messenger.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1131 LOC) / complexity score 3506",
+      "detail": {
+        "loc": 1131,
+        "complexity_score": 3506,
+        "complexity_signals": [
+          "5 TODOs",
+          "nesting depth 6",
+          "longest function 1116 LOC",
+          "cyclomatic complexity 204",
+          "callback depth 5"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/user-object.js": {
+      "id": "structural::src/common/user-object.js",
+      "detector": "structural",
+      "file": "src/common/user-object.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1018 LOC) / complexity score 3180",
+      "detail": {
+        "loc": 1018,
+        "complexity_score": 3180,
+        "complexity_signals": [
+          "nesting depth 5",
+          "longest function 989 LOC",
+          "cyclomatic complexity 235",
+          "callback depth 8"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/components/mailbox-handlers.js": {
+      "id": "structural::src/worker/components/mailbox-handlers.js",
+      "detector": "structural",
+      "file": "src/worker/components/mailbox-handlers.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1007 LOC) / complexity score 3077",
+      "detail": {
+        "loc": 1007,
+        "complexity_score": 3077,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 995 LOC",
+          "cyclomatic complexity 178",
+          "callback depth 6"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/user-object-setter.js": {
+      "id": "structural::src/common/user-object-setter.js",
+      "detector": "structural",
+      "file": "src/common/user-object-setter.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (1005 LOC) / complexity score 3183",
+      "detail": {
+        "loc": 1005,
+        "complexity_score": 3183,
+        "complexity_signals": [
+          "1 TODOs",
+          "nesting depth 7",
+          "longest function 982 LOC",
+          "cyclomatic complexity 242",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/components/roster.js": {
+      "id": "structural::src/worker/components/roster.js",
+      "detector": "structural",
+      "file": "src/worker/components/roster.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (934 LOC)",
+      "detail": {
+        "loc": 934
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/recurrence.js": {
+      "id": "structural::src/common/recurrence.js",
+      "detector": "structural",
+      "file": "src/common/recurrence.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (912 LOC) / complexity score 2853",
+      "detail": {
+        "loc": 912,
+        "complexity_score": 2853,
+        "complexity_signals": [
+          "1 TODOs",
+          "nesting depth 7",
+          "longest function 898 LOC",
+          "cyclomatic complexity 203",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/common-util.js": {
+      "id": "structural::src/common/common-util.js",
+      "detector": "structural",
+      "file": "src/common/common-util.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (895 LOC) / complexity score 2706",
+      "detail": {
+        "loc": 895,
+        "complexity_score": 2706,
+        "complexity_signals": [
+          "1 TODOs",
+          "nesting depth 5",
+          "longest function 879 LOC",
+          "cyclomatic complexity 163",
+          "callback depth 7"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/common-hash.js": {
+      "id": "structural::src/common/common-hash.js",
+      "detector": "structural",
+      "file": "src/common/common-hash.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (766 LOC) / complexity score 28",
+      "detail": {
+        "loc": 766,
+        "complexity_score": 28,
+        "complexity_signals": [
+          "nesting depth 12",
+          "callback depth 5"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/mailbox.js": {
+      "id": "structural::src/worker/modules/mailbox.js",
+      "detector": "structural",
+      "file": "src/worker/modules/mailbox.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (685 LOC) / complexity score 1989",
+      "detail": {
+        "loc": 685,
+        "complexity_score": 1989,
+        "complexity_signals": [
+          "nesting depth 5",
+          "longest function 670 LOC",
+          "cyclomatic complexity 120",
+          "callback depth 6"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/components/migrate-user-object.js": {
+      "id": "structural::src/worker/components/migrate-user-object.js",
+      "detector": "structural",
+      "file": "src/worker/components/migrate-user-object.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: large (520 LOC) / complexity score 1424",
+      "detail": {
+        "loc": 520,
+        "complexity_score": 1424,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 504 LOC",
+          "cyclomatic complexity 85",
+          "callback depth 9"
+        ]
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/components/sharedfolder.js": {
+      "id": "structural::src/worker/components/sharedfolder.js",
+      "detector": "structural",
+      "file": "src/worker/components/sharedfolder.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 1021",
+      "detail": {
+        "complexity_score": 1021,
+        "complexity_signals": [
+          "nesting depth 4",
+          "longest function 383 LOC",
+          "cyclomatic complexity 67",
+          "callback depth 7"
+        ],
+        "loc": 399
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/onlyoffice.js": {
+      "id": "structural::src/worker/modules/onlyoffice.js",
+      "detector": "structural",
+      "file": "src/worker/modules/onlyoffice.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 912",
+      "detail": {
+        "complexity_score": 912,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 350 LOC",
+          "cyclomatic complexity 63",
+          "callback depth 6"
+        ],
+        "loc": 356
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/cursor.js": {
+      "id": "structural::src/worker/modules/cursor.js",
+      "detector": "structural",
+      "file": "src/worker/modules/cursor.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 685",
+      "detail": {
+        "complexity_score": 685,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 283 LOC",
+          "cyclomatic complexity 50",
+          "callback depth 6"
+        ],
+        "loc": 293
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/history.js": {
+      "id": "structural::src/worker/modules/history.js",
+      "detector": "structural",
+      "file": "src/worker/modules/history.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 601",
+      "detail": {
+        "complexity_score": 601,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 253 LOC",
+          "cyclomatic complexity 53",
+          "callback depth 6"
+        ],
+        "loc": 264
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/events-channel.js": {
+      "id": "structural::src/common/events-channel.js",
+      "detector": "structural",
+      "file": "src/common/events-channel.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 465",
+      "detail": {
+        "complexity_score": 465,
+        "complexity_signals": [
+          "nesting depth 6",
+          "longest function 215 LOC",
+          "cyclomatic complexity 38",
+          "callback depth 7"
+        ],
+        "loc": 235
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/outer/login-block.js": {
+      "id": "structural::src/common/outer/login-block.js",
+      "detector": "structural",
+      "file": "src/common/outer/login-block.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 440",
+      "detail": {
+        "complexity_score": 440,
+        "complexity_signals": [
+          "nesting depth 4",
+          "longest function 218 LOC",
+          "cyclomatic complexity 27",
+          "callback depth 4"
+        ],
+        "loc": 245
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/notify.js": {
+      "id": "structural::src/common/notify.js",
+      "detector": "structural",
+      "file": "src/common/notify.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 418",
+      "detail": {
+        "complexity_score": 418,
+        "complexity_signals": [
+          "nesting depth 6",
+          "longest function 198 LOC",
+          "cyclomatic complexity 42",
+          "callback depth 5"
+        ],
+        "loc": 215
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/cache-store.js": {
+      "id": "structural::src/common/cache-store.js",
+      "detector": "structural",
+      "file": "src/common/cache-store.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 398",
+      "detail": {
+        "complexity_score": 398,
+        "complexity_signals": [
+          "2 TODOs",
+          "nesting depth 4",
+          "longest function 190 LOC",
+          "cyclomatic complexity 43",
+          "callback depth 7"
+        ],
+        "loc": 211
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/integration.js": {
+      "id": "structural::src/worker/modules/integration.js",
+      "detector": "structural",
+      "file": "src/worker/modules/integration.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 397",
+      "detail": {
+        "complexity_score": 397,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 199 LOC",
+          "cyclomatic complexity 32",
+          "callback depth 6"
+        ],
+        "loc": 207
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/cryptget.js": {
+      "id": "structural::src/common/cryptget.js",
+      "detector": "structural",
+      "file": "src/common/cryptget.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 389",
+      "detail": {
+        "complexity_score": 389,
+        "complexity_signals": [
+          "nesting depth 4",
+          "longest function 199 LOC",
+          "cyclomatic complexity 27",
+          "callback depth 7"
+        ],
+        "loc": 238
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/modules/profile.js": {
+      "id": "structural::src/worker/modules/profile.js",
+      "detector": "structural",
+      "file": "src/worker/modules/profile.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 316",
+      "detail": {
+        "complexity_score": 316,
+        "complexity_signals": [
+          "nesting depth 3",
+          "longest function 176 LOC",
+          "cyclomatic complexity 26",
+          "callback depth 6"
+        ],
+        "loc": 191
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/components/messaging.js": {
+      "id": "structural::src/worker/components/messaging.js",
+      "detector": "structural",
+      "file": "src/worker/components/messaging.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 196",
+      "detail": {
+        "complexity_score": 196,
+        "complexity_signals": [
+          "nesting depth 1",
+          "longest function 136 LOC",
+          "cyclomatic complexity 27",
+          "callback depth 5"
+        ],
+        "loc": 148
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/core/interface.js": {
+      "id": "structural::src/worker/core/interface.js",
+      "detector": "structural",
+      "file": "src/worker/core/interface.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 140",
+      "detail": {
+        "complexity_score": 140,
+        "complexity_signals": [
+          "1 TODOs",
+          "nesting depth 2",
+          "longest function 120 LOC",
+          "cyclomatic complexity 21",
+          "callback depth 6"
+        ],
+        "loc": 129
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/worker/core/store-rpc.js": {
+      "id": "structural::src/worker/core/store-rpc.js",
+      "detector": "structural",
+      "file": "src/worker/core/store-rpc.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 101",
+      "detail": {
+        "complexity_score": 101,
+        "complexity_signals": [
+          "nesting depth 2",
+          "longest function 113 LOC",
+          "cyclomatic complexity 2",
+          "callback depth 4"
+        ],
+        "loc": 121
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "structural::src/common/outer/http-command.js": {
+      "id": "structural::src/common/outer/http-command.js",
+      "detector": "structural",
+      "file": "src/common/outer/http-command.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Large file: complexity score 73",
+      "detail": {
+        "complexity_score": 73,
+        "complexity_signals": [
+          "nesting depth 4",
+          "longest function 103 LOC",
+          "cyclomatic complexity 10",
+          "callback depth 5"
+        ],
+        "loc": 130
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/common/notify.js::empty_catch::79": {
+      "id": "smells::src/common/notify.js::empty_catch::79",
+      "detector": "smells",
+      "file": "src/common/notify.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/common/proxy-manager.js::empty_catch::346": {
+      "id": "smells::src/common/proxy-manager.js::empty_catch::346",
+      "detector": "smells",
+      "file": "src/common/proxy-manager.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/common/user-object-setter.js::empty_catch::803": {
+      "id": "smells::src/common/user-object-setter.js::empty_catch::803",
+      "detector": "smells",
+      "file": "src/common/user-object-setter.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:08+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/common/user-object-setter.js::empty_catch::920": {
+      "id": "smells::src/common/user-object-setter.js::empty_catch::920",
+      "detector": "smells",
+      "file": "src/common/user-object-setter.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/components/migrate-user-object.js::empty_catch::215": {
+      "id": "smells::src/worker/components/migrate-user-object.js::empty_catch::215",
+      "detector": "smells",
+      "file": "src/worker/components/migrate-user-object.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/components/migrate-user-object.js::empty_catch::352": {
+      "id": "smells::src/worker/components/migrate-user-object.js::empty_catch::352",
+      "detector": "smells",
+      "file": "src/worker/components/migrate-user-object.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/components/sharedfolder.js::empty_catch::248": {
+      "id": "smells::src/worker/components/sharedfolder.js::empty_catch::248",
+      "detector": "smells",
+      "file": "src/worker/components/sharedfolder.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/components/sharedfolder.js::empty_catch::320": {
+      "id": "smells::src/worker/components/sharedfolder.js::empty_catch::320",
+      "detector": "smells",
+      "file": "src/worker/components/sharedfolder.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/onlyoffice.js::empty_catch::141": {
+      "id": "smells::src/worker/modules/onlyoffice.js::empty_catch::141",
+      "detector": "smells",
+      "file": "src/worker/modules/onlyoffice.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/support.js::empty_catch::381": {
+      "id": "smells::src/worker/modules/support.js::empty_catch::381",
+      "detector": "smells",
+      "file": "src/worker/modules/support.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::106": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::106",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T07:48:09+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::107": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::107",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T07:48:09+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::1524": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::1524",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:09+00:00",
+      "last_seen": "2026-04-12T07:48:09+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "security::src/common/common-constants.js::security::hardcoded_secret_name::src/common/common-constants.js::24": {
+      "id": "security::src/common/common-constants.js::security::hardcoded_secret_name::src/common/common-constants.js::24",
+      "detector": "security",
+      "file": "src/common/common-constants.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Hardcoded secret in variable 'loginTokenStorageKey'",
+      "detail": {
+        "kind": "hardcoded_secret_name",
+        "severity": "high",
+        "line": 24,
+        "content": "        loginTokenStorageKey: 'loginToken',",
+        "remediation": "Move secret to environment variable or secrets manager"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:04:21+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "zone": "production",
+      "lang": "javascript",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "security::src/worker/async-store.js::security::log_sensitive::src/worker/async-store.js::2033": {
+      "id": "security::src/worker/async-store.js::security::log_sensitive::src/worker/async-store.js::2033",
+      "detector": "security",
+      "file": "src/worker/async-store.js",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Sensitive data may be logged",
+      "detail": {
+        "kind": "log_sensitive",
+        "severity": "medium",
+        "line": 2033,
+        "content": "                            console.log('Shared folder password changed');",
+        "remediation": "Remove sensitive data from log statements"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T07:48:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "zone": "production",
+      "lang": "javascript",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "security::src/worker/modules/team.js::security::log_sensitive::src/worker/modules/team.js::37": {
+      "id": "security::src/worker/modules/team.js::security::log_sensitive::src/worker/modules/team.js::37",
+      "detector": "security",
+      "file": "src/worker/modules/team.js",
+      "tier": 2,
+      "confidence": "medium",
+      "summary": "Sensitive data may be logged",
+      "detail": {
+        "kind": "log_sensitive",
+        "severity": "medium",
+        "line": 37,
+        "content": "                            console.log('Shared folder password changed');",
+        "remediation": "Remove sensitive data from log statements"
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T07:48:11+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "zone": "production",
+      "lang": "javascript",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/async-store.js": {
+      "id": "orphaned::src/worker/async-store.js",
+      "detector": "orphaned",
+      "file": "src/worker/async-store.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (2996 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 2996
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/team.js": {
+      "id": "orphaned::src/worker/modules/team.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (2264 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 2264
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/proxy-manager.js": {
+      "id": "orphaned::src/common/proxy-manager.js",
+      "detector": "orphaned",
+      "file": "src/common/proxy-manager.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1865 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1865
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/support.js": {
+      "id": "orphaned::src/worker/modules/support.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/support.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1434 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1434
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/calendar.js": {
+      "id": "orphaned::src/worker/modules/calendar.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/calendar.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1222 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1222
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/messenger.js": {
+      "id": "orphaned::src/worker/modules/messenger.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/messenger.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1131 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1131
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/user-object.js": {
+      "id": "orphaned::src/common/user-object.js",
+      "detector": "orphaned",
+      "file": "src/common/user-object.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1018 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1018
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/mailbox-handlers.js": {
+      "id": "orphaned::src/worker/components/mailbox-handlers.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/mailbox-handlers.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1007 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1007
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/user-object-setter.js": {
+      "id": "orphaned::src/common/user-object-setter.js",
+      "detector": "orphaned",
+      "file": "src/common/user-object-setter.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (1005 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 1005
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/roster.js": {
+      "id": "orphaned::src/worker/components/roster.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/roster.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (934 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 934
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/recurrence.js": {
+      "id": "orphaned::src/common/recurrence.js",
+      "detector": "orphaned",
+      "file": "src/common/recurrence.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (912 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 912
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-util.js": {
+      "id": "orphaned::src/common/common-util.js",
+      "detector": "orphaned",
+      "file": "src/common/common-util.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (895 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 895
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-hash.js": {
+      "id": "orphaned::src/common/common-hash.js",
+      "detector": "orphaned",
+      "file": "src/common/common-hash.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (766 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 766
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/mailbox.js": {
+      "id": "orphaned::src/worker/modules/mailbox.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/mailbox.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (685 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 685
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/migrate-user-object.js": {
+      "id": "orphaned::src/worker/components/migrate-user-object.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/migrate-user-object.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (520 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 520
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/rpc.js": {
+      "id": "orphaned::src/common/rpc.js",
+      "detector": "orphaned",
+      "file": "src/common/rpc.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (422 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 422
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/sharedfolder.js": {
+      "id": "orphaned::src/worker/components/sharedfolder.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/sharedfolder.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (399 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 399
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/onlyoffice.js": {
+      "id": "orphaned::src/worker/modules/onlyoffice.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/onlyoffice.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (356 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 356
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/cursor.js": {
+      "id": "orphaned::src/worker/modules/cursor.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/cursor.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (293 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 293
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/history.js": {
+      "id": "orphaned::src/worker/modules/history.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/history.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (264 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 264
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/outer/login-block.js": {
+      "id": "orphaned::src/common/outer/login-block.js",
+      "detector": "orphaned",
+      "file": "src/common/outer/login-block.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (245 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 245
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/cryptget.js": {
+      "id": "orphaned::src/common/cryptget.js",
+      "detector": "orphaned",
+      "file": "src/common/cryptget.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (238 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 238
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/events-channel.js": {
+      "id": "orphaned::src/common/events-channel.js",
+      "detector": "orphaned",
+      "file": "src/common/events-channel.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (235 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 235
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/pinpad.js": {
+      "id": "orphaned::src/common/pinpad.js",
+      "detector": "orphaned",
+      "file": "src/common/pinpad.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (235 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 235
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/notify.js": {
+      "id": "orphaned::src/common/notify.js",
+      "detector": "orphaned",
+      "file": "src/common/notify.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (215 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 215
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/cache-store.js": {
+      "id": "orphaned::src/common/cache-store.js",
+      "detector": "orphaned",
+      "file": "src/common/cache-store.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (211 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 211
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/integration.js": {
+      "id": "orphaned::src/worker/modules/integration.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/integration.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (207 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 207
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/modules/profile.js": {
+      "id": "orphaned::src/worker/modules/profile.js",
+      "detector": "orphaned",
+      "file": "src/worker/modules/profile.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (191 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 191
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/messaging.js": {
+      "id": "orphaned::src/worker/components/messaging.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/messaging.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (148 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 148
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-credential.js": {
+      "id": "orphaned::src/common/common-credential.js",
+      "detector": "orphaned",
+      "file": "src/common/common-credential.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (135 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 135
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/outer/http-command.js": {
+      "id": "orphaned::src/common/outer/http-command.js",
+      "detector": "orphaned",
+      "file": "src/common/outer/http-command.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (130 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 130
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/core/interface.js": {
+      "id": "orphaned::src/worker/core/interface.js",
+      "detector": "orphaned",
+      "file": "src/worker/core/interface.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (129 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 129
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/core/store-rpc.js": {
+      "id": "orphaned::src/worker/core/store-rpc.js",
+      "detector": "orphaned",
+      "file": "src/worker/core/store-rpc.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (121 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 121
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-signing-keys.js": {
+      "id": "orphaned::src/common/common-signing-keys.js",
+      "detector": "orphaned",
+      "file": "src/common/common-signing-keys.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (110 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 110
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/invitation.js": {
+      "id": "orphaned::src/worker/components/invitation.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/invitation.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (109 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 109
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/components/merge-drive.js": {
+      "id": "orphaned::src/worker/components/merge-drive.js",
+      "detector": "orphaned",
+      "file": "src/worker/components/merge-drive.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (98 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 98
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-feedback.js": {
+      "id": "orphaned::src/common/common-feedback.js",
+      "detector": "orphaned",
+      "file": "src/common/common-feedback.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (79 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 79
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/pad-types.js": {
+      "id": "orphaned::src/common/pad-types.js",
+      "detector": "orphaned",
+      "file": "src/common/pad-types.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (68 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 68
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/core/sw-connector.js": {
+      "id": "orphaned::src/worker/core/sw-connector.js",
+      "detector": "orphaned",
+      "file": "src/worker/core/sw-connector.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (52 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 52
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/core/async-connector.js": {
+      "id": "orphaned::src/worker/core/async-connector.js",
+      "detector": "orphaned",
+      "file": "src/worker/core/async-connector.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (50 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 50
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-constants.js": {
+      "id": "orphaned::src/common/common-constants.js",
+      "detector": "orphaned",
+      "file": "src/common/common-constants.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (47 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 47
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/network-config.js": {
+      "id": "orphaned::src/common/network-config.js",
+      "detector": "orphaned",
+      "file": "src/common/network-config.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (41 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 41
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/worker/core/ww-connector.js": {
+      "id": "orphaned::src/worker/core/ww-connector.js",
+      "detector": "orphaned",
+      "file": "src/worker/core/ww-connector.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (38 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 38
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/common-realtime.js": {
+      "id": "orphaned::src/common/common-realtime.js",
+      "detector": "orphaned",
+      "file": "src/common/common-realtime.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (36 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 36
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/common/onlyoffice/current-version.js": {
+      "id": "orphaned::src/common/onlyoffice/current-version.js",
+      "detector": "orphaned",
+      "file": "src/common/onlyoffice/current-version.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (19 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 19
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "orphaned::src/messages.js": {
+      "id": "orphaned::src/messages.js",
+      "detector": "orphaned",
+      "file": "src/messages.js",
+      "tier": 3,
+      "confidence": "medium",
+      "summary": "Orphaned file (19 LOC): zero importers, not an entry point",
+      "detail": {
+        "loc": 19
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/async-store.js": {
+      "id": "test_coverage::src/worker/async-store.js",
+      "detector": "test_coverage",
+      "file": "src/worker/async-store.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (2996 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 2996,
+        "importer_count": 0,
+        "loc_weight": 50,
+        "complexity_score": 9767
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/team.js": {
+      "id": "test_coverage::src/worker/modules/team.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/team.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (2264 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 2264,
+        "importer_count": 0,
+        "loc_weight": 47.58150901348127,
+        "complexity_score": 7379
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/proxy-manager.js": {
+      "id": "test_coverage::src/common/proxy-manager.js",
+      "detector": "test_coverage",
+      "file": "src/common/proxy-manager.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1865 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1865,
+        "importer_count": 0,
+        "loc_weight": 43.18564576337837,
+        "complexity_score": 5845
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/support.js": {
+      "id": "test_coverage::src/worker/modules/support.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/support.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1434 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1434,
+        "importer_count": 0,
+        "loc_weight": 37.86819245752297,
+        "complexity_score": 4495
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/calendar.js": {
+      "id": "test_coverage::src/worker/modules/calendar.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/calendar.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1222 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1222,
+        "importer_count": 0,
+        "loc_weight": 34.95711658589707,
+        "complexity_score": 3969
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/messenger.js": {
+      "id": "test_coverage::src/worker/modules/messenger.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/messenger.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1131 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1131,
+        "importer_count": 0,
+        "loc_weight": 33.63034344160047,
+        "complexity_score": 3506
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/user-object.js": {
+      "id": "test_coverage::src/common/user-object.js",
+      "detector": "test_coverage",
+      "file": "src/common/user-object.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1018 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1018,
+        "importer_count": 0,
+        "loc_weight": 31.906112267087632,
+        "complexity_score": 3180
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/mailbox-handlers.js": {
+      "id": "test_coverage::src/worker/components/mailbox-handlers.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/mailbox-handlers.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1007 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1007,
+        "importer_count": 0,
+        "loc_weight": 31.73326330524486,
+        "complexity_score": 3077
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/user-object-setter.js": {
+      "id": "test_coverage::src/common/user-object-setter.js",
+      "detector": "test_coverage",
+      "file": "src/common/user-object-setter.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (1005 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 1005,
+        "importer_count": 0,
+        "loc_weight": 31.701734968294716,
+        "complexity_score": 3183
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/roster.js": {
+      "id": "test_coverage::src/worker/components/roster.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/roster.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (934 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 934,
+        "importer_count": 0,
+        "loc_weight": 30.56141357987225
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/recurrence.js": {
+      "id": "test_coverage::src/common/recurrence.js",
+      "detector": "test_coverage",
+      "file": "src/common/recurrence.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (912 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 912,
+        "importer_count": 0,
+        "loc_weight": 30.199337741083,
+        "complexity_score": 2853
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-util.js": {
+      "id": "test_coverage::src/common/common-util.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-util.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (895 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 895,
+        "importer_count": 0,
+        "loc_weight": 29.916550603303182,
+        "complexity_score": 2706
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-hash.js": {
+      "id": "test_coverage::src/common/common-hash.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-hash.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (766 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 766,
+        "importer_count": 0,
+        "loc_weight": 27.676705006196094,
+        "complexity_score": 28
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/mailbox.js": {
+      "id": "test_coverage::src/worker/modules/mailbox.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/mailbox.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (685 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 685,
+        "importer_count": 0,
+        "loc_weight": 26.1725046566048,
+        "complexity_score": 1989
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/migrate-user-object.js": {
+      "id": "test_coverage::src/worker/components/migrate-user-object.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/migrate-user-object.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (520 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 520,
+        "importer_count": 0,
+        "loc_weight": 22.80350850198276,
+        "complexity_score": 1424
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/rpc.js": {
+      "id": "test_coverage::src/common/rpc.js",
+      "detector": "test_coverage",
+      "file": "src/common/rpc.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (422 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 422,
+        "importer_count": 0,
+        "loc_weight": 20.54263858417414
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/sharedfolder.js": {
+      "id": "test_coverage::src/worker/components/sharedfolder.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/sharedfolder.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (399 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 399,
+        "importer_count": 0,
+        "loc_weight": 19.974984355438178,
+        "complexity_score": 1021
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/onlyoffice.js": {
+      "id": "test_coverage::src/worker/modules/onlyoffice.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/onlyoffice.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (356 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 356,
+        "importer_count": 0,
+        "loc_weight": 18.867962264113206,
+        "complexity_score": 912
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/cursor.js": {
+      "id": "test_coverage::src/worker/modules/cursor.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/cursor.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (293 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 293,
+        "importer_count": 0,
+        "loc_weight": 17.11724276862369,
+        "complexity_score": 685
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:11+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/history.js": {
+      "id": "test_coverage::src/worker/modules/history.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/history.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (264 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 264,
+        "importer_count": 0,
+        "loc_weight": 16.24807680927192,
+        "complexity_score": 601
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/outer/login-block.js": {
+      "id": "test_coverage::src/common/outer/login-block.js",
+      "detector": "test_coverage",
+      "file": "src/common/outer/login-block.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (245 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 245,
+        "importer_count": 0,
+        "loc_weight": 15.652475842498529,
+        "complexity_score": 440
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/cryptget.js": {
+      "id": "test_coverage::src/common/cryptget.js",
+      "detector": "test_coverage",
+      "file": "src/common/cryptget.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (238 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 238,
+        "importer_count": 0,
+        "loc_weight": 15.427248620541512,
+        "complexity_score": 389
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/events-channel.js": {
+      "id": "test_coverage::src/common/events-channel.js",
+      "detector": "test_coverage",
+      "file": "src/common/events-channel.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (235 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 235,
+        "importer_count": 0,
+        "loc_weight": 15.329709716755891,
+        "complexity_score": 465
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/pinpad.js": {
+      "id": "test_coverage::src/common/pinpad.js",
+      "detector": "test_coverage",
+      "file": "src/common/pinpad.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (235 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 235,
+        "importer_count": 0,
+        "loc_weight": 15.329709716755891
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/notify.js": {
+      "id": "test_coverage::src/common/notify.js",
+      "detector": "test_coverage",
+      "file": "src/common/notify.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (215 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 215,
+        "importer_count": 0,
+        "loc_weight": 14.66287829861518,
+        "complexity_score": 418
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/cache-store.js": {
+      "id": "test_coverage::src/common/cache-store.js",
+      "detector": "test_coverage",
+      "file": "src/common/cache-store.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (211 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 211,
+        "importer_count": 0,
+        "loc_weight": 14.52583904633395,
+        "complexity_score": 398
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/integration.js": {
+      "id": "test_coverage::src/worker/modules/integration.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/integration.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (207 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 207,
+        "importer_count": 0,
+        "loc_weight": 14.38749456993816,
+        "complexity_score": 397
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/modules/profile.js": {
+      "id": "test_coverage::src/worker/modules/profile.js",
+      "detector": "test_coverage",
+      "file": "src/worker/modules/profile.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (191 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 191,
+        "importer_count": 0,
+        "loc_weight": 13.820274961085254,
+        "complexity_score": 316
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/messaging.js": {
+      "id": "test_coverage::src/worker/components/messaging.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/messaging.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (148 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 148,
+        "importer_count": 0,
+        "loc_weight": 12.165525060596439,
+        "complexity_score": 196
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-credential.js": {
+      "id": "test_coverage::src/common/common-credential.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-credential.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (135 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 135,
+        "importer_count": 0,
+        "loc_weight": 11.61895003862225
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/outer/http-command.js": {
+      "id": "test_coverage::src/common/outer/http-command.js",
+      "detector": "test_coverage",
+      "file": "src/common/outer/http-command.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (130 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 130,
+        "importer_count": 0,
+        "loc_weight": 11.40175425099138,
+        "complexity_score": 73
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/core/interface.js": {
+      "id": "test_coverage::src/worker/core/interface.js",
+      "detector": "test_coverage",
+      "file": "src/worker/core/interface.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (129 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 129,
+        "importer_count": 0,
+        "loc_weight": 11.357816691600547,
+        "complexity_score": 140
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/core/store-rpc.js": {
+      "id": "test_coverage::src/worker/core/store-rpc.js",
+      "detector": "test_coverage",
+      "file": "src/worker/core/store-rpc.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (121 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 121,
+        "importer_count": 0,
+        "loc_weight": 11.0,
+        "complexity_score": 101
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-signing-keys.js": {
+      "id": "test_coverage::src/common/common-signing-keys.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-signing-keys.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (110 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 110,
+        "importer_count": 0,
+        "loc_weight": 10.488088481701515
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/invitation.js": {
+      "id": "test_coverage::src/worker/components/invitation.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/invitation.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (109 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 109,
+        "importer_count": 0,
+        "loc_weight": 10.44030650891055
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/components/merge-drive.js": {
+      "id": "test_coverage::src/worker/components/merge-drive.js",
+      "detector": "test_coverage",
+      "file": "src/worker/components/merge-drive.js",
+      "tier": 2,
+      "confidence": "high",
+      "summary": "Untested module (98 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_critical",
+        "loc": 98,
+        "importer_count": 0,
+        "loc_weight": 9.899494936611665,
+        "complexity_score": 45
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-feedback.js": {
+      "id": "test_coverage::src/common/common-feedback.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-feedback.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (79 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 79,
+        "importer_count": 0,
+        "loc_weight": 8.888194417315589
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/pad-types.js": {
+      "id": "test_coverage::src/common/pad-types.js",
+      "detector": "test_coverage",
+      "file": "src/common/pad-types.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (68 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 68,
+        "importer_count": 0,
+        "loc_weight": 8.246211251235321
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/core/sw-connector.js": {
+      "id": "test_coverage::src/worker/core/sw-connector.js",
+      "detector": "test_coverage",
+      "file": "src/worker/core/sw-connector.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (52 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 52,
+        "importer_count": 0,
+        "loc_weight": 7.211102550927978
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/core/async-connector.js": {
+      "id": "test_coverage::src/worker/core/async-connector.js",
+      "detector": "test_coverage",
+      "file": "src/worker/core/async-connector.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (50 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 50,
+        "importer_count": 0,
+        "loc_weight": 7.0710678118654755
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-constants.js": {
+      "id": "test_coverage::src/common/common-constants.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-constants.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (47 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 47,
+        "importer_count": 0,
+        "loc_weight": 6.855654600401044
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/network-config.js": {
+      "id": "test_coverage::src/common/network-config.js",
+      "detector": "test_coverage",
+      "file": "src/common/network-config.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (41 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 41,
+        "importer_count": 0,
+        "loc_weight": 6.4031242374328485
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/worker/core/ww-connector.js": {
+      "id": "test_coverage::src/worker/core/ww-connector.js",
+      "detector": "test_coverage",
+      "file": "src/worker/core/ww-connector.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (38 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 38,
+        "importer_count": 0,
+        "loc_weight": 6.164414002968976
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/common-realtime.js": {
+      "id": "test_coverage::src/common/common-realtime.js",
+      "detector": "test_coverage",
+      "file": "src/common/common-realtime.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (36 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 36,
+        "importer_count": 0,
+        "loc_weight": 6.0
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/messages.js": {
+      "id": "test_coverage::src/messages.js",
+      "detector": "test_coverage",
+      "file": "src/messages.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (19 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 19,
+        "importer_count": 0,
+        "loc_weight": 4.358898943540674
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "test_coverage::src/common/onlyoffice/current-version.js": {
+      "id": "test_coverage::src/common/onlyoffice/current-version.js",
+      "detector": "test_coverage",
+      "file": "src/common/onlyoffice/current-version.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Untested module (19 LOC, 0 importers) \u2014 no test files found",
+      "detail": {
+        "kind": "untested_module",
+        "loc": 19,
+        "importer_count": 0,
+        "loc_weight": 4.358898943540674
+      },
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T07:48:12+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::104": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::104",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T08:04:19+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::105": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::105",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T08:04:19+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    },
+    "smells::src/worker/modules/team.js::empty_catch::1522": {
+      "id": "smells::src/worker/modules/team.js::empty_catch::1522",
+      "detector": "smells",
+      "file": "src/worker/modules/team.js",
+      "tier": 3,
+      "confidence": "high",
+      "summary": "Empty catch_clause \u2014 swallows errors silently",
+      "detail": {},
+      "status": "open",
+      "note": null,
+      "first_seen": "2026-04-12T08:04:19+00:00",
+      "last_seen": "2026-04-12T08:05:37+00:00",
+      "resolved_at": null,
+      "reopen_count": 0,
+      "work_item_kind": "mechanical_defect",
+      "issue_kind": "mechanical_defect",
+      "origin": "scan",
+      "lang": "javascript",
+      "zone": "production",
+      "suppressed": false,
+      "suppressed_at": null,
+      "suppression_pattern": null
+    }
+  },
+  "scan_coverage": {
+    "javascript": {
+      "status": "reduced",
+      "confidence": 0.0,
+      "detectors": {
+        "eslint_warning": {
+          "detector": "eslint_warning",
+          "status": "reduced",
+          "confidence": 0.0,
+          "summary": "ESLint tooling unavailable (parser_error)",
+          "impact": "Detector results may be under-reported for this scan.",
+          "remediation": "Install/fix the tool command and rerun scan.",
+          "tool": "ESLint",
+          "reason": "parser_error"
+        },
+        "security": {
+          "detector": "security",
+          "status": "full",
+          "confidence": 1.0,
+          "summary": "Security coverage complete for enabled detectors.",
+          "impact": "",
+          "remediation": "",
+          "tool": "",
+          "reason": ""
+        }
+      },
+      "warnings": [
+        {
+          "detector": "eslint_warning",
+          "status": "reduced",
+          "confidence": 0.0,
+          "summary": "ESLint tooling unavailable (parser_error)",
+          "impact": "Detector results may be under-reported for this scan.",
+          "remediation": "Install/fix the tool command and rerun scan.",
+          "tool": "ESLint",
+          "reason": "parser_error"
+        }
+      ],
+      "updated_at": "2026-04-12T08:05:37+00:00"
+    }
+  },
+  "score_confidence": {
+    "status": "reduced",
+    "confidence": 0.0,
+    "detectors": [
+      {
+        "detector": "eslint_warning",
+        "status": "reduced",
+        "confidence": 0.0,
+        "summary": "ESLint tooling unavailable (parser_error)",
+        "impact": "Detector results may be under-reported for this scan.",
+        "remediation": "Install/fix the tool command and rerun scan.",
+        "tool": "ESLint",
+        "reason": "parser_error"
+      }
+    ],
+    "dimensions": []
+  },
+  "scan_metadata": {
+    "source": "scan"
+  },
+  "subjective_integrity": {
+    "status": "pass",
+    "target_score": 85.0,
+    "matched_count": 0,
+    "matched_dimensions": [],
+    "reset_dimensions": []
+  },
+  "subjective_assessments": {},
+  "scan_history": [
+    {
+      "timestamp": "2026-04-12T07:48:12+00:00",
+      "lang": "javascript",
+      "strict_score": 12.3,
+      "verified_strict_score": 49.2,
+      "objective_score": 49.2,
+      "overall_score": 12.3,
+      "open": 138,
+      "diff_new": 138,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 138,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.0,
+        "detector_count": 1,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 40.4,
+          "strict": 40.4
+        },
+        "Security": {
+          "score": 97.4,
+          "strict": 97.4
+        },
+        "File health": {
+          "score": 54.3,
+          "strict": 54.3
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Data sovereignty": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy language": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security (subjective)": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy terminology": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy tools": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy UX": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-12T08:04:21+00:00",
+      "lang": "javascript",
+      "strict_score": 12.3,
+      "verified_strict_score": 49.2,
+      "objective_score": 49.2,
+      "overall_score": 12.3,
+      "open": 141,
+      "diff_new": 3,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 136,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.0,
+        "detector_count": 1,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 40.4,
+          "strict": 40.4
+        },
+        "Security": {
+          "score": 97.4,
+          "strict": 97.4
+        },
+        "File health": {
+          "score": 54.3,
+          "strict": 54.3
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Data sovereignty": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy language": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security (subjective)": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy terminology": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy tools": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy UX": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    },
+    {
+      "timestamp": "2026-04-12T08:05:37+00:00",
+      "lang": "javascript",
+      "strict_score": 12.3,
+      "verified_strict_score": 49.2,
+      "objective_score": 49.2,
+      "overall_score": 12.3,
+      "open": 141,
+      "diff_new": 0,
+      "diff_resolved": 0,
+      "ignored": 0,
+      "raw_issues": 135,
+      "suppressed_pct": 0.0,
+      "ignore_patterns": 0,
+      "subjective_integrity": {
+        "status": "pass",
+        "matched_count": 0,
+        "reset_count": 0,
+        "target_score": 85.0
+      },
+      "score_confidence": {
+        "status": "reduced",
+        "confidence": 0.0,
+        "detector_count": 1,
+        "dimension_count": 0
+      },
+      "dimension_scores": {
+        "Code quality": {
+          "score": 40.4,
+          "strict": 40.4
+        },
+        "Security": {
+          "score": 97.4,
+          "strict": 97.4
+        },
+        "File health": {
+          "score": 54.3,
+          "strict": 54.3
+        },
+        "Test health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security": {
+          "score": 100.0,
+          "strict": 100.0
+        },
+        "Abstraction fit": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Data sovereignty": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy language": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy security (subjective)": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy terminology": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy tools": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Advocacy UX": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "AI generated debt": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "API coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Auth consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Contracts": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Convention drift": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Cross-module arch": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Dep health": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Design coherence": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Error consistency": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "High elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Stale migration": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Init coupling": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Logic clarity": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Low elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Mid elegance": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Naming quality": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Structure nav": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Test strategy": {
+          "score": 0.0,
+          "strict": 0.0
+        },
+        "Type safety": {
+          "score": 0.0,
+          "strict": 0.0
+        }
+      }
+    }
+  ],
+  "review_cache": {
+    "detectors": {
+      "security": {
+        "version": 1,
+        "fingerprint": "8b946d33ce44079f47cf8e63bac62368ec5ee70d",
+        "entries": [],
+        "files_scanned": 0,
+        "coverage": null
+      }
+    }
+  },
+  "lang_capabilities": {
+    "javascript": {
+      "fixers": [
+        "eslint-warning"
+      ],
+      "typecheck_cmd": ""
+    }
+  },
+  "zone_distribution": {
+    "production": 46
+  },
+  "tool_hash": "141ace7b12db",
+  "scan_path": "src",
+  "scan_completeness": {
+    "javascript": "fast"
+  },
+  "potentials": {
+    "javascript": {
+      "structural": 46,
+      "flat_dirs": 8,
+      "empty_catch": 13,
+      "security": 46,
+      "single_use": 0,
+      "cycles": 46,
+      "orphaned": 46,
+      "test_coverage": 876,
+      "advocacy_language": 0,
+      "advocacy_security": 53,
+      "stale_wontfix": 0
+    }
+  },
+  "codebase_metrics": {
+    "javascript": {
+      "total_files": 46,
+      "total_loc": 0,
+      "total_directories": 8
+    }
+  },
+  "dimension_scores": {
+    "Code quality": {
+      "score": 40.4,
+      "strict": 40.4,
+      "verified_strict_score": 40.4,
+      "checks": 54,
+      "failing": 46,
+      "tier": 3,
+      "detectors": {
+        "orphaned": {
+          "potential": 46,
+          "pass_rate": 0.3000000000000004,
+          "failing": 46,
+          "weighted_failures": 32.19999999999998
+        },
+        "flat_dirs": {
+          "potential": 8,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Security": {
+      "score": 97.4,
+      "strict": 97.4,
+      "verified_strict_score": 97.4,
+      "checks": 92,
+      "failing": 3,
+      "tier": 4,
+      "detectors": {
+        "cycles": {
+          "potential": 46,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        },
+        "security": {
+          "potential": 46,
+          "pass_rate": 0.9478260869565218,
+          "failing": 3,
+          "weighted_failures": 2.4
+        }
+      }
+    },
+    "File health": {
+      "score": 54.3,
+      "strict": 54.3,
+      "verified_strict_score": 54.3,
+      "checks": 46,
+      "failing": 30,
+      "tier": 3,
+      "detectors": {
+        "structural": {
+          "potential": 46,
+          "pass_rate": 0.5434782608695654,
+          "failing": 30,
+          "weighted_failures": 20.99999999999999
+        }
+      }
+    },
+    "Test health": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 876,
+      "failing": 46,
+      "tier": 4,
+      "detectors": {
+        "test_coverage": {
+          "potential": 876,
+          "pass_rate": 0.00033107742698844134,
+          "failing": 46,
+          "weighted_failures": 875.7099761739581
+        }
+      }
+    },
+    "Advocacy security": {
+      "score": 100.0,
+      "strict": 100.0,
+      "verified_strict_score": 100.0,
+      "checks": 53,
+      "failing": 0,
+      "tier": 2,
+      "detectors": {
+        "advocacy_security": {
+          "potential": 53,
+          "pass_rate": 1.0,
+          "failing": 0,
+          "weighted_failures": 0.0
+        }
+      }
+    },
+    "Abstraction fit": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "abstraction_fitness",
+          "configured_weight": 8.0,
+          "components": []
+        }
+      }
+    },
+    "Data sovereignty": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_data_sovereignty",
+          "configured_weight": 6.0,
+          "components": []
+        }
+      }
+    },
+    "Advocacy language": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_language_quality",
+          "configured_weight": 8.0,
+          "components": []
+        }
+      }
+    },
+    "Advocacy security (subjective)": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_security_posture",
+          "configured_weight": 10.0,
+          "components": []
+        }
+      }
+    },
+    "Advocacy terminology": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_terminology_consistency",
+          "configured_weight": 4.0,
+          "components": []
+        }
+      }
+    },
+    "Advocacy tools": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_tool_integration",
+          "configured_weight": 3.0,
+          "components": []
+        }
+      }
+    },
+    "Advocacy UX": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "advocacy_ux_inclusivity",
+          "configured_weight": 4.0,
+          "components": []
+        }
+      }
+    },
+    "AI generated debt": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "ai_generated_debt",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "API coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "api_surface_coherence",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Auth consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "authorization_consistency",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Contracts": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "contract_coherence",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Convention drift": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "convention_outlier",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Cross-module arch": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "cross_module_architecture",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Dep health": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "dependency_health",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Design coherence": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "design_coherence",
+          "configured_weight": 10.0,
+          "components": []
+        }
+      }
+    },
+    "Error consistency": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "error_consistency",
+          "configured_weight": 3.0,
+          "components": []
+        }
+      }
+    },
+    "High elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "high_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Stale migration": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "incomplete_migration",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Init coupling": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "initialization_coupling",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Logic clarity": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "logic_clarity",
+          "configured_weight": 6.0,
+          "components": []
+        }
+      }
+    },
+    "Low elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "low_level_elegance",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    },
+    "Mid elegance": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "mid_level_elegance",
+          "configured_weight": 22.0,
+          "components": []
+        }
+      }
+    },
+    "Naming quality": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "naming_quality",
+          "configured_weight": 2.0,
+          "components": []
+        }
+      }
+    },
+    "Structure nav": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "package_organization",
+          "configured_weight": 5.0,
+          "components": []
+        }
+      }
+    },
+    "Test strategy": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "test_strategy",
+          "configured_weight": 1.0,
+          "components": []
+        }
+      }
+    },
+    "Type safety": {
+      "score": 0.0,
+      "strict": 0.0,
+      "verified_strict_score": 0.0,
+      "checks": 10,
+      "failing": 0,
+      "tier": 4,
+      "detectors": {
+        "subjective_assessment": {
+          "potential": 10,
+          "pass_rate": 0.0,
+          "failing": 0,
+          "weighted_failures": 10.0,
+          "assessment_score": 0.0,
+          "placeholder": true,
+          "dimension_key": "type_safety",
+          "configured_weight": 12.0,
+          "components": []
+        }
+      }
+    }
+  },
+  "reminder_history": {
+    "report_scores": 3,
+    "feedback_nudge": 2,
+    "stagnant_nudge": 31
+  }
+}
