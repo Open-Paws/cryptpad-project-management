@@ -406,9 +406,9 @@ define([
     };
     common.logoutFromAll = function (cb) {
         var token = Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
-        localStorage.setItem(Constants.tokenKey, token);
+        localStorage.setItem(Constants.loginSessionStorageKey, token);
         postMessage("SET", {
-            key: [Constants.tokenKey],
+            key: [Constants.loginSessionStorageKey],
             value: token
         }, function (obj) {
             if (obj && obj.error) { return void cb(obj.error); }
@@ -2356,10 +2356,10 @@ define([
     };
     var onStoreReady = function (data) {
         if (common.userHash) {
-            var localToken = tryParsing(localStorage.getItem(Constants.tokenKey));
+            var localToken = tryParsing(localStorage.getItem(Constants.loginSessionStorageKey));
             if (localToken === null) {
                 // if that number hasn't been set to localStorage, do so.
-                localStorage.setItem(Constants.tokenKey, data[Constants.tokenKey]);
+                localStorage.setItem(Constants.loginSessionStorageKey, data[Constants.loginSessionStorageKey]);
             }
         }
         initFeedback(data.feedback);
@@ -2416,7 +2416,7 @@ define([
         REQUEST_LOGIN: requestLogin,
         UPDATE_METADATA: common.changeMetadata,
         UPDATE_TOKEN: function (data) {
-            var localToken = tryParsing(localStorage.getItem(Constants.tokenKey));
+            var localToken = tryParsing(localStorage.getItem(Constants.loginSessionStorageKey));
             if (localToken !== data.token) { requestLogin(); }
         },
         // Store
@@ -2659,7 +2659,7 @@ define([
                 init: true,
                 userHash: userHash || LocalStore.getUserHash(),
                 anonHash: LocalStore.getFSHash(),
-                localToken: tryParsing(localStorage.getItem(Constants.tokenKey)), // TODO move this to LocalStore ?
+                localToken: tryParsing(localStorage.getItem(Constants.loginSessionStorageKey)), // TODO move this to LocalStore ?
                 language: common.getLanguage(),
                 form_seed: localStorage.CP_formSeed,
                 cache: rdyCfg.cache,

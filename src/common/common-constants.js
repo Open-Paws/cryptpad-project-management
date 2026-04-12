@@ -21,7 +21,7 @@ const factory = function (AppConfig = {}) {
         displayNameKey: 'cryptpad.username',
         oldStorageKey: 'CryptPad_RECENTPADS',
         storageKey: 'filesData',
-        tokenKey: 'loginToken',
+        loginSessionStorageKey: 'loginToken',
         prefersDriveRedirectKey: 'prefersDriveRedirect',
         isPremiumKey: 'isPremiumUser',
         displayPadCreationScreen: 'displayPadCreationScreen',

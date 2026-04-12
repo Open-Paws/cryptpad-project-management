@@ -33,9 +33,7 @@ const factory = (Util, Hash, Constants, Realtime, ProxyManager,
                             oldChannel: secret.channel,
                             password: n,
                             href: href
-                        }, ctx.store.network, function () {
-                            console.log('Shared folder password changed');
-                        });
+                        }, ctx.store.network, function () {});
                     });
                     return false;
                 }

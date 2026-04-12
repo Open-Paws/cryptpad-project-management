@@ -836,7 +836,7 @@ const factory = (Sortify, UserObject, ProxyManager,
                     }).nThen(function (waitFor) {
                         globalThis.accountDeletion = clientId;
                         // Log out from other workers
-                        store.proxy[Constants.tokenKey] = 'DELETED';
+                        store.proxy[Constants.loginSessionStorageKey] = 'DELETED';
                         onSync(null, waitFor());
                     }).nThen(function (waitFor) {
                         // Delete Pin Store
@@ -2029,9 +2029,7 @@ const factory = (Sortify, UserObject, ProxyManager,
                             oldChannel: secret.channel,
                             password: n,
                             href: href
-                        }, store.network, function () {
-                            console.log('Shared folder password changed');
-                        });
+                        }, store.network, function () {});
                         return false;
                     }
                 });
@@ -2394,12 +2392,12 @@ const factory = (Sortify, UserObject, ProxyManager,
 
                     // every user object should have a persistent, random number
                     if (typeof(proxy.loginToken) !== 'number') {
-                        proxy[Constants.tokenKey] = store.data.localToken ||
+                        proxy[Constants.loginSessionStorageKey] = store.data.localToken ||
                                     Math.floor(Math.random()*Number.MAX_SAFE_INTEGER);
                     }
-                    returned[Constants.tokenKey] = proxy[Constants.tokenKey];
+                    returned[Constants.loginSessionStorageKey] = proxy[Constants.loginSessionStorageKey];
 
-                    if (store.data.localToken && store.data.localToken !== proxy[Constants.tokenKey]) {
+                    if (store.data.localToken && store.data.localToken !== proxy[Constants.loginSessionStorageKey]) {
                         // the local number doesn't match that in
                         // the user object, request that they reauthenticate.
                         return void requestLogin();
@@ -2467,9 +2465,9 @@ const factory = (Sortify, UserObject, ProxyManager,
                 proxy.on('change', ['settings'], function () {
                     broadcast([], "UPDATE_METADATA");
                 });
-                proxy.on('change', [Constants.tokenKey], function () {
-                    if (store.isDeleted || proxy[Constants.tokenKey] === 'DELETED') { return; }
-                    broadcast([], "UPDATE_TOKEN", { token: proxy[Constants.tokenKey] });
+                proxy.on('change', [Constants.loginSessionStorageKey], function () {
+                    if (store.isDeleted || proxy[Constants.loginSessionStorageKey] === 'DELETED') { return; }
+                    broadcast([], "UPDATE_TOKEN", { token: proxy[Constants.loginSessionStorageKey] });
                 });
 
                 loadMailbox();
@@ -2603,7 +2601,7 @@ const factory = (Sortify, UserObject, ProxyManager,
          *   - userHash or anonHash
          * Todo in cb
          *   - LocalStore.setFSHash if needed
-         *   - stuff with tokenKey
+         *   - stuff with loginSessionStorageKey
          * Event to outer
          *   - requestLogin
          */
