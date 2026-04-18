@@ -8,6 +8,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 # Open Paws Project Management
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+[![desloppify score](https://img.shields.io/badge/desloppify-50.4%2F100-yellow)](scorecard.png)
 [![Version](https://img.shields.io/badge/version-2025.6.0-green.svg)](package.json)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](.nvmrc)
 [![JavaScript](https://img.shields.io/badge/language-JavaScript-yellow.svg)](www/kanban/inner.js)
@@ -153,6 +154,10 @@ The composite score (average of all ten dimensions) displays on cards and drives
 </details>
 
 ---
+
+## Code Quality
+
+<img src="scorecard.png" width="100%">
 
 ## Contributing
 

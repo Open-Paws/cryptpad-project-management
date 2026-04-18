@@ -6,6 +6,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Open Paws Project Management
 
+[![desloppify score](https://img.shields.io/badge/desloppify-50.4%2F100-yellow)](scorecard.png)
+
 > **Status: 🟢 Production** — Active operational tool for Open Paws. Do not add server-side content extraction features. See [Architecture Decisions](#architecture-decisions) for settled constraints.
 
 **End-to-end encrypted project management for animal advocacy organizations with high security requirements.**
@@ -302,6 +304,10 @@ After any upstream sync, verify:
 - [ ] View-only links cannot write
 
 ---
+
+## Code Quality
+
+<img src="scorecard.png" width="100%">
 
 ## Contributing
 
