@@ -1,0 +1,406 @@
+version: "1"
+# Schema: https://github.com/Open-Paws/open-paws-strategy/ecosystem/playwright-persona-schema.md
+#
+# CryptPad auth model: access is cryptographic, not credential-based.
+# A document URL contains the seed in its hash fragment (#/2/kanban/edit/<seed>/).
+# Hash fragments are never sent to the server — possession of the URL *is* the key.
+# User "login" derives NaCl keys from username + password via Scrypt and unlocks
+# a stored encrypted block. View-only access uses a separate view-key URL.
+# There are no server-side sessions in the traditional sense.
+#
+# Deployed at: https://cryptpaws.openpaws.ai
+# Sandbox domain (iframe isolation): https://cryptbox.openpaws.ai
+
+personas:
+  - id: org-admin
+    name: Org Admin
+    role: owner
+    description: >
+      Organization owner who set up the CryptPad instance and holds OWNER role
+      on all boards. Manages team membership, access-control metadata, and
+      security-tier visibility (T1/T2/T3). Accesses the full board via an
+      edit-key URL. Tests that T3 items are visible to owners and that admin
+      operations (metadata commands, export) work correctly.
+
+    auth:
+      state: authenticated
+      # CryptPad auth: user logs in via /login with username + password;
+      # Scrypt derives an Ed25519 keypair that unlocks their encrypted drive.
+      # The board itself is accessed via a hash-fragment URL (edit key).
+      mechanism: cryptpad_login
+      seed_account: admin-e2e@openpaws.ai
+
+    device:
+      type: desktop
+      viewport:
+        width: 1440
+        height: 900
+      dark_mode: true
+
+    accessibility:
+      needs: []
+
+    content_sensitivity:
+      tier: detailed
+
+    flows:
+      - id: create-campaign-card
+        name: Create a new campaign project card
+        entry_point: /kanban/#/2/kanban/edit/SEED_ADMIN_BOARD/
+        steps:
+          - Open the board in Pipeline (kanban) view
+          - Click the add-card button in the Backlog column
+          - Enter a title for the new campaign project
+          - Open the scoring panel and set values for all ten dimensions
+          - Assign a security tier of T1
+          - Save the card
+        expected_outcome: >
+          Card appears in the Backlog column with a composite score displayed
+          and T1 badge visible. No errors in console.
+
+      - id: set-t3-card
+        name: Create and verify a T3 investigation card
+        entry_point: /kanban/#/2/kanban/edit/SEED_ADMIN_BOARD/
+        steps:
+          - Add a new card with security tier set to T3
+          - Confirm the card is visible to the owner in the default Pipeline view
+          - Switch to My Tasks view and confirm the T3 card is accessible
+          - Initiate a CryptDrive export
+        expected_outcome: >
+          T3 card is visible in all views for the owner. Export does not
+          include T3 items — redactT3Items() strips them before the export
+          file is written.
+
+      - id: manage-team-access
+        name: Add a team member to the allowed list
+        entry_point: /kanban/#/2/kanban/edit/SEED_ADMIN_BOARD/
+        steps:
+          - Open the board access settings panel
+          - Add a user's Ed25519 public key to the allowed list
+          - Verify the metadata command is accepted without error
+        expected_outcome: >
+          User appears in the allowed list. Server accepts the signed
+          ADD_ALLOWED metadata command. No INSUFFICIENT_PERMISSIONS error.
+
+    assertions:
+      should_see:
+        - Pipeline view with columns
+        - Composite score on each card
+        - T1/T2/T3 tier badges
+        - T3 cards (owner has full visibility)
+        - My Tasks and Timeline view switcher
+        - Filter and sort controls
+        - Export option in the board menu
+      should_not_see:
+        - Access Denied error
+        - ERESTRICTED error
+        - T3 content in exported file
+      critical_routes:
+        accessible:
+          - /kanban/#/2/kanban/edit/SEED_ADMIN_BOARD/
+          - /login
+          - /drive/
+        blocked:
+          - /admin/server
+
+  - id: campaign-manager
+    name: Campaign Manager
+    role: admin
+    description: >
+      Advocacy campaign manager with ADMIN role on the board. Assigns tasks,
+      reviews strategic scores across projects, uses filter/sort controls to
+      surface the highest-leverage work, and monitors due dates. Accesses the
+      board via an edit-key URL. Cannot access T3 items unless explicitly
+      added to the allowed list for those restricted documents.
+
+    auth:
+      state: authenticated
+      mechanism: cryptpad_login
+      seed_account: campaign-manager-e2e@openpaws.ai
+
+    device:
+      type: desktop
+      viewport:
+        width: 1280
+        height: 800
+      dark_mode: false
+
+    accessibility:
+      needs: []
+
+    content_sensitivity:
+      tier: standard
+
+    flows:
+      - id: filter-by-score-and-assignee
+        name: Filter cards by composite score and assignee
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Open the board in Pipeline view
+          - Open the filter panel
+          - Set score range filter to 7-10
+          - Set assignee filter to a specific team member
+          - Confirm filtered results update in real time
+        expected_outcome: >
+          Only cards matching both filters are shown. Score and assignee
+          filters combine correctly. No T3 cards appear unless the manager
+          is explicitly allowed on that T3 document.
+
+      - id: assign-subtask
+        name: Assign a sub-task to a team member with a due date
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Open a campaign card
+          - Add a sub-task with a title
+          - Assign the sub-task to a team member
+          - Set a due date on the sub-task
+          - Save and confirm the progress indicator updates
+        expected_outcome: >
+          Sub-task appears in the card with assignee name and due date.
+          Progress indicator reflects completion state. Due-date urgency
+          indicator shows if the task is overdue.
+
+      - id: switch-to-timeline-view
+        name: Switch to Timeline (Gantt) view and drag a card
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Click the Timeline view tab
+          - Verify all T1 and T2 cards appear as Gantt bars
+          - Drag a bar to adjust the start date
+          - Confirm the date change persists on switching back to Pipeline view
+        expected_outcome: >
+          Timeline renders cards as draggable bars with correct start and due
+          dates. Date change is synced via framework.localChange() and visible
+          in Pipeline view. DST boundary is handled correctly.
+
+    assertions:
+      should_see:
+        - Pipeline, My Tasks, and Timeline view tabs
+        - Filter panel with score range, assignee, due date, tier, and status controls
+        - Sort controls (by score, due date, title, creation date)
+        - Composite score on cards
+        - Sub-task checkbox list with assignee and due date fields
+        - Progress indicator on cards with sub-tasks
+        - Urgency indicator on overdue cards
+      should_not_see:
+        - T3 cards (unless explicitly allowed)
+        - Other users' encrypted drive contents
+      critical_routes:
+        accessible:
+          - /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+
+  - id: team-member
+    name: Team Member
+    role: member
+    description: >
+      Frontline activist and MEMBER on the board. Views assigned work via the
+      My Tasks view (personal task dashboard across all boards), updates
+      sub-task completion, and checks due dates. Uses edit-key URL for boards
+      they are members of. Cannot modify board structure or access T3 items
+      they are not explicitly allowed on.
+
+    auth:
+      state: authenticated
+      mechanism: cryptpad_login
+      seed_account: team-member-e2e@openpaws.ai
+
+    device:
+      type: desktop
+      viewport:
+        width: 1280
+        height: 800
+      dark_mode: false
+
+    accessibility:
+      needs: []
+
+    content_sensitivity:
+      tier: standard
+
+    flows:
+      - id: review-my-tasks
+        name: Review assigned tasks in My Tasks view
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Click the My Tasks view tab
+          - Verify only tasks assigned to the current user are shown
+          - Check completion checkbox on a sub-task
+          - Confirm the change syncs to the Pipeline view
+        expected_outcome: >
+          My Tasks view shows only tasks assigned to this user. Completing a
+          sub-task updates the progress indicator on the parent card.
+          Real-time sync occurs without page reload (ChainPad operational
+          transformation).
+
+      - id: view-card-scoring
+        name: View the strategic score breakdown on a card
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Open the board in Pipeline view
+          - Click on a campaign card to open it
+          - View the scoring breakdown panel with all ten dimensions
+        expected_outcome: >
+          Ten-dimension scoring breakdown is visible: scale, impact magnitude,
+          longevity, multiplication, foundation, future-readiness,
+          accessibility, coalition building, pillar coverage, and build
+          feasibility. Composite average score matches displayed badge value.
+
+      - id: open-view-only-link
+        name: Open a shared view-only link for a board
+        entry_point: /kanban/#/2/kanban/view/VIEW_KEY_SEED/
+        steps:
+          - Open the board via a view-key URL (no edit access)
+          - Attempt to drag a card to a different column
+          - Attempt to edit a card title
+        expected_outcome: >
+          Board renders in read-only mode. Drag-and-drop and edit controls
+          are disabled or produce no change. No framework.localChange() is
+          triggered. Encryption key in URL is a view key, not an edit key.
+
+    assertions:
+      should_see:
+        - My Tasks view tab
+        - Only tasks assigned to this user in My Tasks view
+        - Composite score badge on each card
+        - Ten-dimension scoring breakdown in card detail
+        - Sub-task completion checkboxes
+        - Due date and assignee per sub-task
+      should_not_see:
+        - T3 cards (not in allowed list)
+        - Board metadata commands (add owners, restrict access)
+        - Edit controls when using a view-only link
+      critical_routes:
+        accessible:
+          - /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+          - /kanban/#/2/kanban/view/VIEW_KEY_SEED/
+
+  - id: coalition-coordinator
+    name: Coalition Coordinator
+    role: viewer
+    description: >
+      Representative from a partner organization with VIEWER (view-only) access
+      to the shared board. Reviews campaign progress and scores without edit
+      access. Holds a view-key URL — cannot write to the board. Reflects the
+      coalition access pattern: partner orgs get read access to T1/T2 items
+      only, never T3. Tests that the view-key restriction is enforced
+      client-side (no edit controls enabled) and T3 items remain hidden.
+
+    auth:
+      state: authenticated
+      mechanism: cryptpad_login
+      seed_account: coalition-viewer-e2e@openpaws.ai
+
+    device:
+      type: desktop
+      viewport:
+        width: 1280
+        height: 800
+      dark_mode: false
+
+    accessibility:
+      needs: []
+
+    content_sensitivity:
+      tier: minimal
+
+    flows:
+      - id: review-pipeline-view-only
+        name: Review campaign pipeline in view-only mode
+        entry_point: /kanban/#/2/kanban/view/VIEW_KEY_SEED/
+        steps:
+          - Open the board via the view-key URL
+          - Scan the Pipeline columns for T1 campaign cards
+          - Open a card to view composite score and sub-task list
+          - Attempt to complete a sub-task checkbox
+        expected_outcome: >
+          Board renders correctly with T1 and T2 cards. T3 cards are not
+          visible. Edit controls (drag, checkbox toggle, title edit) are
+          inert — the view key cannot sign metadata commands or call
+          framework.localChange(). No errors.
+
+      - id: review-timeline-view-only
+        name: Review the Timeline (Gantt) view in read-only mode
+        entry_point: /kanban/#/2/kanban/view/VIEW_KEY_SEED/
+        steps:
+          - Switch to the Timeline view tab
+          - Inspect Gantt bars for T1 campaign cards
+          - Attempt to drag a bar to a new date
+        expected_outcome: >
+          Timeline renders with T1/T2 cards as Gantt bars. Dragging a bar
+          produces no date change. No ChainPad patch is created.
+
+    assertions:
+      should_see:
+        - Pipeline view with T1 and T2 campaign cards
+        - Composite score badges
+        - Timeline view with Gantt bars
+        - Ten-dimension score breakdown in card detail (read-only)
+      should_not_see:
+        - T3 investigation cards
+        - Edit or drag controls that produce changes
+        - Add card button (or it must be inert)
+        - Export option (view-only users lack metadata command authority)
+        - ERESTRICTED error on T1/T2 content
+      critical_routes:
+        accessible:
+          - /kanban/#/2/kanban/view/VIEW_KEY_SEED/
+        blocked:
+          - /kanban/#/2/kanban/edit/SEED_ADMIN_BOARD/
+
+  - id: keyboard-only-member
+    name: Keyboard-Only Team Member
+    role: member
+    description: >
+      Team member using keyboard-only navigation — exercises accessibility
+      compliance on the board UI. Tests that all interactive elements (view
+      switcher, filter controls, card open/close, sub-task checkboxes, score
+      panel) are reachable and operable via Tab and keyboard shortcuts alone.
+
+    auth:
+      state: authenticated
+      mechanism: cryptpad_login
+      seed_account: team-member-e2e@openpaws.ai
+
+    device:
+      type: desktop
+      viewport:
+        width: 1280
+        height: 800
+      dark_mode: false
+
+    accessibility:
+      needs:
+        - keyboard_only
+
+    content_sensitivity:
+      tier: standard
+
+    flows:
+      - id: keyboard-navigate-board
+        name: Navigate the board using only the keyboard
+        entry_point: /kanban/#/2/kanban/edit/SEED_SHARED_BOARD/
+        steps:
+          - Navigate to the board URL
+          - Press Tab to enter the page and locate the view switcher
+          - Tab to the Pipeline / My Tasks / Timeline tabs and press Enter to switch views
+          - Tab to the filter panel toggle and open it
+          - Tab through filter controls and set an assignee filter
+          - Tab to a card and press Enter to open it
+          - Tab to the sub-task list and check a checkbox with Space
+          - Press Escape to close the card
+        expected_outcome: >
+          All interactive elements receive visible focus. View switching,
+          filter controls, card open/close, and sub-task checkbox toggling
+          are all operable without a mouse. Focus does not become trapped.
+          Skip-to-main-content link is present.
+
+    assertions:
+      should_see:
+        - Visible focus indicators on all interactive elements
+        - Skip to main content link (or equivalent landmark navigation)
+        - View switcher operable via Enter key
+        - Filter controls operable via keyboard
+        - Card detail openable via Enter, closable via Escape
+      should_not_see:
+        - Focus trapped inside a modal or panel with no escape
+        - Interactive elements unreachable by Tab order
