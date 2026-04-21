@@ -92,3 +92,15 @@ if (Fs.existsSync(scryptMin)) {
         Fs.writeFileSync(scryptMin, scryptContent, 'utf8');
     }
 }
+
+// file-saver 2.x ships build artifacts under dist/; CryptPad expects them at
+// the component root (/components/file-saver/FileSaver.min.js).
+var fileSaverDist = Path.join(componentsPath, "file-saver", "dist");
+if (Fs.existsSync(fileSaverDist)) {
+    for (const f of Fs.readdirSync(fileSaverDist)) {
+        Fs.copyFileSync(
+            Path.join(fileSaverDist, f),
+            Path.join(componentsPath, "file-saver", f)
+        );
+    }
+}
