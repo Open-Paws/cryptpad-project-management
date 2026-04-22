@@ -1,0 +1,20 @@
+# Vendored third-party libraries — findings upstream, not owned here
+www/lib/mermaid/
+www/lib/pdfjs/
+www/lib/asciidoctor/
+www/lib/calendar/
+www/lib/highlight/
+www/kanban/jkanban_cp.js
+www/debug/chainpad.dist.js
+
+# Upstream CryptPad source — tracked from cryptpad/cryptpad, rewordings
+# belong in the upstream project, not this fork
+lib/plan.js
+scripts/tests/test-rpc.js
+src/common/proxy-manager.js
+
+# Auto-generated release notes carry historical wording we cannot rewrite
+CHANGELOG.md
+
+# Agent rule docs describe patterns as examples for the scanner itself
+.claude/
