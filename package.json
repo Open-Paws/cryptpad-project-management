@@ -83,7 +83,7 @@
     "@rollup/plugin-terser": "^1.0.0",
     "@rollup/plugin-typescript": "^12.3.0",
     "eslint": "^9.39.4",
-    "eslint-plugin-compat": "^7.0.1",
+    "eslint-plugin-compat": "^7.0.2",
     "less": "^4.6.4",
     "rollup": "^4.60.2",
     "stylelint": "^17.9.0",
