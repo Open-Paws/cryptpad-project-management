@@ -36,12 +36,29 @@ jobs:
           git clone --no-recurse-submodules https://github.com/Open-Paws/desloppify.git /tmp/desloppify
 
       - name: Install desloppify
-        run: pip install "/tmp/desloppify[full]"
+        run: |
+          # Pin tree-sitter-language-pack to <1.8 — the 1.8.0 release (after
+          # 2026-05-02) changed the type of objects it returns, producing
+          # `TypeError: __new__() argument 1 must be tree_sitter.Language,
+          # not builtins.Language` inside desloppify's tree-sitter analysis.
+          # This broke the quality gate on every PR opened after the
+          # language-pack 1.8.0 release, including dependabot PRs #115-#119.
+          # Drop the constraint once desloppify (or language-pack) ships a
+          # compatible fix and this workflow has been verified against it.
+          pip install "tree-sitter-language-pack<1.8"
+          pip install "/tmp/desloppify[full]"
 
       - name: Run quality gate
         run: |
+          set +e
           SCAN_OUTPUT=$(desloppify scan --path . --profile ci --no-badge 2>&1)
+          SCAN_RC=$?
+          set -e
           echo "${SCAN_OUTPUT}"
+          if [ "${SCAN_RC}" -ne 0 ]; then
+            echo "ERROR: desloppify scan exited with code ${SCAN_RC}"
+            exit 1
+          fi
           SCORE=$(echo "${SCAN_OUTPUT}" | grep -oP 'objective \K[\d.]+(?=/100)')
           if [ -z "${SCORE}" ]; then
             echo "ERROR: could not extract objective score from desloppify output"
