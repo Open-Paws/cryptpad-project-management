@@ -8,3 +8,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # http-proxy-middleware v4+ is ESM-only and requires Node ^22.15.0,
+      # but this repo's engines.node is >=18 and lib/http-worker.js uses
+      # CommonJS require(). v3.x patches/minors continue to flow.
+      - dependency-name: "http-proxy-middleware"
+        update-types: ["version-update:semver-major"]
