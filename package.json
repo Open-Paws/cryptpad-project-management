@@ -86,7 +86,7 @@
     "eslint-plugin-compat": "^7.0.2",
     "less": "^4.6.4",
     "rollup": "^4.60.3",
-    "stylelint": "^17.9.1",
+    "stylelint": "^17.11.0",
     "stylelint-config-standard-less": "^4.1.0",
     "tslib": "^2.7.0",
     "typescript": "^6.0.3"
