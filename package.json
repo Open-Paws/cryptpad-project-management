@@ -58,7 +58,7 @@
     "open-sans-fontface": "^1.4.0",
     "openid-client": "^6.8.4",
     "pako": "^2.1.0",
-    "pg": "^8.20.0",
+    "pg": "^8.21.0",
     "prompt-confirm": "^2.0.4",
     "pull-stream": "^3.6.1",
     "require-css": "0.1.10",
